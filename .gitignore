@@ -1,0 +1,19 @@
+# Hugo
+/public/
+/resources/_gen/
+/assets/jsconfig.json
+hugo_stats.json
+
+# System
+.DS_Store
+.idea/
+
+# Node/npm
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+
+# Render.com build output
+render-build/
