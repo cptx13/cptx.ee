@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Poems on cptx13</title>
+    <link>http://localhost:1313/categories/poems/</link>
+    <description>Recent content in Poems on cptx13</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 23 Apr 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/poems/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Garabatos</title>
+      <link>http://localhost:1313/posts/garabatos/</link>
+      <pubDate>Wed, 23 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/garabatos/</guid>
+      <description>&lt;p&gt;Si yo supera pintar&lt;br&gt;&#xA;llenaría este cuaderno&lt;br&gt;&#xA;de tímidas líneas&lt;br&gt;&#xA;ajenas a mi mala letra,&lt;br&gt;&#xA;a mi mala cabeza.&lt;/p&gt;&#xA;&lt;p&gt;Si yo supiera pintar&lt;br&gt;&#xA;este cuaderno no tendría&lt;br&gt;&#xA;dos hojas arrancadas,&lt;br&gt;&#xA;ni alegres manchas de tinta&lt;br&gt;&#xA;sin forma y con prisa.&lt;/p&gt;&#xA;&lt;p&gt;Si yo supiera pintar&lt;br&gt;&#xA;no habría vuelto a la poesía&lt;br&gt;&#xA;con una pinta y un bolígrafo&lt;br&gt;&#xA;en una terraza tallinesa&lt;br&gt;&#xA;escribo tímidas líneas.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Terraza marbellí</title>
+      <link>http://localhost:1313/posts/terraza-marnelli/</link>
+      <pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/terraza-marnelli/</guid>
+      <description>&lt;p&gt;En una terraza marbellí&lt;br&gt;&#xA;trato de pensar, quiero escribir&lt;br&gt;&#xA;me pesan las ideas, pero no el pulso&lt;/p&gt;&#xA;&lt;p&gt;Cuatro párrafos a los que faltan puntos&lt;br&gt;&#xA;tachones, rotos, y varios disgustos&lt;/p&gt;&#xA;&lt;p&gt;En una terraza marbellí&lt;br&gt;&#xA;trato de escribir, quiero rimar&lt;br&gt;&#xA;me pesa el pulso, pero no el vivir&lt;/p&gt;&#xA;&lt;p&gt;Ocho versos a los que faltan rima&lt;br&gt;&#xA;golondrinas aireadas y varios sustos&lt;/p&gt;&#xA;&lt;p&gt;En una terraza marbellí&lt;br&gt;&#xA;trato de rimar, quiero vivir&lt;br&gt;&#xA;me pesa la cabeza, pero no mucho&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

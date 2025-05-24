@@ -1,0 +1,65 @@
+baseURL = "https://cptx13.com/"
+languageCode = "en-us"
+title = "cptx13"
+theme = "typo"
+
+[taxonomies]
+  tag      = "tags"
+  category = "categories"
+
+[params]
+  goToTop = true
+  homepageSections = ["poems", "retales"]
+  description = "a collection of disorganised drafts"
+  theme = "auto"
+  colorPalette = "default"
+  hideHeader = false
+  showFooter = true
+
+  # Intro on main page, content is markdown
+  homeIntroContent = "A collection of unfinished texts by an Atleti fan born in Madrid and based Tallinn."
+
+  # Collection to display on home
+  homeCollectionTitle = "Posts"
+  homeCollection = "posts"
+
+  # Lists parameters
+  paginationSize = 100
+  listSummaries = true
+  listDateFormat = "2 Jan 2006"
+
+  [params.breadcrumbs]
+    enabled = true
+    showCurrentPage = true
+    home = "Home"
+
+  [[params.socialIcons]]
+  name = "instagram"
+  url = "https://www.instagram.com/cptx13/"
+
+  [[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/cptx13"
+
+  [[params.socialIcons]]
+  name = "X"
+  url = "https://x.com/cptx_13"
+
+  [[params.socialIcons]]
+  name = "linkedin"
+  url = "https://www.linkedin.com/in/cpinedotexidor/"
+
+  # Main menu pages
+  [[params.menu]]
+  name = "home"
+  url = "/"
+
+  [[params.menu]]
+  name = "poems"
+  url = "/categories/poems/"
+
+  [[params.menu]]
+  name = "retales"
+  url = "/categories/retales/"
+
+  footerContent = "Powered by <a href=\"https://gohugo.io/\">Hugo</a> and <a href=\"https://github.com/tomfran/typo\">Typo</a>"
