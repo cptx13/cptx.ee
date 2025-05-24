@@ -1,0 +1,10 @@
+# Render.com Hugo static site configuration
+
+# Build command
+build: hugo --minify
+
+# Publish directory
+publish: public
+
+# Hugo version (optional, specify if you want a specific version)
+hugo_version: 0.125.4
