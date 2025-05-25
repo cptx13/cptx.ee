@@ -1,5 +1,4 @@
 
-```
 ---
 title: "Chasing the details."
 author: Carlos Pinedo Texidor

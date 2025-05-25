@@ -1,5 +1,3 @@
-
-```
 ---
 title: "Hoy viajamos juntos otra vez."
 author: Carlos Pinedo Texidor
@@ -42,6 +40,3 @@ No sé muy bien cómo será de acertada mi decisión, pero sí que creo que lo c
 *me educaron para hombre adinerado*
 *pero ahora prefiero ser un indio*
 *que un importante abogado.*
-
-
-```
