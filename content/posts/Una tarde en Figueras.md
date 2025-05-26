@@ -3,7 +3,7 @@ title: "Una tarde en Figueras"
 author: Carlos Pinedo Texidor
 date: 2024-12-31
 draft: false
-categories: ["poetry"]
+categories: ["poems"]
 tags: [paco]
 ---
 Paco, mi fiel perro, corre
