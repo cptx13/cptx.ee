@@ -6,7 +6,7 @@ author: Carlos Pinedo Texidor
 date: 2021-07-29
 draft: false
 categories: ["retales"]
-tags: [""]
+tags: [mallorca]
 ---
 No sé que tendrán las noches de verano para lograr que todo improperio y propuesta disoluta suene a una idea digna de la mejor mente. Toda idea cabe en las propuestas veraniegas, incluso si en el seno de la noche unos autoproclamados holandeses errantes deciden dejar puerto y marchar a la conquista del último resquicio de salvaje naturaleza mallorquina. La confusión se apodera de la escena, unos creen ir en busca de cobijo para rematar su ginebra mientras otros buscan de forma desesperada un punto de irresponsable aventura con la que llenar las páginas de su no tan joven historia.
 
