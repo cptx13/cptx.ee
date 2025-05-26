@@ -1,5 +1,3 @@
-
-```
 ---
 title: "Una tarde en Figueras"
 author: Carlos Pinedo Texidor
