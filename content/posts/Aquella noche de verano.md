@@ -1,5 +1,3 @@
-
-```
 ---
 title: "Aquella noche de verano"
 author: Carlos Pinedo Texidor
