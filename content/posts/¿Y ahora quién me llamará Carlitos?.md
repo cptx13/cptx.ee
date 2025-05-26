@@ -1,4 +1,3 @@
-```
 ---
 title: "¿Y ahora quién me llamará Carlitos?"
 author: Carlos Pinedo Texidor
@@ -34,3 +33,4 @@ Querido Tolo, fuiste un gran hombre, fiel defensor del amor familiar y las amist
 Espero que algún día nos volvamos a ver ahí arriba, y tal vez, alejados de piscinas, podamos disfrutar de alguna de las tertulias que debimos tener y nunca tuvimos.
 
 Descansa en paz Tolo
+---
