@@ -17,7 +17,7 @@ theme = "typo"
   showFooter = true
 
   # Intro on main page, content is markdown
-  homeIntroContent = "A collection of unfinished texts by an Atleti fan born in Madrid and based Tallinn."
+  homeIntroContent = "A collection of unfinished texts by an Atleti fan born in Madrid and based in Tallinn."
 
   # Collection to display on home
   homeCollectionTitle = "Posts"
