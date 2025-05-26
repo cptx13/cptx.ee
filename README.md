@@ -1,4 +1,4 @@
-# 📖 README for My Blog Repository
+# 📖 README for cptx13.com
 
 ## Introduction
 
