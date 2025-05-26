@@ -6,7 +6,7 @@ author: Carlos Pinedo Texidor
 date: 2024-12-31
 draft: false
 categories: ["poetry"]
-tags: [""]
+tags: [paco]
 ---
 Paco, mi fiel perro, corre
 sepenteando con esmero
