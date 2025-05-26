@@ -1,9 +1,9 @@
 
 ```
 ---
-title: "quella noche de verano"
+title: "Aquella noche de verano"
 author: Carlos Pinedo Texidor
-date: 2021.07.29
+date: 2021-07-29
 draft: false
 categories: ["retales"]
 tags: [""]
