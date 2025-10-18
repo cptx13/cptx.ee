@@ -3,7 +3,7 @@ title: "The river Alph"
 author: Carlos Pinedo Texidor
 date: 2024-10-18
 draft: false
-categories: ["poetry"]
+categories: ["poems"]
 tags: [life]
 ---
 Darkness, rippled echo and echoed ripples. 
