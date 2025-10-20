@@ -34,10 +34,6 @@ theme = "typo"
     home = "Home"
 
   [[params.socialIcons]]
-  name = "instagram"
-  url = "https://www.instagram.com/cptx13/"
-
-  [[params.socialIcons]]
   name = "github"
   url = "https://github.com/cptx13"
 
@@ -46,8 +42,16 @@ theme = "typo"
   url = "https://x.com/cptx_13"
 
   [[params.socialIcons]]
+  name = "instagram"
+  url = "https://www.instagram.com/cptx13/"
+
+  [[params.socialIcons]]
   name = "linkedin"
   url = "https://www.linkedin.com/in/cptx/"
+
+[[params.socialIcons]]
+  name = "protonmail"
+  url = "mailto:hello@cptx.ee"
 
   # Main menu pages
   [[params.menu]]
