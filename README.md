@@ -1,4 +1,4 @@
-# 📖 README for cptx13.com
+# 📖 README for cptx.ee
 
 ## Introduction
 
