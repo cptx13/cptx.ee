@@ -1,6 +1,6 @@
-baseURL = "https://cptx13.com/"
+baseURL = "https://cptx.ee/"
 languageCode = "en-us"
-title = "cptx13"
+title = "cptx"
 theme = "typo"
 
 [taxonomies]
@@ -10,14 +10,14 @@ theme = "typo"
 [params]
   goToTop = true
   homepageSections = ["poems", "retales"]
-  description = "a collection of disorganised drafts"
+  description = "a collection of mathoms"
   theme = "auto"
   colorPalette = "default"
   hideHeader = false
   showFooter = true
 
   # Intro on main page, content is markdown
-  homeIntroContent = "A collection of unfinished texts by an Atleti fan born in Madrid and based in Tallinn."
+  homeIntroContent = "a collection of mathoms"
 
   # Collection to display on home
   homeCollectionTitle = "Posts"
@@ -47,7 +47,7 @@ theme = "typo"
 
   [[params.socialIcons]]
   name = "linkedin"
-  url = "https://www.linkedin.com/in/cpinedotexidor/"
+  url = "https://www.linkedin.com/in/cptx/"
 
   # Main menu pages
   [[params.menu]]
