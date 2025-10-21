@@ -16,5 +16,4 @@ The been becomes seen, and the seen is not me.
 When the ego dies and nothing is seen,  
 the darkness enlightens what was and is.    
 Rippled echoes and echoed ripples  
-that’s what all is meant to be.  
-```
+that’s what all is meant to be. 
