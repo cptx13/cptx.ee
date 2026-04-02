@@ -28,13 +28,18 @@
   <script>
   (function () {
     var button = document.getElementById("random-post-button");
-    var pool = document.querySelectorAll("#random-post-pool a");
-    if (!button || !pool.length) return;
+    if (!button) return;
+    var pool = null;
     button.addEventListener("click", function (event) {
       event.preventDefault();
-      var index = Math.floor(Math.random() * pool.length);
-      var target = pool[index].getAttribute("href");
-      if (target) window.location.href = target;
+      if (pool) {
+        window.location.href = pool[Math.floor(Math.random() * pool.length)];
+        return;
+      }
+      fetch("/shuffle-pool.json").then(function(r){return r.json()}).then(function(data){
+        pool = data;
+        if (pool.length) window.location.href = pool[Math.floor(Math.random() * pool.length)];
+      });
     });
   })();
   </script>
