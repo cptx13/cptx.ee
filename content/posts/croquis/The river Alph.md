@@ -1,0 +1,20 @@
+---
+title: "The river Alph"
+author: cptx
+date: 2025-10-18
+draft: false
+categories: ["croquis"]
+tags: [rimas]
+showTags: true
+---
+Darkness, rippled echo and echoed ripples.  
+The light comes, yet the eyes do not see.  
+The water ripples, and the echoes are seen.    
+A sudden silent sound, and I am no longer me.    
+Being has no perspective, nothing is to be seen.  
+The ripples echo, and the echoes are now free.    
+The been becomes seen, and the seen is not me.  
+When the ego dies and nothing is seen,  
+the darkness enlightens what was and is.    
+Rippled echoes and echoed ripples  
+that’s what all is meant to be. 
