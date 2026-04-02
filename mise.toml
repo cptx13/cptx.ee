@@ -1,0 +1,3 @@
+[tools]
+go = "latest"
+"go:github.com/dhamidi/htmlc/cmd/htmlc" = "v1.0.0"
