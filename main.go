@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io/fs"
@@ -130,11 +131,12 @@ func main() {
 		return result
 	}
 
-	// Register shuffle pool as a global function
-	shufflePoolData := toPostList(allPostsForPool)
-	engine.RegisterFunc("shufflePool", func(args ...any) (any, error) {
-		return shufflePoolData, nil
-	})
+	// Generate shuffle pool JSON (just paths)
+	shufflePoolPaths := make([]string, len(allPostsForPool))
+	for i, p := range allPostsForPool {
+		shufflePoolPaths[i] = p.Path
+	}
+	shufflePoolJSON, _ := json.Marshal(shufflePoolPaths)
 
 	// Home page
 	must(router.GET("home", "/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -263,10 +265,14 @@ func main() {
 	mux.Handle("/favicon-32x32.png", staticFS)
 	mux.Handle("/android-chrome-192x192.png", staticFS)
 	mux.Handle("/apple-touch-icon.png", staticFS)
+	mux.HandleFunc("/shuffle-pool.json", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(shufflePoolJSON)
+	})
 	mux.Handle("/", router)
 
 	// Build static site
-	if err := buildStaticSite(engine, published, allPostsForPool, postsByCategory, postsBySection, pocketPosts, manifestoPost, toPostMap, toPostList); err != nil {
+	if err := buildStaticSite(engine, published, allPostsForPool, postsByCategory, postsBySection, pocketPosts, manifestoPost, toPostMap, toPostList, shufflePoolJSON); err != nil {
 		log.Fatalf("building static site: %v", err)
 	}
 
@@ -527,6 +533,7 @@ func buildStaticSite(
 	manifestoPost *Post,
 	toPostMap func(*Post) map[string]any,
 	toPostList func([]*Post) []any,
+	shufflePoolJSON []byte,
 ) error {
 	distDir := "dist"
 	os.RemoveAll(distDir)
@@ -534,6 +541,11 @@ func buildStaticSite(
 	// Copy static files
 	if err := copyDir("static", filepath.Join(distDir)); err != nil {
 		return fmt.Errorf("copying static: %w", err)
+	}
+
+	// Write shuffle pool JSON
+	if err := os.WriteFile(filepath.Join(distDir, "shuffle-pool.json"), shufflePoolJSON, 0o644); err != nil {
+		return fmt.Errorf("writing shuffle-pool.json: %w", err)
 	}
 
 	// Helper to write a page
