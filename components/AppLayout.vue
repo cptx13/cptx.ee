@@ -13,7 +13,7 @@
   <link rel="canonical" :href="canonicalURL">
   <link rel="stylesheet" href="/css/style.css" media="all">
 </head>
-<body class="auto">
+<body class="dark">
   <div class="content">
     <header>
       <SiteHeader></SiteHeader>
