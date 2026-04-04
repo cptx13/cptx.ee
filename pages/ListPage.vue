@@ -5,7 +5,7 @@
     <div v-if="posts.length === 0 && !contentHTML">
       <p>Work in progress, to be uploaded soon</p>
     </div>
-    <PostEntry v-for="post in posts" :dateFormatted="post.DateFormatted" :path="post.Path" :title="post.Title"></PostEntry>
+    <PostEntry v-for="post in posts" :dateFormatted="post.DateYear" :path="post.Path" :title="post.Title"></PostEntry>
   </div>
 </AppLayout>
 </template>

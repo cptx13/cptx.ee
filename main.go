@@ -36,8 +36,11 @@ type Post struct {
 	Slug          string
 	Section       string
 	Path          string
+	OldPath       string
 	FilePath      string
 	DateFormatted string
+	DateYear      string
+	ID            string
 }
 
 func main() {
@@ -46,11 +49,6 @@ func main() {
 		log.Fatalf("loading content: %v", err)
 	}
 
-	// Sort posts by date descending
-	sort.Slice(posts, func(i, j int) bool {
-		return posts[i].Date.After(posts[j].Date)
-	})
-
 	// Filter out drafts
 	var published []*Post
 	for _, p := range posts {
@@ -58,6 +56,14 @@ func main() {
 			published = append(published, p)
 		}
 	}
+
+	// Compute IDs for posts in recuerdos/croquis sections and assign new paths
+	computePostIDs(published)
+
+	// Sort posts by date descending
+	sort.Slice(published, func(i, j int) bool {
+		return published[i].Date.After(published[j].Date)
+	})
 
 	engine, err := htmlc.New(htmlc.Options{
 		ComponentDir: ".",
@@ -73,13 +79,16 @@ func main() {
 	postsBySection := map[string][]*Post{}
 	postsByCategory := map[string][]*Post{}
 	postsByPath := map[string]*Post{}
+	postsByOldPath := map[string]*Post{}
 	pocketPosts := []*Post{}
-	// allPostsForPool will be set below after grouping
 	var manifestoPost *Post
 	var allPosts []*Post // all posts for shuffle pool (posts section only)
 
 	for _, p := range published {
 		postsByPath[p.Path] = p
+		if p.OldPath != "" {
+			postsByOldPath[p.OldPath] = p
+		}
 		for _, cat := range p.Categories {
 			postsByCategory[cat] = append(postsByCategory[cat], p)
 		}
@@ -93,7 +102,6 @@ func main() {
 		}
 	}
 
-	// allPosts for shuffle pool = all posts in the "posts" collection
 	allPostsForPool := allPosts
 
 	// Post data as maps for templates
@@ -111,15 +119,18 @@ func main() {
 			"Author":        p.Author,
 			"Date":          p.Date,
 			"DateFormatted": p.DateFormatted,
+			"DateYear":      p.DateYear,
 			"Content":       string(p.Content),
 			"Slug":          p.Slug,
 			"Section":       p.Section,
 			"Path":          p.Path,
+			"OldPath":       p.OldPath,
 			"Summary":       p.Summary,
 			"Tags":          tags,
 			"ShowTags":      p.ShowTags,
 			"TOC":           p.TOC,
 			"Categories":    categories,
+			"ID":            p.ID,
 		}
 	}
 
@@ -138,10 +149,13 @@ func main() {
 	}
 	shufflePoolJSON, _ := json.Marshal(shufflePoolPaths)
 
+	postCount := len(allPostsForPool)
+
 	// Home page
 	must(router.GET("home", "/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		data := map[string]any{
-			"posts": toPostList(allPostsForPool),
+			"posts":     toPostList(allPostsForPool),
+			"postCount": postCount,
 		}
 		renderPage(w, engine, "HomePage", data)
 	})))
@@ -166,7 +180,6 @@ func main() {
 		name := m.Params["name"]
 		catPosts := postsByCategory[name]
 
-		// Check if there's an _index.md for this category
 		var contentHTML string
 		indexPath := filepath.Join("content", "categories", name, "_index.md")
 		if data, err := os.ReadFile(indexPath); err == nil {
@@ -184,10 +197,10 @@ func main() {
 		renderPage(w, engine, "ListPage", data)
 	})))
 
-	// Individual posts
-	must(router.GET("post", "/posts/{section}/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// Individual posts (new URL scheme: /{category}/{id}/)
+	must(router.GET("post", "/{category}/{id}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
-		postPath := "/posts/" + m.Params["section"] + "/" + m.Params["slug"] + "/"
+		postPath := "/" + m.Params["category"] + "/" + m.Params["id"] + "/"
 		post := postsByPath[postPath]
 		if post == nil {
 			renderNotFound(w, engine)
@@ -217,9 +230,20 @@ func main() {
 		renderPage(w, engine, "SinglePage", data)
 	})))
 
+	// Old URL redirects: /posts/{section}/{slug}/ -> new path
+	must(router.GET("old-post-redirect", "/posts/{section}/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		m, _ := dispatch.MatchFromContext(r.Context())
+		oldPath := "/posts/" + m.Params["section"] + "/" + m.Params["slug"] + "/"
+		post := postsByOldPath[oldPath]
+		if post == nil {
+			renderNotFound(w, engine)
+			return
+		}
+		http.Redirect(w, r, post.Path, http.StatusMovedPermanently)
+	})))
+
 	// Pockets index
 	must(router.GET("pockets.index", "/pockets/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Check for _index.md content
 		var contentHTML string
 		indexPath := filepath.Join("content", "pockets", "_index.md")
 		if data, err := os.ReadFile(indexPath); err == nil {
@@ -272,13 +296,51 @@ func main() {
 	mux.Handle("/", router)
 
 	// Build static site
-	if err := buildStaticSite(engine, published, allPostsForPool, postsByCategory, postsBySection, pocketPosts, manifestoPost, toPostMap, toPostList, shufflePoolJSON); err != nil {
+	if err := buildStaticSite(engine, published, allPostsForPool, postsByCategory, postsBySection, pocketPosts, manifestoPost, toPostMap, toPostList, shufflePoolJSON, postCount); err != nil {
 		log.Fatalf("building static site: %v", err)
 	}
 
 	addr := ":8080"
 	log.Printf("Serving on http://localhost%s", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))
+}
+
+// computePostIDs assigns IDs to posts in the recuerdos/croquis sections.
+// IDs are YYYYMMDD + 1-based index within that (category, date) group.
+// Posts within the same date are sorted by filename alphabetically.
+func computePostIDs(posts []*Post) {
+	// Collect posts that need IDs (recuerdos or croquis)
+	type postKey struct {
+		category string
+		dateStr  string
+	}
+	groups := map[postKey][]*Post{}
+
+	for _, p := range posts {
+		if p.Section != "recuerdos" && p.Section != "croquis" {
+			continue
+		}
+		// Use first category as the URL category; fall back to section
+		category := p.Section
+		if len(p.Categories) > 0 {
+			category = p.Categories[0]
+		}
+		dateStr := p.Date.Format("20060102")
+		key := postKey{category: category, dateStr: dateStr}
+		groups[key] = append(groups[key], p)
+	}
+
+	// Sort each group by filename and assign IDs
+	for key, group := range groups {
+		sort.Slice(group, func(i, j int) bool {
+			return filepath.Base(group[i].FilePath) < filepath.Base(group[j].FilePath)
+		})
+		for i, p := range group {
+			p.ID = fmt.Sprintf("%s%d", key.dateStr, i+1)
+			p.OldPath = "/posts/" + p.Section + "/" + p.Slug + "/"
+			p.Path = "/" + key.category + "/" + p.ID + "/"
+		}
+	}
 }
 
 func renderPage(w http.ResponseWriter, engine *htmlc.Engine, component string, data map[string]any) {
@@ -364,7 +426,6 @@ func parsePost(content, filePath, root string) (*Post, error) {
 
 	// Parse date
 	if dateStr := fmString(fm, "date"); dateStr != "" {
-		// Try various date formats
 		for _, layout := range []string{
 			"2006-01-02",
 			"2006-01-02T15:04:05-07:00",
@@ -378,6 +439,7 @@ func parsePost(content, filePath, root string) (*Post, error) {
 		}
 	}
 	post.DateFormatted = post.Date.Format("2006.01.02")
+	post.DateYear = post.Date.Format("06")
 
 	// Parse categories and tags
 	post.Categories = fmStringSlice(fm, "categories")
@@ -387,8 +449,8 @@ func parsePost(content, filePath, root string) (*Post, error) {
 	relPath := strings.TrimPrefix(filePath, root+"/")
 
 	// Determine the URL path based on content structure
+	// Note: for posts in recuerdos/croquis, the Path will be overwritten by computePostIDs
 	if strings.HasPrefix(relPath, "posts/") {
-		// posts/section/filename.md -> /posts/section/slug/
 		parts := strings.SplitN(relPath, "/", 3)
 		if len(parts) >= 3 {
 			post.Section = parts[1]
@@ -396,7 +458,6 @@ func parsePost(content, filePath, root string) (*Post, error) {
 			post.Path = "/posts/" + post.Section + "/" + post.Slug + "/"
 		}
 	} else if strings.HasPrefix(relPath, "pockets/") {
-		// pockets/filename.md -> /pockets/slug/
 		post.Section = "pockets"
 		post.Slug = slugify(strings.TrimSuffix(filepath.Base(relPath), ".md"))
 		post.Path = "/pockets/" + post.Slug + "/"
@@ -405,7 +466,6 @@ func parsePost(content, filePath, root string) (*Post, error) {
 		post.Slug = "manifesto"
 		post.Path = "/manifesto/"
 	} else {
-		// Other top-level content
 		post.Slug = slugify(strings.TrimSuffix(filepath.Base(relPath), ".md"))
 		post.Path = "/" + post.Slug + "/"
 	}
@@ -430,7 +490,6 @@ func renderMarkdown(source string) string {
 func parseFrontmatter(content string) (map[string]string, string) {
 	fm := make(map[string]string)
 
-	// Trim leading whitespace (some files have blank lines before frontmatter)
 	content = strings.TrimLeft(content, " \t\n\r")
 
 	if !strings.HasPrefix(content, "---") {
@@ -456,7 +515,6 @@ func parseFrontmatter(content string) (map[string]string, string) {
 		}
 		key := strings.TrimSpace(line[:idx])
 		val := strings.TrimSpace(line[idx+1:])
-		// Remove surrounding quotes
 		val = strings.Trim(val, "\"'")
 		fm[key] = val
 	}
@@ -478,7 +536,6 @@ func fmStringSlice(fm map[string]string, key string) []string {
 	if val == "" {
 		return nil
 	}
-	// Handle YAML array syntax: [item1, item2] or ["item1", "item2"]
 	val = strings.Trim(val, "[]")
 	if val == "" {
 		return nil
@@ -497,16 +554,10 @@ func fmStringSlice(fm map[string]string, key string) []string {
 
 // Slugify converts a filename to a URL-safe slug, matching Hugo's behavior.
 func slugify(s string) string {
-	// Normalize unicode
 	s = norm.NFC.String(s)
-
-	// Convert to lowercase
 	s = strings.ToLower(s)
-
-	// Replace spaces with dashes
 	s = strings.ReplaceAll(s, " ", "-")
 
-	// Remove characters that aren't alphanumeric, dashes, or dots
 	var buf strings.Builder
 	for _, r := range s {
 		if unicode.IsLetter(r) || unicode.IsDigit(r) || r == '-' || r == '.' {
@@ -514,10 +565,7 @@ func slugify(s string) string {
 		}
 	}
 	s = buf.String()
-
-	// Trim leading/trailing dashes
 	s = strings.Trim(s, "-")
-
 	return s
 }
 
@@ -534,6 +582,7 @@ func buildStaticSite(
 	toPostMap func(*Post) map[string]any,
 	toPostList func([]*Post) []any,
 	shufflePoolJSON []byte,
+	postCount int,
 ) error {
 	distDir := "dist"
 	os.RemoveAll(distDir)
@@ -561,9 +610,20 @@ func buildStaticSite(
 		return os.WriteFile(outPath, []byte(html), 0o644)
 	}
 
+	// Helper to write a redirect page
+	writeRedirect := func(oldPath, newPath string) error {
+		redirectHTML := fmt.Sprintf(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=%s"><link rel="canonical" href="%s"><title>Redirecting...</title></head><body><p>Redirecting to <a href="%s">%s</a>...</p></body></html>`, newPath, newPath, newPath, newPath)
+		outPath := filepath.Join(distDir, strings.TrimPrefix(oldPath, "/"), "index.html")
+		if err := os.MkdirAll(filepath.Dir(outPath), 0o755); err != nil {
+			return err
+		}
+		return os.WriteFile(outPath, []byte(redirectHTML), 0o644)
+	}
+
 	// Home page
 	if err := writePage("index.html", "HomePage", map[string]any{
-		"posts": toPostList(allPostsForPool),
+		"posts":     toPostList(allPostsForPool),
+		"postCount": postCount,
 	}); err != nil {
 		return err
 	}
@@ -579,12 +639,11 @@ func buildStaticSite(
 		}
 	}
 
-	// Category pages — from posts and from _index.md files
+	// Category pages
 	allCategories := make(map[string]bool)
 	for name := range postsByCategory {
 		allCategories[name] = true
 	}
-	// Also discover categories with _index.md but no posts
 	if entries, err := os.ReadDir(filepath.Join("content", "categories")); err == nil {
 		for _, e := range entries {
 			if e.IsDir() {
@@ -616,10 +675,9 @@ func buildStaticSite(
 	// Individual posts
 	for _, post := range published {
 		if post.Path == "/manifesto/" {
-			continue // already handled
+			continue
 		}
 
-		// Find prev/next for posts in sections
 		var prevPost, nextPost any = false, false
 		if post.Section == "recuerdos" || post.Section == "croquis" {
 			sectionPosts := postsBySection[post.Section]
@@ -643,6 +701,13 @@ func buildStaticSite(
 			"nextPost": nextPost,
 		}); err != nil {
 			return err
+		}
+
+		// Write redirect from old path to new path
+		if post.OldPath != "" && post.OldPath != post.Path {
+			if err := writeRedirect(post.OldPath, post.Path); err != nil {
+				return fmt.Errorf("writing redirect for %s: %w", post.OldPath, err)
+			}
 		}
 	}
 
