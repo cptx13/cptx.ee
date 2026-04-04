@@ -188,6 +188,8 @@ img {
         --header-top-gap: 1rem;
         --social-icons-bottom-margin: 0rem;
         --caption-padding: calc(2 * var(--main-padding));
+        --li-indent: 1rem;
+        --main-padding: 1em;
     }
 }
 

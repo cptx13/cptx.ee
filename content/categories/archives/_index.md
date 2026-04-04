@@ -10,5 +10,5 @@ title: "Archives"
   * [Click here to buy](https://amzn.eu/d/0fjsjG4b)
 * Recuerdos: Vol.1 (2022)
   * [Click here to buy](https://amzn.eu/d/06JJCaPm)
-* Recuerdos: Edición Completa (2026)
+* Recuerdos: Edición Completa (2026)
   * [Click here to buy](https://amzn.eu/d/0aEZrWxZ)
