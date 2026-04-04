@@ -6,7 +6,7 @@
   </div>
   <div class="list-container">
     <h2 style="font-size: 1.1em; margin-bottom: 1em; font-family: inherit;">posts ({{ postCount }})</h2>
-    <PostEntry v-for="post in posts" :dateShort="post.DateShort" :path="post.Path" :title="post.Title"></PostEntry>
+    <PostEntry v-for="post in posts" :dateFormatted="post.DateShort" :path="post.Path" :title="post.Title"></PostEntry>
   </div>
 </AppLayout>
 </template>
