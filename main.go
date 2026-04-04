@@ -120,6 +120,7 @@ func main() {
 			"Date":          p.Date,
 			"DateFormatted": p.DateFormatted,
 			"DateYear":      p.DateYear,
+			"DateShort":     p.DateShort,
 			"Content":       string(p.Content),
 			"Slug":          p.Slug,
 			"Section":       p.Section,
@@ -439,7 +440,8 @@ func parsePost(content, filePath, root string) (*Post, error) {
 		}
 	}
 	post.DateFormatted = post.Date.Format("2006.01.02")
-	post.DateYear = post.Date.Format("06")
+	post.DateYear = post.Date.Format("2006")
+	post.DateShort = post.Date.Format("06.01.02")
 
 	// Parse categories and tags
 	post.Categories = fmStringSlice(fm, "categories")
