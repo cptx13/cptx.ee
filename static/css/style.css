@@ -130,8 +130,8 @@ img {
     --header-menu-side-gap: .5rem;
     --header-menu-top-gap: 1rem;
 
-    --font-body: 'Literata', Georgia, Cambria, 'Noto Serif', 'Droif Serif', ui-serif, serif;
-    --font-mono: "Monaspace", ui-monospace, monospace;
+    --font-body: 'Lucida Console', 'Courier New', monospace;
+    --font-mono: 'Lucida Console', 'Courier New', monospace;
 
     --h1-margin-top: 2rem;
     --h1-margin-bottom: 1.5rem;
@@ -192,53 +192,6 @@ img {
 }
 
 /* === Fonts === */
-@font-face {
-    font-family: 'Literata';
-    src: url('/fonts/Literata/Literata-Light.woff2') format('woff2');
-    font-weight: light;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Literata';
-    src: url('/fonts/Literata/Literata-LightItalic.woff2') format('woff2');
-    font-weight: light;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Literata';
-    src: url('/fonts/Literata/Literata-SemiBold.woff2') format('woff2');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Literata';
-    src: url('/fonts/Literata/Literata-SemiBoldItalic.woff2') format('woff2');
-    font-weight: bold;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Monaspace';
-    src: url('/fonts/Monaspace/MonaspaceArgon-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Monaspace';
-    src: url('/fonts/Monaspace/MonaspaceArgon-SemiBold.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
 
 /* === Colors (default) === */
 :root {
@@ -413,8 +366,9 @@ hr {
 }
 
 .header-menu {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  column-gap: var(--header-menu-side-gap);
   padding-top: var(--header-menu-top-gap);
 }
 
