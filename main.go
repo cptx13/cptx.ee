@@ -40,6 +40,7 @@ type Post struct {
 	FilePath      string
 	DateFormatted string
 	DateYear      string
+	DateShort     string
 	ID            string
 }
 
@@ -440,7 +441,7 @@ func parsePost(content, filePath, root string) (*Post, error) {
 		}
 	}
 	post.DateFormatted = post.Date.Format("2006.01.02")
-	post.DateYear = post.Date.Format("2006")
+	post.DateYear = post.Date.Format("06")
 	post.DateShort = post.Date.Format("06.01.02")
 
 	// Parse categories and tags
