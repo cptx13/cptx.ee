@@ -383,6 +383,18 @@ hr {
   text-decoration: none;
 }
 
+.shuffle-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: shuffle-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes shuffle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
 /* Footer */
 footer {
   font-size: small;
