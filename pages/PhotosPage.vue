@@ -19,7 +19,7 @@
     <div id="view-all" class="photo-grid" style="display: none;">
       <div v-for="photo in allPhotos" class="photo-item">
         <a :href="photo.URL" target="_blank">
-          <img :src="photo.URL" :alt="photo.ID" loading="lazy">
+          <img :src="photo.ThumbURL" :alt="photo.ID" loading="lazy">
           <span class="photo-id">{{ photo.ID }}</span>
         </a>
       </div>

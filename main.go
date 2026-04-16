@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"image"
+	"image/jpeg"
+	_ "image/png"
 	"io/fs"
 	"log"
 	"net/http"
@@ -18,16 +21,18 @@ import (
 	"github.com/dhamidi/dispatch"
 	"github.com/dhamidi/htmlc"
 	"github.com/yuin/goldmark"
+	"golang.org/x/image/draw"
 	"golang.org/x/text/unicode/norm"
 )
 
 // Photo represents a single image in a photo folder.
 type Photo struct {
-	ID     string // e.g. "2016_Madrid-001"
-	Folder string // e.g. "2016_Madrid"
-	File   string // e.g. "001.jpg"
-	URL    string // e.g. "/photos/2016_Madrid/001.jpg"
-	Index  int    // 1-based
+	ID       string // e.g. "2016_Madrid-001"
+	Folder   string // e.g. "2016_Madrid"
+	File     string // e.g. "001.jpg"
+	URL      string // e.g. "/photos/2016_Madrid/001.jpg"
+	ThumbURL string // e.g. "/photos/2016_Madrid/thumb_001.jpg"
+	Index    int    // 1-based
 }
 
 // PhotoFolder represents a directory of photos.
@@ -83,6 +88,20 @@ func main() {
 	photoFolders, err := loadPhotos("content")
 	if err != nil {
 		log.Fatalf("loading photos: %v", err)
+	}
+
+	// Generate thumbnails for dev mode (into content/photos/)
+	for _, folder := range photoFolders {
+		for _, photo := range folder.Photos {
+			srcPath := filepath.Join("content", "photos", folder.Name, photo.File)
+			thumbPath := filepath.Join("content", "photos", folder.Name, "thumb_"+photo.File)
+			if _, err := os.Stat(thumbPath); err == nil {
+				continue // thumbnail already exists
+			}
+			if err := generateThumbnail(srcPath, thumbPath, 600, 80); err != nil {
+				log.Printf("warning: dev thumbnail for %s: %v", photo.ID, err)
+			}
+		}
 	}
 
 	// Sort posts by date descending
@@ -170,11 +189,12 @@ func main() {
 
 	toPhotoMap := func(p Photo) map[string]any {
 		return map[string]any{
-			"ID":     p.ID,
-			"Folder": p.Folder,
-			"File":   p.File,
-			"URL":    p.URL,
-			"Index":  p.Index,
+			"ID":       p.ID,
+			"Folder":   p.Folder,
+			"File":     p.File,
+			"URL":      p.URL,
+			"ThumbURL": p.ThumbURL,
+			"Index":    p.Index,
 		}
 	}
 
@@ -557,11 +577,12 @@ func loadPhotos(root string) ([]PhotoFolder, error) {
 		for i, file := range imageFiles {
 			idx := i + 1
 			photos = append(photos, Photo{
-				ID:     fmt.Sprintf("%s-%03d", folderName, idx),
-				Folder: folderName,
-				File:   file,
-				URL:    fmt.Sprintf("/photos/%s/%s", folderName, file),
-				Index:  idx,
+				ID:       fmt.Sprintf("%s-%03d", folderName, idx),
+				Folder:   folderName,
+				File:     file,
+				URL:      fmt.Sprintf("/photos/%s/%s", folderName, file),
+				ThumbURL: fmt.Sprintf("/photos/%s/thumb_%s", folderName, file),
+				Index:    idx,
 			})
 		}
 
@@ -911,12 +932,20 @@ func buildStaticSite(
 
 	// Photos section
 	if len(photoFolders) > 0 {
-		// Copy photo images to dist
+		// Copy photo images and generate thumbnails
 		for _, folder := range photoFolders {
 			srcDir := filepath.Join("content", "photos", folder.Name)
 			dstDir := filepath.Join(distDir, "photos", folder.Name)
 			if err := copyDir(srcDir, dstDir); err != nil {
 				return fmt.Errorf("copying photos for %s: %w", folder.Name, err)
+			}
+			// Generate thumbnails (600px wide, quality 80)
+			for _, photo := range folder.Photos {
+				srcPath := filepath.Join(srcDir, photo.File)
+				thumbPath := filepath.Join(dstDir, "thumb_"+photo.File)
+				if err := generateThumbnail(srcPath, thumbPath, 600, 80); err != nil {
+					log.Printf("warning: thumbnail for %s: %v", photo.ID, err)
+				}
 			}
 		}
 
@@ -949,6 +978,48 @@ func buildStaticSite(
 
 	log.Printf("Static site built to %s/", distDir)
 	return nil
+}
+
+// generateThumbnail resizes an image to fit within maxWidth pixels wide,
+// preserving aspect ratio, and writes JPEG at the given quality.
+func generateThumbnail(srcPath, dstPath string, maxWidth int, quality int) error {
+	f, err := os.Open(srcPath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	src, _, err := image.Decode(f)
+	if err != nil {
+		return fmt.Errorf("decoding %s: %w", srcPath, err)
+	}
+
+	bounds := src.Bounds()
+	origW := bounds.Dx()
+	origH := bounds.Dy()
+
+	// Only downscale, never upscale
+	newW := maxWidth
+	newH := origH * maxWidth / origW
+	if origW <= maxWidth {
+		newW = origW
+		newH = origH
+	}
+
+	dst := image.NewRGBA(image.Rect(0, 0, newW, newH))
+	draw.CatmullRom.Scale(dst, dst.Bounds(), src, bounds, draw.Over, nil)
+
+	if err := os.MkdirAll(filepath.Dir(dstPath), 0o755); err != nil {
+		return err
+	}
+
+	out, err := os.Create(dstPath)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	return jpeg.Encode(out, dst, &jpeg.Options{Quality: quality})
 }
 
 func copyDir(src, dst string) error {
