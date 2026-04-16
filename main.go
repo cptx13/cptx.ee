@@ -565,6 +565,10 @@ func loadPhotos(root string) ([]PhotoFolder, error) {
 			if f.IsDir() {
 				continue
 			}
+			// Skip generated thumbnails
+			if strings.HasPrefix(f.Name(), "thumb_") {
+				continue
+			}
 			ext := strings.ToLower(filepath.Ext(f.Name()))
 			if imageExts[ext] {
 				imageFiles = append(imageFiles, f.Name())
