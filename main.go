@@ -21,6 +21,24 @@ import (
 	"golang.org/x/text/unicode/norm"
 )
 
+// Photo represents a single image in a photo folder.
+type Photo struct {
+	ID     string // e.g. "2016_Madrid-001"
+	Folder string // e.g. "2016_Madrid"
+	File   string // e.g. "001.jpg"
+	URL    string // e.g. "/photos/2016_Madrid/001.jpg"
+	Index  int    // 1-based
+}
+
+// PhotoFolder represents a directory of photos.
+type PhotoFolder struct {
+	Name   string  // directory name e.g. "2016_Madrid"
+	Title  string  // display title e.g. "2016 Madrid"
+	Photos []Photo
+	Path   string  // e.g. "/photos/2016_Madrid/"
+	Count  int
+}
+
 // Post represents a content entry parsed from markdown files.
 type Post struct {
 	Title         string
@@ -60,6 +78,12 @@ func main() {
 
 	// Compute IDs for posts in recuerdos/croquis sections and assign new paths
 	computePostIDs(published)
+
+	// Load photos
+	photoFolders, err := loadPhotos("content")
+	if err != nil {
+		log.Fatalf("loading photos: %v", err)
+	}
 
 	// Sort posts by date descending
 	sort.Slice(published, func(i, j int) bool {
@@ -140,6 +164,42 @@ func main() {
 		result := make([]any, len(posts))
 		for i, p := range posts {
 			result[i] = toPostMap(p)
+		}
+		return result
+	}
+
+	toPhotoMap := func(p Photo) map[string]any {
+		return map[string]any{
+			"ID":     p.ID,
+			"Folder": p.Folder,
+			"File":   p.File,
+			"URL":    p.URL,
+			"Index":  p.Index,
+		}
+	}
+
+	toPhotoList := func(photos []Photo) []any {
+		result := make([]any, len(photos))
+		for i, p := range photos {
+			result[i] = toPhotoMap(p)
+		}
+		return result
+	}
+
+	toFolderMap := func(f PhotoFolder) map[string]any {
+		return map[string]any{
+			"Name":   f.Name,
+			"Title":  f.Title,
+			"Path":   f.Path,
+			"Count":  f.Count,
+			"Photos": toPhotoList(f.Photos),
+		}
+	}
+
+	toFolderList := func(folders []PhotoFolder) []any {
+		result := make([]any, len(folders))
+		for i, f := range folders {
+			result[i] = toFolderMap(f)
 		}
 		return result
 	}
@@ -263,6 +323,40 @@ func main() {
 		renderPage(w, engine, "ListPage", data)
 	})))
 
+	// Photos index
+	must(router.GET("photos.index", "/photos/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var allPhotos []any
+		for _, f := range photoFolders {
+			allPhotos = append(allPhotos, toPhotoList(f.Photos)...)
+		}
+		data := map[string]any{
+			"folders":   toFolderList(photoFolders),
+			"allPhotos": allPhotos,
+		}
+		renderPage(w, engine, "PhotosPage", data)
+	})))
+
+	// Photo folder page
+	must(router.GET("photos.folder", "/photos/{folder}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		m, _ := dispatch.MatchFromContext(r.Context())
+		folderName := m.Params["folder"]
+		var folder *PhotoFolder
+		for i := range photoFolders {
+			if photoFolders[i].Name == folderName {
+				folder = &photoFolders[i]
+				break
+			}
+		}
+		if folder == nil {
+			renderNotFound(w, engine)
+			return
+		}
+		data := map[string]any{
+			"folder": toFolderMap(*folder),
+		}
+		renderPage(w, engine, "PhotoFolderPage", data)
+	})))
+
 	// Individual pocket pages
 	must(router.GET("pocket", "/pockets/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
@@ -295,10 +389,21 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(shufflePoolJSON)
 	})
+	// Serve photo images from content/photos/ in dev mode
+	photoFileServer := http.StripPrefix("/photos/", http.FileServer(http.Dir("content/photos")))
+	mux.HandleFunc("/photos/", func(w http.ResponseWriter, r *http.Request) {
+		ext := strings.ToLower(filepath.Ext(r.URL.Path))
+		switch ext {
+		case ".jpg", ".jpeg", ".png", ".gif", ".webp":
+			photoFileServer.ServeHTTP(w, r)
+		default:
+			router.ServeHTTP(w, r)
+		}
+	})
 	mux.Handle("/", router)
 
 	// Build static site
-	if err := buildStaticSite(engine, published, allPostsForPool, postsByCategory, postsBySection, pocketPosts, manifestoPost, toPostMap, toPostList, shufflePoolJSON, postCount); err != nil {
+	if err := buildStaticSite(engine, published, allPostsForPool, postsByCategory, postsBySection, pocketPosts, manifestoPost, toPostMap, toPostList, shufflePoolJSON, postCount, photoFolders, toFolderMap, toFolderList, toPhotoList); err != nil {
 		log.Fatalf("building static site: %v", err)
 	}
 
@@ -406,6 +511,74 @@ func loadAllContent(root string) ([]*Post, error) {
 	})
 
 	return posts, err
+}
+
+func loadPhotos(root string) ([]PhotoFolder, error) {
+	photosDir := filepath.Join(root, "photos")
+	entries, err := os.ReadDir(photosDir)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("reading photos dir: %w", err)
+	}
+
+	imageExts := map[string]bool{
+		".jpg": true, ".jpeg": true, ".png": true, ".gif": true, ".webp": true,
+	}
+
+	var folders []PhotoFolder
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		folderName := entry.Name()
+		folderPath := filepath.Join(photosDir, folderName)
+
+		files, err := os.ReadDir(folderPath)
+		if err != nil {
+			return nil, fmt.Errorf("reading photo folder %s: %w", folderName, err)
+		}
+
+		var imageFiles []string
+		for _, f := range files {
+			if f.IsDir() {
+				continue
+			}
+			ext := strings.ToLower(filepath.Ext(f.Name()))
+			if imageExts[ext] {
+				imageFiles = append(imageFiles, f.Name())
+			}
+		}
+
+		sort.Strings(imageFiles)
+
+		var photos []Photo
+		for i, file := range imageFiles {
+			idx := i + 1
+			photos = append(photos, Photo{
+				ID:     fmt.Sprintf("%s-%03d", folderName, idx),
+				Folder: folderName,
+				File:   file,
+				URL:    fmt.Sprintf("/photos/%s/%s", folderName, file),
+				Index:  idx,
+			})
+		}
+
+		folders = append(folders, PhotoFolder{
+			Name:   folderName,
+			Title:  strings.ReplaceAll(folderName, "_", " "),
+			Photos: photos,
+			Path:   "/photos/" + folderName + "/",
+			Count:  len(photos),
+		})
+	}
+
+	sort.Slice(folders, func(i, j int) bool {
+		return folders[i].Name < folders[j].Name
+	})
+
+	return folders, nil
 }
 
 func parsePost(content, filePath, root string) (*Post, error) {
@@ -586,6 +759,10 @@ func buildStaticSite(
 	toPostList func([]*Post) []any,
 	shufflePoolJSON []byte,
 	postCount int,
+	photoFolders []PhotoFolder,
+	toFolderMap func(PhotoFolder) map[string]any,
+	toFolderList func([]PhotoFolder) []any,
+	toPhotoList func([]Photo) []any,
 ) error {
 	distDir := "dist"
 	os.RemoveAll(distDir)
@@ -730,6 +907,39 @@ func buildStaticSite(
 		"contentHTML":  pocketsContentHTML,
 	}); err != nil {
 		return err
+	}
+
+	// Photos section
+	if len(photoFolders) > 0 {
+		// Copy photo images to dist
+		for _, folder := range photoFolders {
+			srcDir := filepath.Join("content", "photos", folder.Name)
+			dstDir := filepath.Join(distDir, "photos", folder.Name)
+			if err := copyDir(srcDir, dstDir); err != nil {
+				return fmt.Errorf("copying photos for %s: %w", folder.Name, err)
+			}
+		}
+
+		// Photos index page
+		var allPhotos []any
+		for _, f := range photoFolders {
+			allPhotos = append(allPhotos, toPhotoList(f.Photos)...)
+		}
+		if err := writePage("photos/index.html", "PhotosPage", map[string]any{
+			"folders":   toFolderList(photoFolders),
+			"allPhotos": allPhotos,
+		}); err != nil {
+			return err
+		}
+
+		// Individual folder pages
+		for _, folder := range photoFolders {
+			if err := writePage(filepath.Join("photos", folder.Name, "index.html"), "PhotoFolderPage", map[string]any{
+				"folder": toFolderMap(folder),
+			}); err != nil {
+				return err
+			}
+		}
 	}
 
 	// 404 page

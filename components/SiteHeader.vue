@@ -18,6 +18,7 @@
     <p class="small"><a href="/categories/croquis/">/croquis</a></p>
     <p class="small"><a href="/categories/recuerdos/">/recuerdos</a></p>
     <p class="small"><a href="/categories/archives/">/archives</a></p>
+    <p class="small"><a href="/photos/">/photos</a></p>
   </div>
 </div>
 </template>
