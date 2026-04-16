@@ -8,7 +8,7 @@
     <div class="photo-grid">
       <div v-for="photo in folder.Photos" class="photo-item">
         <a :href="photo.URL" target="_blank">
-          <img :src="photo.URL" :alt="photo.ID" loading="lazy">
+          <img :src="photo.ThumbURL" :alt="photo.ID" loading="lazy">
           <span class="photo-id">{{ photo.ID }}</span>
         </a>
       </div>
