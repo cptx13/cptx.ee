@@ -34,9 +34,7 @@ My works are organized and distributed using the following system:
 
 - **[recuerdos](/categories/recuerdos/)** are daily memories written from 2021 to 2024, a project that began as a naive attempt to document lived experiences but evolved into something far more demanding. What started as voluntary writing gradually transformed into a disciplined obligation, eventually stirring feelings of guilt with each passing day. Over 1,000 entries reflect the tension between the desire to preserve memory and the burden of maintaining the practice.
 
-- **[archives](/categories/archives/)** comprise manuscripts that have been formatted, reviewed, and are considered complete, ready for publication and distribution.
-  - **Poemas de un joven no leido** (Parts 1, 2, and Complete Edition, 2021)
-  - **Recuerdos: Vol.1** (2022) and **Recuerdos: Edición Completa** (2026)
+- **[archives](/categories/archives/)** comprise published books—manuscripts that have been formatted, reviewed, and are considered complete.
 
 - **[pockets](/pockets/)** comprise my daily resources, everything I would carry around if I could.
   - **bedsidetable**: Some books I have enjoyed recently.
