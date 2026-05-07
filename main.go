@@ -37,11 +37,13 @@ type Photo struct {
 
 // PhotoFolder represents a directory of photos.
 type PhotoFolder struct {
-	Name   string  // directory name e.g. "2016_Madrid"
-	Title  string  // display title e.g. "2016 Madrid"
-	Photos []Photo
-	Path   string  // e.g. "/photos/2016_Madrid/"
-	Count  int
+	Name     string // directory name e.g. "2016_Madrid"
+	Title    string // display title e.g. "2016 Madrid"
+	Location string // e.g. "Madrid"
+	Year     string // e.g. "2016"
+	Photos   []Photo
+	Path     string // e.g. "/photos/2016_Madrid/"
+	Count    int
 }
 
 // Post represents a content entry parsed from markdown files.
@@ -208,11 +210,13 @@ func main() {
 
 	toFolderMap := func(f PhotoFolder) map[string]any {
 		return map[string]any{
-			"Name":   f.Name,
-			"Title":  f.Title,
-			"Path":   f.Path,
-			"Count":  f.Count,
-			"Photos": toPhotoList(f.Photos),
+			"Name":     f.Name,
+			"Title":    f.Title,
+			"Location": f.Location,
+			"Year":     f.Year,
+			"Path":     f.Path,
+			"Count":    f.Count,
+			"Photos":   toPhotoList(f.Photos),
 		}
 	}
 
@@ -610,12 +614,23 @@ func loadPhotos(root string) ([]PhotoFolder, error) {
 			})
 		}
 
+		title := strings.ReplaceAll(folderName, "_", " ")
+		// Split "2016 Madrid" into year="2016" location="Madrid"
+		var year, location string
+		if parts := strings.SplitN(title, " ", 2); len(parts) == 2 {
+			year = parts[0]
+			location = parts[1]
+		} else {
+			location = title
+		}
 		folders = append(folders, PhotoFolder{
-			Name:   folderName,
-			Title:  strings.ReplaceAll(folderName, "_", " "),
-			Photos: photos,
-			Path:   "/photos/" + folderName + "/",
-			Count:  len(photos),
+			Name:     folderName,
+			Title:    title,
+			Location: location,
+			Year:     year,
+			Photos:   photos,
+			Path:     "/photos/" + folderName + "/",
+			Count:    len(photos),
 		})
 	}
 
