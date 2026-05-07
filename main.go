@@ -264,6 +264,10 @@ func main() {
 	must(router.GET("category", "/categories/{name}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
 		name := m.Params["name"]
+		if name == "pockets" {
+			http.Redirect(w, r, "/pockets/", http.StatusMovedPermanently)
+			return
+		}
 		catPosts := postsByCategory[name]
 
 		var contentHTML string
@@ -893,6 +897,18 @@ func buildStaticSite(
 	}
 
 	for name := range allCategories {
+		if name == "pockets" {
+			// Write a redirect page instead of a category listing
+			redirectHTML := `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=/pockets/"><link rel="canonical" href="https://cptx.ee/pockets/"></head><body><a href="/pockets/">Redirecting to /pockets/</a></body></html>`
+			redirectPath := filepath.Join(distDir, "categories", "pockets", "index.html")
+			if err := os.MkdirAll(filepath.Dir(redirectPath), 0755); err != nil {
+				return err
+			}
+			if err := os.WriteFile(redirectPath, []byte(redirectHTML), 0644); err != nil {
+				return err
+			}
+			continue
+		}
 		catPosts := postsByCategory[name]
 		var contentHTML string
 		indexPath := filepath.Join("content", "categories", name, "_index.md")
