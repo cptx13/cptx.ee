@@ -324,23 +324,43 @@ func main() {
 		http.Redirect(w, r, post.Path, http.StatusMovedPermanently)
 	})))
 
+	// Build pockets data for the accordion page
+	pocketMeta := []struct {
+		Slug string
+		Icon string
+		Desc string
+	}{
+		{"bedsidetable", "📚", "books I've enjoyed"},
+		{"cheatsheet", "🔗", "links at hand"},
+		{"workbench", "🔧", "projects & resources"},
+		{"weekendreads", "📰", "articles I enjoyed"},
+	}
+
+	var pocketsData []any
+	for _, pm := range pocketMeta {
+		var contentHTML string
+		for _, p := range pocketPosts {
+			if p.Slug == pm.Slug {
+				contentHTML = string(p.Content)
+				break
+			}
+		}
+		pocketsData = append(pocketsData, map[string]any{
+			"Slug":        pm.Slug,
+			"Title":       pm.Slug,
+			"Icon":        pm.Icon,
+			"Desc":        pm.Desc,
+			"ContentHTML": contentHTML,
+		})
+	}
+
 	// Pockets index
 	must(router.GET("pockets.index", "/pockets/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var contentHTML string
-		indexPath := filepath.Join("content", "pockets", "_index.md")
-		if data, err := os.ReadFile(indexPath); err == nil {
-			_, body := parseFrontmatter(string(data))
-			contentHTML = renderMarkdown(body)
-		}
-
 		data := map[string]any{
-			"title":        "pockets",
-			"description":  "pockets - cptx",
-			"canonicalURL": "https://cptx.ee/pockets/",
-			"posts":        toPostList(pocketPosts),
-			"contentHTML":  contentHTML,
+			"pockets":     pocketsData,
+			"activeIndex": 0,
 		}
-		renderPage(w, engine, "ListPage", data)
+		renderPage(w, engine, "PocketsPage", data)
 	})))
 
 	// Photos index
@@ -916,20 +936,39 @@ func buildStaticSite(
 		}
 	}
 
-	// Pockets index
-	var pocketsContentHTML string
-	indexPath := filepath.Join("content", "pockets", "_index.md")
-	if data, err := os.ReadFile(indexPath); err == nil {
-		_, body := parseFrontmatter(string(data))
-		pocketsContentHTML = renderMarkdown(body)
+	// Pockets index (accordion page)
+	pocketMeta := []struct {
+		Slug string
+		Icon string
+		Desc string
+	}{
+		{"bedsidetable", "📚", "books I've enjoyed"},
+		{"cheatsheet", "🔗", "links at hand"},
+		{"workbench", "🔧", "projects & resources"},
+		{"weekendreads", "📰", "articles I enjoyed"},
 	}
 
-	if err := writePage("pockets/index.html", "ListPage", map[string]any{
-		"title":        "pockets",
-		"description":  "pockets - cptx",
-		"canonicalURL": "https://cptx.ee/pockets/",
-		"posts":        toPostList(pocketPosts),
-		"contentHTML":  pocketsContentHTML,
+	var pocketsData []any
+	for _, pm := range pocketMeta {
+		var contentHTML string
+		for _, p := range pocketPosts {
+			if p.Slug == pm.Slug {
+				contentHTML = string(p.Content)
+				break
+			}
+		}
+		pocketsData = append(pocketsData, map[string]any{
+			"Slug":        pm.Slug,
+			"Title":       pm.Slug,
+			"Icon":        pm.Icon,
+			"Desc":        pm.Desc,
+			"ContentHTML": contentHTML,
+		})
+	}
+
+	if err := writePage("pockets/index.html", "PocketsPage", map[string]any{
+		"pockets":     pocketsData,
+		"activeIndex": 0,
 	}); err != nil {
 		return err
 	}

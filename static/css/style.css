@@ -1036,3 +1036,91 @@ blockquote p {
         height: 140px;
     }
 }
+
+/* === Pockets === */
+.pocket-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+}
+
+.pocket-card {
+    border: 1px solid var(--code-border);
+    padding: 2em 1.2em;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.pocket-card:hover {
+    border-color: var(--content-primary);
+    background: var(--code-background);
+}
+
+.pocket-card.active {
+    border-color: var(--content-primary);
+    background: var(--code-background);
+}
+
+.pocket-card .pc-icon {
+    font-size: 1.8em;
+    margin-bottom: 0.4em;
+}
+
+.pocket-card .pc-title {
+    font-family: var(--font-mono);
+    font-size: 1em;
+    font-weight: 700;
+    color: var(--content-primary);
+}
+
+.pocket-card .pc-desc {
+    font-family: var(--font-mono);
+    font-size: 0.75em;
+    color: var(--content-secondary);
+    margin-top: 0.3em;
+}
+
+.pocket-expanded {
+    border: 1px solid var(--code-border);
+    border-top: none;
+    padding: 1.5em;
+    display: none;
+}
+
+.pocket-expanded.active {
+    display: block;
+}
+
+.pocket-expanded h4 {
+    font-size: 0.9em;
+    margin: 1em 0 0.3em;
+    color: var(--content-secondary);
+}
+
+.pocket-expanded h3 {
+    font-size: 1em;
+    margin: 1.2em 0 0.4em;
+}
+
+.pocket-expanded ul {
+    list-style: disc;
+    padding-left: 2em;
+}
+
+.pocket-expanded li {
+    margin: 0.25em 0;
+    font-size: 0.85em;
+}
+
+.pocket-expanded p {
+    margin: 0.4em 0;
+    font-size: 0.85em;
+    color: var(--content-secondary);
+}
+
+@media screen and (max-width: 500px) {
+    .pocket-grid {
+        grid-template-columns: 1fr;
+    }
+}
