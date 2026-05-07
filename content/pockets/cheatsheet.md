@@ -11,6 +11,8 @@ toc: false
 Some links I like to have at hand,
 
 #### Blogs
+* [No One's Happy](https://nooneshappy.com/)
+* [Invokation Games](https://www.invokation.games/blog)
 * [Mrus](https://マリウス.com/)
 * [Seth For Privacy](https://sethforprivacy.com/)
 * [Bartosz Ciechanowski](https://ciechanow.ski/)
