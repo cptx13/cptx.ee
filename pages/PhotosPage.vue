@@ -11,7 +11,8 @@
 
     <div id="view-folders" class="folder-grid">
       <a v-for="folder in folders" :href="folder.Path" class="folder-card">
-        <span class="folder-card-title">{{ folder.Title }}</span>
+        <span class="folder-card-title">{{ folder.Location }}</span>
+        <span class="folder-card-year">{{ folder.Year }}</span>
         <span class="folder-card-count">{{ folder.Count }} photos</span>
       </a>
     </div>
