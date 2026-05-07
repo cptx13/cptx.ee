@@ -10,6 +10,9 @@ toc: false
 ---
 Some books I have enjoyed recently.
 
+#### 2026.04
+* _Helena o el mar del verano_ (1952) by Julián Ayesta
+
 #### 2026.03
 * _The Butcher's Masquerade_ (2022) by Matt Dinniman
 
