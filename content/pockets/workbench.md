@@ -26,6 +26,10 @@ Some of my main projects.
         * [Click here to buy](https://amzn.eu/d/0aEZrWxZ)
 
 
+Guides:
+
+* [Replace Your Cloud Subscriptions in One Evening](/croquis/202607161/) — self-hosted photos, notes, and files on an old laptop
+
 Resources I used for some of my side projects.
 
 * [Kindle modification](https://kindlemodding.org/kindle-models.html)
