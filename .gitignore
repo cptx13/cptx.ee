@@ -1,3 +1,5 @@
 dist/
 cptx.ee
 content/photos/**/*.jpg
+
+feed-cache.json

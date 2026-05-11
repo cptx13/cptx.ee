@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -15,12 +16,15 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 	"unicode"
 
 	"github.com/dhamidi/dispatch"
 	"github.com/dhamidi/htmlc"
+	"github.com/mmcdole/gofeed"
 	"github.com/yuin/goldmark"
+	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
 	"golang.org/x/image/draw"
 	"golang.org/x/text/unicode/norm"
 )
@@ -44,6 +48,132 @@ type PhotoFolder struct {
 	Photos   []Photo
 	Path     string // e.g. "/photos/2016_Madrid/"
 	Count    int
+}
+
+// FeedItem represents a single article from an RSS feed.
+type FeedItem struct {
+	Title         string `json:"title"`
+	Link          string `json:"link"`
+	Source        string `json:"source"`
+	Date          time.Time `json:"date"`
+	DateFormatted string `json:"date_formatted"`
+}
+
+// FeedCache represents the on-disk cache of fetched feeds.
+type FeedCache struct {
+	LastRefreshed time.Time  `json:"last_refreshed"`
+	Items         []FeedItem `json:"items"`
+	Errors        []string   `json:"errors"`
+}
+
+const feedCacheFile = "feed-cache.json"
+
+// feedSources maps a display name to the RSS/Atom feed URL.
+var feedSources = []struct {
+	Name    string
+	FeedURL string
+}{
+	{"No One's Happy", "https://nooneshappy.com/rss.xml"},
+	{"Mrus", "https://xn--gckvb8fzb.com/index.xml"},
+	{"Seth For Privacy", "https://sethforprivacy.com/index.xml"},
+	{"Bartosz Ciechanowski", "https://ciechanow.ski/atom.xml"},
+	{"Matthew Ball", "https://www.matthewball.co/matthewball?format=rss"},
+	{"Mark Qvist", "https://unsigned.io/?feed=rss2"},
+	{"Matthew Green", "https://blog.cryptographyengineering.com/feed/"},
+	{"Uncharted Territories", "https://unchartedterritories.tomaspueyo.com/feed"},
+	{"Fitness Revolucionario", "https://www.fitnessrevolucionario.com/feed/"},
+	{"Adam Thiede", "https://adamthiede.com/rss.xml"},
+	{"Bunnie Studios", "https://www.bunniestudios.com/blog/?feed=rss2"},
+	{"Privacy Guides", "https://blog.privacyguides.org/feed_rss_created.xml"},
+}
+
+func loadFeedCache() (*FeedCache, error) {
+	data, err := os.ReadFile(feedCacheFile)
+	if err != nil {
+		return nil, err
+	}
+	var cache FeedCache
+	if err := json.Unmarshal(data, &cache); err != nil {
+		return nil, err
+	}
+	return &cache, nil
+}
+
+func saveFeedCache(cache *FeedCache) error {
+	data, err := json.MarshalIndent(cache, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(feedCacheFile, data, 0o644)
+}
+
+func fetchAllFeeds() *FeedCache {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	type result struct {
+		items []FeedItem
+		err   string
+	}
+
+	results := make([]result, len(feedSources))
+	var wg sync.WaitGroup
+
+	for i, src := range feedSources {
+		wg.Add(1)
+		go func(idx int, name, feedURL string) {
+			defer wg.Done()
+			feedCtx, feedCancel := context.WithTimeout(ctx, 10*time.Second)
+			defer feedCancel()
+
+			parser := gofeed.NewParser()
+			feed, err := parser.ParseURLWithContext(feedURL, feedCtx)
+			if err != nil {
+				results[idx] = result{err: fmt.Sprintf("%s: %v", name, err)}
+				return
+			}
+
+			var items []FeedItem
+			for _, item := range feed.Items {
+				var pubDate time.Time
+				if item.PublishedParsed != nil {
+					pubDate = *item.PublishedParsed
+				} else if item.UpdatedParsed != nil {
+					pubDate = *item.UpdatedParsed
+				}
+				items = append(items, FeedItem{
+					Title:         item.Title,
+					Link:          item.Link,
+					Source:        name,
+					Date:          pubDate,
+					DateFormatted: pubDate.Format("2006.01.02"),
+				})
+			}
+			results[idx] = result{items: items}
+		}(i, src.Name, src.FeedURL)
+	}
+
+	wg.Wait()
+
+	var allItems []FeedItem
+	var allErrors []string
+	for _, r := range results {
+		if r.err != "" {
+			allErrors = append(allErrors, r.err)
+		} else {
+			allItems = append(allItems, r.items...)
+		}
+	}
+
+	sort.Slice(allItems, func(i, j int) bool {
+		return allItems[i].Date.After(allItems[j].Date)
+	})
+
+	return &FeedCache{
+		LastRefreshed: time.Now(),
+		Items:         allItems,
+		Errors:        allErrors,
+	}
 }
 
 // Post represents a content entry parsed from markdown files.
@@ -422,6 +552,10 @@ func main() {
 		renderPage(w, engine, "SinglePage", data)
 	})))
 
+	// Feed page (server-side only, not static)
+	// Note: registered on mux below since it's under /pockets/feed/ which would
+	// otherwise match the pocket slug route.
+
 	// Static files
 	staticFS := http.FileServer(http.Dir("static"))
 	mux := http.NewServeMux()
@@ -448,6 +582,64 @@ func main() {
 			router.ServeHTTP(w, r)
 		}
 	})
+	// Feed page handlers (server-side only)
+	mux.HandleFunc("/pockets/cheatsheet/feed/refresh", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Refreshing feeds...")
+		cache := fetchAllFeeds()
+		if err := saveFeedCache(cache); err != nil {
+			log.Printf("error saving feed cache: %v", err)
+		}
+		log.Printf("Feed refresh complete: %d items, %d errors", len(cache.Items), len(cache.Errors))
+		http.Redirect(w, r, "/pockets/cheatsheet/feed/", http.StatusSeeOther)
+	})
+	// Redirect old /pockets/feed/ to new location
+	mux.HandleFunc("/pockets/feed/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/pockets/cheatsheet/feed/", http.StatusMovedPermanently)
+	})
+	mux.HandleFunc("/pockets/cheatsheet/feed/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/pockets/cheatsheet/feed/" {
+			router.ServeHTTP(w, r)
+			return
+		}
+		cache, err := loadFeedCache()
+		noCache := err != nil
+
+		var items []any
+		var feedErrors []any
+		var lastRefreshed string
+		var hasItems, hasErrors bool
+		var errorCount int
+
+		if !noCache {
+			lastRefreshed = cache.LastRefreshed.Format("2006.01.02 15:04 MST")
+			for _, item := range cache.Items {
+				items = append(items, map[string]any{
+					"Title":         item.Title,
+					"Link":          item.Link,
+					"Source":        item.Source,
+					"DateFormatted": item.DateFormatted,
+				})
+			}
+			for _, e := range cache.Errors {
+				feedErrors = append(feedErrors, e)
+			}
+			hasItems = len(items) > 0
+			hasErrors = len(feedErrors) > 0
+			errorCount = len(feedErrors)
+		}
+
+		data := map[string]any{
+			"noCache":       noCache,
+			"hasItems":      hasItems,
+			"hasErrors":     hasErrors,
+			"errorCount":    errorCount,
+			"lastRefreshed": lastRefreshed,
+			"items":         items,
+			"errors":        feedErrors,
+		}
+		renderPage(w, engine, "FeedPage", data)
+	})
+
 	mux.Handle("/", router)
 
 	// Build static site
@@ -716,9 +908,13 @@ func parsePost(content, filePath, root string) (*Post, error) {
 	return post, nil
 }
 
+var md = goldmark.New(
+	goldmark.WithRendererOptions(goldmarkhtml.WithUnsafe()),
+)
+
 func renderMarkdown(source string) string {
 	var buf bytes.Buffer
-	if err := goldmark.Convert([]byte(source), &buf); err != nil {
+	if err := md.Convert([]byte(source), &buf); err != nil {
 		log.Printf("markdown render error: %v", err)
 		return source
 	}

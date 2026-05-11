@@ -1126,6 +1126,16 @@ blockquote p {
     color: var(--content-secondary);
 }
 
+.pocket-expanded p.feed-link {
+    font-size: 1em;
+    margin-bottom: 0.3em;
+}
+.pocket-expanded p.feed-link .feed-emoji {
+    font-size: 1.8em;
+    vertical-align: middle;
+    line-height: 1;
+}
+
 @media screen and (max-width: 500px) {
     .pocket-grid {
         grid-template-columns: 1fr;
