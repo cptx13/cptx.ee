@@ -13,6 +13,7 @@ Articles from other people I have recently enjoyed.
 #### 2026.05
 * [Appearing Productive in The Workplace](https://nooneshappy.com/article/appearing-productive-in-the-workplace/) by No One's Happy
 * [Native Apps Should Be Avoided Whenever Possible](https://nooneshappy.com/article/native-apps-should-be-avoided-whenever-possible/) by No One's Happy
+* [Management](https://andrulis.de/blog/20260429_management.html) by Andrulis
 
 #### 2026.04
 * [We Removed the Immune System](https://gothburz.substack.com/p/we-removed-the-immune-system) by Peter Girnus
