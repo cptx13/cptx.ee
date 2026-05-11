@@ -40,3 +40,4 @@ Resources I used for some of my side projects.
 * [dArk OS](https://github.com/christianhaitian/dArkOS/wiki)
 * [Bookmarkdown](https://github.com/mrusme/bookmarkdown)
 * [Rockbox for iPod](https://download.rockbox.org/daily/manual/rockbox-ipod3g/rockbox-build.html)
+* [Build Your Own Decentralized Dropbox with Syncthing](https://xn--gckvb8fzb.com/build-your-own-decentralized-dropbox-with-syncthing/)
