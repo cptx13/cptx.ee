@@ -11,6 +11,8 @@ toc: false
 Some links I like to have at hand,
 
 #### Blogs
+<p class="feed-link"><span class="feed-emoji">📡</span> <a href="/pockets/cheatsheet/feed/">feed</a> — latest articles from these blogs</p>
+
 * [No One's Happy](https://nooneshappy.com/)
 * [Invokation Games](https://www.invokation.games/blog)
 * [Andrulis](https://andrulis.de/blog/)
