@@ -1209,10 +1209,13 @@ func buildStaticSite(
 			if err := copyDir(srcDir, dstDir); err != nil {
 				return fmt.Errorf("copying photos for %s: %w", folder.Name, err)
 			}
-			// Generate thumbnails (600px wide, quality 80)
+			// Generate thumbnails (600px wide, quality 80) — skip if already copied from dev cache
 			for _, photo := range folder.Photos {
-				srcPath := filepath.Join(srcDir, photo.File)
 				thumbPath := filepath.Join(dstDir, "thumb_"+photo.File)
+				if _, err := os.Stat(thumbPath); err == nil {
+					continue // already exists (copied from content/photos/)
+				}
+				srcPath := filepath.Join(srcDir, photo.File)
 				if err := generateThumbnail(srcPath, thumbPath, 600, 80); err != nil {
 					log.Printf("warning: thumbnail for %s: %v", photo.ID, err)
 				}
