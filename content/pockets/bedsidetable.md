@@ -1,7 +1,7 @@
 ---
 title: "bedsidetable"
 author: cptx
-date: 2026-04-02
+date: 2026-07-01
 draft: false
 categories: [pockets]
 tags: [bedsidetable]
@@ -9,6 +9,16 @@ showTags: true
 toc: false
 ---
 Some books I have enjoyed recently.
+
+#### 2026.07
+* _Butter_ (2017) by Asako Yuzuki (translated by Polly Barton)
+* _This Inevitable Ruin_ (2024) by Matt Dinniman
+
+#### 2026.06
+* _The Eye of the Bedlam Bride_ (2023) by Matt Dinniman
+
+#### 2026.05
+* _Akira Toriyama's Manga Theater_ (2021) by Akira Toriyama (translated by Greg Werner)
 
 #### 2026.04
 * _Helena o el mar del verano_ (1952) by Julián Ayesta
