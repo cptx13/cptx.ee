@@ -1,8 +1,7 @@
 <template>
 <AppLayout :pageTitle="'photos | cptx'" :description="'photo galleries'" :canonicalURL="'https://cptx.ee/photos/'">
   <div class="list-container" style="margin-top: 2.5em;">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5em;">
-      <h2 style="font-size: 1.1em; margin: 0; font-family: inherit;">photos</h2>
+    <div style="display: flex; align-items: center; justify-content: flex-end; margin-bottom: 1.5em;">
       <div class="photos-toggle-group">
         <button id="toggle-folders" class="photos-toggle active" onclick="switchView('folders')">folders</button>
         <button id="toggle-all" class="photos-toggle" onclick="switchView('all')">all</button>

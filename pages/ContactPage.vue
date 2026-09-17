@@ -1,7 +1,6 @@
 <template>
 <AppLayout :pageTitle="'contact | cptx'" :description="'get in touch'" :canonicalURL="'https://cptx.ee/contact/'">
   <div style="margin-top: 2em;">
-    <h2 style="font-size: 1.3em; margin-bottom: 1.5em;">contact</h2>
     <p style="color: var(--content-secondary); margin-bottom: 2em;">Feel free to reach out.</p>
     <div class="contact-links">
       <a href="mailto:hello@cptx.ee" class="contact-link">
