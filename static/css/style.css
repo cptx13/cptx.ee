@@ -414,9 +414,6 @@ hr {
 }
 
 .shuffle-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   animation: shuffle-pulse 2.5s ease-in-out infinite;
 }
 
@@ -1142,9 +1139,48 @@ blockquote p {
     }
 }
 
+/* === List toolbar === */
+.list-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    margin-bottom: 1em;
+}
+
+.list-toolbar-title {
+    font-size: 1.1em;
+    font-family: inherit;
+    margin: 0;
+}
+
+.list-toolbar-actions {
+    display: flex;
+    gap: 0.3em;
+    margin-left: auto;
+}
+
+.toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--content-secondary);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.toolbar-btn:hover {
+    color: var(--content-primary);
+    border-color: var(--content-primary);
+}
+
 /* === Search === */
 .search-bar {
-    margin-bottom: 1.2em;
+    margin-bottom: 1em;
 }
 
 .search-bar input {
