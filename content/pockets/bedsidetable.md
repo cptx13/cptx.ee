@@ -1,7 +1,7 @@
 ---
 title: "bedsidetable"
 author: cptx
-date: 2026-07-01
+date: 2026-09-17
 draft: false
 categories: [pockets]
 tags: [bedsidetable]
@@ -9,6 +9,12 @@ showTags: true
 toc: false
 ---
 Some books I have enjoyed recently.
+
+#### 2026.09
+* _Kitchen Confidential_ (2000) by Anthony Bourdain
+
+#### 2026.08
+* _Watchmen: The Deluxe Edition_ (2013) by Alan Moore
 
 #### 2026.07
 * _Butter_ (2017) by Asako Yuzuki (translated by Polly Barton)
