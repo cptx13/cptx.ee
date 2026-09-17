@@ -390,6 +390,11 @@ func main() {
 		renderPage(w, engine, "SinglePage", data)
 	})))
 
+	// Contact page
+	must(router.GET("contact", "/contact/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		renderPage(w, engine, "ContactPage", map[string]any{})
+	})))
+
 	// Category pages
 	must(router.GET("category", "/categories/{name}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
@@ -1077,6 +1082,11 @@ func buildStaticSite(
 		}); err != nil {
 			return err
 		}
+	}
+
+	// Contact page
+	if err := writePage("contact/index.html", "ContactPage", map[string]any{}); err != nil {
+		return err
 	}
 
 	// Category pages
