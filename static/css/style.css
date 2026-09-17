@@ -1169,6 +1169,32 @@ blockquote p {
     color: var(--content-primary);
 }
 
+/* === Contact === */
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    font-family: var(--font-mono);
+    font-size: 0.95em;
+    color: var(--content-secondary);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.contact-link:hover {
+    color: var(--content-primary);
+}
+
+.contact-link svg {
+    flex-shrink: 0;
+}
+
 /* === Search === */
 .search-bar {
     margin-bottom: 1em;

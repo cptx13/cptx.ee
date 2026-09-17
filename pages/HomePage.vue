@@ -2,7 +2,6 @@
 <AppLayout :pageTitle="'cptx'" :description="'a collection of mathoms'" :canonicalURL="'https://cptx.ee/'">
   <div class="intro">
     <p>A collection of mathoms.</p>
-    <SocialIcons></SocialIcons>
   </div>
   <div class="list-container">
     <div class="list-toolbar">
