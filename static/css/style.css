@@ -1141,3 +1141,29 @@ blockquote p {
         grid-template-columns: 1fr;
     }
 }
+
+/* === Search === */
+.search-bar {
+    margin-bottom: 1.2em;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 0.5em 0.7em;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--content-primary);
+    background: var(--code-background);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    transition: border-color 0.2s;
+}
+
+.search-bar input::placeholder {
+    color: var(--content-secondary);
+}
+
+.search-bar input:focus {
+    border-color: var(--content-primary);
+    outline: none;
+}

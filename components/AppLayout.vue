@@ -25,6 +25,7 @@
   <SiteFooter></SiteFooter>
   <script src="/js/theme-switch.js"></script>
   <script defer src="/js/copy-code.js"></script>
+  <script defer src="/js/post-search.js"></script>
   <script>
   (function () {
     var button = document.getElementById("random-post-button");
