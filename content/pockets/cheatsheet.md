@@ -1,7 +1,7 @@
 ---
 title: "cheatsheet"
 author: cptx
-date: 2026-04-02
+date: 2026-09-17
 draft: false
 categories: [pockets]
 tags: [cheatsheet]
@@ -50,3 +50,4 @@ Some links I like to have at hand,
 * [Mikkel Eye](https://www.mikkeleye.dk/)
 * [The Door of Perception](https://doorofperception.com/)
 * [The Stormtrooper Obsession](https://stormtrooperobsession.com/)
+* [The Restroom Archive](https://restroomarchive.com/)
