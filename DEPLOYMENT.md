@@ -1,6 +1,28 @@
 # Deployment
 
-cptx.ee is deployed to the `cptx` SSH host as systemd user services under the `exedev` user.
+cptx.ee is deployed on the `cptx` VM as systemd user services under the `exedev` user.
+
+## Automatic deploys (normal path)
+
+Just push to `main` on GitHub (web UI, phone, laptop — anywhere). The VM polls
+GitHub itself, so nothing needs to reach into the VM:
+
+- **`cptx-ee-deploy.timer`** — fires every minute
+- **`cptx-ee-deploy.service`** — runs `deploy.sh`, which fetches `origin/main`
+  and, if it moved, does `git reset --hard origin/main`, rebuilds, and restarts
+  the server. If nothing changed it exits immediately.
+
+Watch a deploy: `journalctl --user -u cptx-ee-deploy -n 20`
+
+Note: `deploy.sh` hard-resets the worktree, so never leave uncommitted or
+unpushed work on the VM — it will be discarded.
+
+The `origin` remote uses a tokenless public HTTPS URL (read-only). Pushing from
+the VM needs credentials; pushing isn't required for deploys.
+
+GitHub Actions cannot be used for deploys: hosted runners can't reach this VM.
+
+## Manual deploy
 
 ## Prerequisites
 
