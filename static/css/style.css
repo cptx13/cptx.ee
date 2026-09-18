@@ -163,7 +163,6 @@ img {
     --code-border-radius: 10px;
     --copy-code-button-border-radius: 7px;
 
-    --social-icons-bottom-margin: 3rem;
 
     --footer-height: 3rem;
 
@@ -186,7 +185,6 @@ img {
 @media screen and (max-width: 640px) {
     :root {
         --header-top-gap: 1rem;
-        --social-icons-bottom-margin: 0rem;
         --caption-padding: calc(2 * var(--main-padding));
         --li-indent: 1rem;
         --main-padding: 1em;
@@ -498,25 +496,6 @@ footer a {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-}
-
-/* Social Icons */
-.social-icons {
-  padding: 12px 0;
-  margin-bottom: var(--social-icons-bottom-margin)
-}
-
-.social-icons a {
-  text-decoration: none;
-}
-
-.social-icons a:not(:last-of-type) {
-  margin-inline-end: 12px;
-}
-
-.social-icons a svg {
-  height: 20px;
-  width: 20px;
 }
 
 /* Single post page */
