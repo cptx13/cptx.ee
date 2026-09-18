@@ -1,7 +1,7 @@
 ---
 title: "cheatsheet"
 author: cptx
-date: 2026-09-17
+date: 2026-09-18
 draft: false
 categories: [pockets]
 tags: [cheatsheet]
@@ -51,3 +51,8 @@ Some links I like to have at hand,
 * [The Door of Perception](https://doorofperception.com/)
 * [The Stormtrooper Obsession](https://stormtrooperobsession.com/)
 * [The Restroom Archive](https://restroomarchive.com/)
+
+#### Fun
+* [No Meat Proxy](https://nomeatproxy.com/)
+* [Don't ask to ask, just ask](https://dontasktoask.com/)
+* [No Hello](https://nohello.net/en/)
