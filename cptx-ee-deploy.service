@@ -1,0 +1,7 @@
+[Unit]
+Description=Pull cptx.ee from GitHub and redeploy if changed
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/cptx-v2/deploy.sh
