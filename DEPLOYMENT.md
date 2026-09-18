@@ -17,8 +17,14 @@ Watch a deploy: `journalctl --user -u cptx-ee-deploy -n 20`
 Note: `deploy.sh` hard-resets the worktree, so never leave uncommitted or
 unpushed work on the VM — it will be discarded.
 
-The `origin` remote uses a tokenless public HTTPS URL (read-only). Pushing from
-the VM needs credentials; pushing isn't required for deploys.
+The `origin` remote uses a tokenless public HTTPS URL, so deploys need no
+credentials. Pushing *from* the VM uses a GitHub token stored outside the repo
+in `~/.git-credentials` (mode 600) via git's `credential.helper store`.
+To set or rotate that token, run interactively on the VM:
+
+```sh
+~/set-github-token.sh
+```
 
 GitHub Actions cannot be used for deploys: hosted runners can't reach this VM.
 
