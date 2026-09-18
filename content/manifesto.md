@@ -1,7 +1,7 @@
 ---
 title: "manifesto"
 author: cptx
-date: 2026-05-07
+date: 2026-09-18
 draft: false
 categories: ["manifesto"]
 tags: [manifesto]
@@ -14,7 +14,7 @@ A mathom is a term coined by J.R.R. Tolkien to describe an object that Hobbits h
 
 This site emerged out of necessity and stubbornness. Instead of addressing my hoarding tendencies, I sought various organizational systems from different platforms, however, I became tired of fighting and losing data due to their monopolistic practices.
 
-Since creating this site, I have developed various ways to organize my existing data. Thanks to Obsidian and its philosophy of prioritizing "file over app," I have regained my digital freedom and creative ownership.
+Since creating this site, I have developed various ways to organize my existing data. Thanks to [Obsidian](https://obsidian.md/) and its philosophy of prioritizing "file over app," I have regained my digital freedom and creative ownership.
 
 ---
 
