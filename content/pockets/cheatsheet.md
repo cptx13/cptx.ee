@@ -1,7 +1,7 @@
 ---
 title: "cheatsheet"
 author: cptx
-date: 2026-09-18
+date: 2026-10-19
 draft: false
 categories: [pockets]
 tags: [cheatsheet]
@@ -17,6 +17,7 @@ Some links I like to have at hand,
 * [Invokation Games](https://www.invokation.games/blog)
 * [Andrulis](https://andrulis.de/blog/)
 * [Mrus](https://マリウス.com/)
+* [Karri Saarineen] (https://karrisaarinen.com/)
 * [Seth For Privacy](https://sethforprivacy.com/)
 * [Bartosz Ciechanowski](https://ciechanow.ski/)
 * [Matthew Ball](https://www.matthewball.co/)
