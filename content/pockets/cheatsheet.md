@@ -17,7 +17,7 @@ Some links I like to have at hand,
 * [Invokation Games](https://www.invokation.games/blog)
 * [Andrulis](https://andrulis.de/blog/)
 * [Mrus](https://マリウス.com/)
-* [Karri Saarineen] (https://karrisaarinen.com/)
+* [Karri Saarineen](https://karrisaarinen.com/)
 * [Seth For Privacy](https://sethforprivacy.com/)
 * [Bartosz Ciechanowski](https://ciechanow.ski/)
 * [Matthew Ball](https://www.matthewball.co/)
@@ -42,6 +42,7 @@ Some links I like to have at hand,
 * [Piracy Reddit Megathread](https://old.reddit.com/r/Piracy/wiki/megathread)
 * [Layoff Tracker](https://layoffhedge.com/)
 * [Killed by Google](https://killedbygoogle.com/)
+* [Organized Crime and Corruption Reporting Project](https://www.occrp.org/en)
 
 #### Art
 * [Poorly Drawn Lines](https://poorlydrawnlines.com/)
