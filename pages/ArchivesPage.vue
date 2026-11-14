@@ -1,8 +1,8 @@
 <template>
-<AppLayout :pageTitle="'archives | cptx'" :description="'Things I keep: the books I wrote, my library, and later records, films and other collections.'" :canonicalURL="'https://cptx.ee/archives/'" :lang="'en'" :ogType="'website'">
+<AppLayout :pageTitle="'archives | cptx'" :description="'Things we keep: the books I wrote, some of the books Merzeede and I own, and later records, films and other collections.'" :canonicalURL="'https://cptx.ee/archives/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons archives">
     <h1 class="addons-title">archives</h1>
-    <p class="addons-intro">Things I keep. The books I wrote, the books on my shelves, and later the records, films and other collections.</p>
+    <p class="addons-intro">Things we keep. The books I wrote, some of the books Merzeede and I own, and later the records, films and other collections.</p>
 
     <section v-if="hasMine" class="ar-mine">
       <h2 class="lib-shelf-label">written by me</h2>
@@ -19,7 +19,7 @@
 
     <a class="addon-card ar-card" href="/archives/library/">
       <span class="addon-card-title">library →</span>
-      <span class="addon-card-desc">{{ count }} books on my shelves, as covers or spines. Shelve them by genre, colour, author, decade, language or size.</span>
+      <span class="addon-card-desc">Some of the books Merzeede and I own: {{ count }} so far, as not all of them have been scanned. As covers or spines; shelve them by genre, colour, author, decade, language or size.</span>
       <span class="ar-strip" aria-hidden="true"><span v-for="b in strip" class="lib-spine" :style="b.MiniStyle"></span></span>
     </a>
     <div class="addon-card ar-card ar-soon">

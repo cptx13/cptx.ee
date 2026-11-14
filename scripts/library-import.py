@@ -100,8 +100,25 @@ def get_json(url):
     return None
 
 
+BROWSER_UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+
+
+def amazon_asin(link):
+    """Follow an amzn.eu short link to the product page and read its ASIN."""
+    try:
+        req = urllib.request.Request(link, headers={"User-Agent": BROWSER_UA})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            m = re.search(r"/(?:dp|gp/product)/([A-Z0-9]{10})", r.geturl())
+            return m.group(1) if m else ""
+    except urllib.error.HTTPError as e:
+        m = re.search(r"/(?:dp|gp/product)/([A-Z0-9]{10})", e.geturl() or "")
+        return m.group(1) if m else ""
+    except Exception:
+        return ""
+
+
 def get_bytes(url):
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    req = urllib.request.Request(url, headers={"User-Agent": BROWSER_UA if "amazon" in url else UA})
     try:
         with urllib.request.urlopen(req, timeout=30) as r:
             if r.status == 200 and r.headers.get("Content-Type", "").startswith("image/"):
@@ -139,7 +156,7 @@ def fetch_raw(key, isbn, rawdir, refetch):
     return raw
 
 
-def fetch_cover(key, isbn, raw, coverdir, refetch):
+def fetch_cover(key, isbn, raw, coverdir, refetch, isbn10="", asin=""):
     path = os.path.join(coverdir, key + ".jpg")
     if os.path.exists(path) and not refetch:
         return "cached"
@@ -155,7 +172,17 @@ def fetch_cover(key, isbn, raw, coverdir, refetch):
         g = g.replace("http://", "https://").replace("&edge=curl", "")
         tries.append(("google", g + "&fife=w600"))
         tries.append(("google", g))
+    for a in [x for x in (asin, isbn10) if x]:
+        tries.append(("amazon", "https://images-na.ssl-images-amazon.com/images/P/%s.01._SCLZZZZZZZ_.jpg" % a))
+        tries.append(("amazon", "https://m.media-amazon.com/images/P/%s.01._SCLZZZZZZZ_.jpg" % a))
+    if isbn:
+        tries.append(("goodreads", "lookup"))
     for src, url in tries:
+        if url == "lookup":  # Goodreads-based lookup, only when everything else failed
+            lt = get_json("https://bookcover.longitood.com/bookcover/" + isbn)
+            url = (lt or {}).get("url", "")
+            if not url:
+                continue
         b = get_bytes(url)
         time.sleep(0.3)
         if b and len(b) > 2000:  # Google sends a ~1 KB "image not available" placeholder
@@ -238,7 +265,8 @@ def main():
                 b["openlibrary"] = "https://openlibrary.org" + o["key"]
             if raw.get("google"):
                 b["google"] = (raw["google"].get("volumeInfo") or {}).get("infoLink", "")
-            b["cover"] = fetch_cover(key, isbn, raw, coverdir, refetch)
+            asin = amazon_asin(own[key]) if key in own else ""
+            b["cover"] = fetch_cover(key, isbn, raw, coverdir, refetch, r["isbn10"], asin)
             if b["cover"] == "cached":
                 b["cover"] = "yes"
             print("%3d/%d %-14s %-8s %s" % (i, len(rows), key, b["cover"] or "-", b["title"][:50]), flush=True)

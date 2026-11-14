@@ -714,7 +714,7 @@ func buildBookData(lib *library, b *libBook) map[string]any {
 		"buy":           b.Buy,
 		"own":           b.Own,
 		"pageTitle":     b.Title + " | library | cptx",
-		"description":   desc + " — on my shelf.",
+		"description":   desc + " — one of the books Merzeede and I own.",
 		"canonical":     siteURL + b.path(),
 		"lang":          langOr(b.Lang),
 	}

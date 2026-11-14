@@ -1,8 +1,9 @@
 <template>
-<AppLayout :pageTitle="pageTitle" :description="'The books on my shelves, by cover or spine: shelve them by genre, colour, author, decade, language or size.'" :canonicalURL="canonical" :lang="'en'" :ogType="'website'">
+<AppLayout :pageTitle="pageTitle" :description="'Some of the books Merzeede and I own, by cover or spine: shelve them by genre, colour, author, decade, language or size.'" :canonicalURL="canonical" :lang="'en'" :ogType="'website'">
   <div class="list-container addons library">
     <p class="addons-crumb"><a href="/archives/">archives</a> / library<span v-if="hasFocus"> / {{ focus }}</span></p>
     <h1 class="addons-title">library</h1>
+    <p class="addons-intro">Some of the books Merzeede and I own. Not all of them have been scanned yet, so the shelves keep growing.</p>
     <p class="hm-stats">{{ stats }}</p>
 
     <div class="hm-filters">
