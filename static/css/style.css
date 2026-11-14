@@ -1241,3 +1241,4 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 @media print {
     .ph-views, .ph-box { display: none !important; }
 }
+.pk-sub a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
