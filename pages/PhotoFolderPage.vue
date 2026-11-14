@@ -1,5 +1,5 @@
 <template>
-<AppLayout :pageTitle="folder.Title + ' | photos | cptx'" :description="folder.Title + ' - photo gallery'" :canonicalURL="'https://cptx.ee' + folder.Path">
+<AppLayout :pageTitle="folder.Title + ' | photos | cptx'" :description="folder.Title + ' - photo gallery'" :canonicalURL="'https://cptx.ee' + folder.Path" :lang="'en'" :ogType="'website'">
   <div class="list-container" style="margin-top: 2.5em;">
     <p style="margin-bottom: 1.5em;"><a href="/photos/">← back to photos</a></p>
     <h1 style="font-size: 1.6em; margin-bottom: 1em;">{{ folder.Title }}</h1>

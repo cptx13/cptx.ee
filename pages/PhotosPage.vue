@@ -1,5 +1,5 @@
 <template>
-<AppLayout :pageTitle="'photos | cptx'" :description="'photo galleries'" :canonicalURL="'https://cptx.ee/photos/'">
+<AppLayout :pageTitle="'photos | cptx'" :description="'photo galleries'" :canonicalURL="'https://cptx.ee/photos/'" :lang="'en'" :ogType="'website'">
   <div class="list-container" style="margin-top: 2.5em;">
     <div style="display: flex; align-items: center; justify-content: flex-end; margin-bottom: 1.5em;">
       <div class="photos-toggle-group">

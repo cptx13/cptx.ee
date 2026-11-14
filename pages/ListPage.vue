@@ -1,5 +1,5 @@
 <template>
-<AppLayout :pageTitle="title + ' | cptx'" :description="description" :canonicalURL="canonicalURL">
+<AppLayout :pageTitle="title + ' | cptx'" :description="description" :canonicalURL="canonicalURL" :lang="'es'" :ogType="'website'">
   <div class="list-container" style="margin-top: 2.5em;">
     <div v-if="contentHTML" style="margin-bottom: 2em;" v-html="contentHTML"></div>
     <div v-if="posts.length === 0 && !contentHTML">

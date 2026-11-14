@@ -1,5 +1,5 @@
 <template>
-<html lang="en-us" dir="ltr">
+<html :lang="lang" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
@@ -11,6 +11,16 @@
   <meta name="description" :content="description">
   <title>{{ pageTitle }}</title>
   <link rel="canonical" :href="canonicalURL">
+  <meta property="og:site_name" content="cptx">
+  <meta property="og:type" :content="ogType">
+  <meta property="og:title" :content="pageTitle">
+  <meta property="og:description" :content="description">
+  <meta property="og:url" :content="canonicalURL">
+  <meta property="og:image" content="https://cptx.ee/android-chrome-192x192.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="alternate" type="application/rss+xml" title="cptx — croquis" href="/index.xml">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <link rel="preload" href="/fonts/jetbrains-mono/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/css/style.css" media="all">
 </head>
 <body class="dark">
