@@ -1,0 +1,16 @@
+[Unit]
+Description=cptx.ee web server
+# No dependency on cptx-ee-build.service (B-02): deploy.sh builds and swaps the
+# binary safely, and ~/.local/bin/cptx.ee persists across reboots, so a reboot
+# just starts the last good build.
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/cptx-v2
+ExecStart=%h/.local/bin/cptx.ee
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
