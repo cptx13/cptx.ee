@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -136,5 +137,56 @@ func TestAssetVersioning(t *testing.T) {
 	got := withDoctype(`<html><link rel="stylesheet" href="/css/style.css"><script src="/js/theme-switch.js"></script></html>`)
 	if !strings.Contains(got, `/css/style.css?v=`) || !strings.Contains(got, `/js/theme-switch.js?v=`) {
 		t.Errorf("assets not versioned: %s", got)
+	}
+}
+
+func testIdx() []addonPost {
+	d := func(s string) time.Time { t, _ := time.Parse("2006-01-02", s); return t }
+	mk := func(day, sec string, tags ...string) *Post {
+		return &Post{Title: day, Path: "/" + sec + "/" + day + "/", Section: sec, Tags: tags, Date: d(day), Content: "<p>uno dos tres</p>"}
+	}
+	return buildAddonIndex([]*Post{mk("2023-02-01", "recuerdos"), mk("2023-02-01", "recuerdos"), mk("2023-02-02", "recuerdos"),
+		mk("2025-04-22", "croquis", "rimas"), mk("2024-02-01", "croquis", "retales")})
+}
+
+func TestMapParams(t *testing.T) {
+	idx := testIdx()
+	tags := addonTags(idx)
+	data := buildMapData(idx, tags, url.Values{"year": {"2023"}, "section": {"recuerdos"}, "metric": {"words"}, "day": {"2023-02-01"}})
+	if data["year"] != 2023 || data["total"] != 3 || data["activeDays"] != 2 || data["bestStreak"] != 2 {
+		t.Errorf("stats: year=%v total=%v days=%v streak=%v", data["year"], data["total"], data["activeDays"], data["bestStreak"])
+	}
+	if n := len(data["dayPosts"].([]any)); n != 2 {
+		t.Errorf("day posts = %d", n)
+	}
+	if !strings.Contains(data["shareURL"].(string), "metric=words") || !strings.Contains(data["shareURL"].(string), "section=recuerdos") {
+		t.Errorf("share url %v", data["shareURL"])
+	}
+	// junk params fall back to defaults (latest year, all sections)
+	data = buildMapData(idx, tags, url.Values{"year": {"1999"}, "section": {"<x>"}, "tag": {"nope"}, "day": {"zzz"}})
+	if data["year"] != 2025 || data["total"] != 1 || data["hasDayPosts"] != false {
+		t.Errorf("fallback: %v %v", data["year"], data["total"])
+	}
+	// tag filter
+	data = buildMapData(idx, tags, url.Values{"tag": {"retales"}})
+	if data["year"] != 2024 {
+		t.Errorf("tag year %v", data["year"])
+	}
+}
+
+func TestOnThisDay(t *testing.T) {
+	idx := testIdx()
+	now := time.Date(2026, 2, 1, 12, 0, 0, 0, time.UTC)
+	ps, ok := homeOnThisDay(idx, now)
+	if !ok || len(ps) != 3 {
+		t.Errorf("home on this day: %d", len(ps))
+	}
+	d := buildTodayData(idx, url.Values{"date": {"02-02"}}, now)
+	if d["count"] != 1 || d["md"] != "02-02" {
+		t.Errorf("today: %v %v", d["count"], d["md"])
+	}
+	d = buildTodayData(idx, url.Values{"date": {"13-45"}}, now) // invalid -> today
+	if d["md"] != "02-01" {
+		t.Errorf("invalid date fallback: %v", d["md"])
 	}
 }
