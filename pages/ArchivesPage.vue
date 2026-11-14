@@ -4,36 +4,40 @@
     <h1 class="addons-title">archives</h1>
     <p class="addons-intro">Things we keep. The books I wrote, some of the books Merzeede and I own, and later the records, films and other collections.</p>
 
-    <section v-if="hasMine" class="ar-mine">
-      <h2 class="lib-shelf-label">written by me</h2>
-      <div class="ar-mine-row">
-        <div v-for="b in mine" class="ar-mine-book">
-          <a :href="b.Href" class="lib-cover-link" :title="b.Label">
-            <img v-if="b.HasCover" class="lib-cover" :src="b.Thumb" :alt="b.Label" height="150" :width="b.CoverW" loading="lazy">
-            <span v-else class="lib-gen" :style="b.GenStyle" :lang="b.Lang"><span class="lib-gen-author">{{ b.Author }}</span><span class="lib-gen-mid"><span class="lib-gen-title">{{ b.Main }}</span><span v-if="b.Sub" class="lib-gen-sub">{{ b.Sub }}</span></span><span class="lib-gen-year">{{ b.Year }}</span></span>
-          </a>
-          <div class="bk-cap" :style="b.CapStyle" :lang="b.Lang">
-            <a :href="b.Href" class="bk-cap-title">{{ b.Main }}</a>
-            <span v-if="b.Sub" class="bk-cap-sub">{{ b.Sub }}</span>
-            <span class="bk-cap-year">{{ b.Year }}</span>
-            <a class="bk-cap-buy" :href="b.Buy" rel="noopener">buy →</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <a class="addon-card ar-card" href="/archives/library/">
-      <span class="addon-card-title">library →</span>
-      <span class="addon-card-desc">Some of the books Merzeede and I own: {{ count }} so far, as not all of them have been scanned. As covers or spines; shelve them by genre, colour, author, decade, language or size.</span>
-      <span class="ar-strip" aria-hidden="true"><span v-for="b in strip" class="lib-spine" :style="b.MiniStyle"></span></span>
+    <a v-if="hasMine" class="addon-card ar-card ic-card" href="/archives/written-by-me/">
+      <LineIcon :name="'pen'"></LineIcon>
+      <span class="ic-text">
+        <span class="addon-card-title">written by me →</span>
+        <span class="addon-card-desc">The {{ mineCount }} books I wrote: poems and recuerdos, with links to buy them.</span>
+        <span class="ar-covers" aria-hidden="true">
+          <span v-for="b in mine" class="ar-cover">
+            <img v-if="b.HasCover" :src="b.Thumb" alt="" height="64" loading="lazy">
+            <span v-else class="ar-cover-gen" :style="b.GenStyle"></span>
+          </span>
+        </span>
+      </span>
     </a>
-    <div class="addon-card ar-card ar-soon">
-      <span class="addon-card-title">vinyl</span>
-      <span class="addon-card-desc">Soon: records, with their covers and pressings.</span>
+    <a class="addon-card ar-card ic-card" href="/archives/library/">
+      <LineIcon :name="'books'"></LineIcon>
+      <span class="ic-text">
+        <span class="addon-card-title">library →</span>
+        <span class="addon-card-desc">Some of the books Merzeede and I own: {{ count }} so far, as not all of them have been scanned. As covers or spines; shelve them by genre, colour, author, decade, language or size.</span>
+        <span class="ar-strip" aria-hidden="true"><span v-for="b in strip" class="lib-spine" :style="b.MiniStyle"></span></span>
+      </span>
+    </a>
+    <div class="addon-card ar-card ar-soon ic-card">
+      <LineIcon :name="'vinyl'"></LineIcon>
+      <span class="ic-text">
+        <span class="addon-card-title">vinyl</span>
+        <span class="addon-card-desc">Soon: records, with their covers and pressings.</span>
+      </span>
     </div>
-    <div class="addon-card ar-card ar-soon">
-      <span class="addon-card-title">films &amp; other collections</span>
-      <span class="addon-card-desc">Later.</span>
+    <div class="addon-card ar-card ar-soon ic-card">
+      <LineIcon :name="'film'"></LineIcon>
+      <span class="ic-text">
+        <span class="addon-card-title">films &amp; other collections</span>
+        <span class="addon-card-desc">Later.</span>
+      </span>
     </div>
   </div>
 </AppLayout>

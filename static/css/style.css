@@ -1242,3 +1242,17 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
     .ph-views, .ph-box { display: none !important; }
 }
 .pk-sub a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
+/* === line icons on hub cards (pockets, addons, archives) === */
+.ic-card { display: flex; gap: 1em; align-items: flex-start; }
+.ic-text { flex: 1; min-width: 0; }
+.line-icon { flex: none; width: 1.75em; height: 1.75em; margin-top: .05em; color: var(--content-secondary); transition: color .15s; }
+.ic-card:hover .line-icon { color: var(--pk-accent); }
+.ar-soon.ic-card:hover .line-icon { color: var(--content-secondary); }
+.ar-covers { display: flex; align-items: flex-end; gap: .45em; margin-top: .9em; height: 64px; overflow: hidden; }
+.ar-cover img { height: 64px; width: auto; border-radius: 2px; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
+.ar-cover-gen { display: block; width: 42px; height: 64px; border-radius: 2px; }
+@media screen and (max-width: 640px) {
+    .ic-card { gap: .75em; }
+    .line-icon { width: 1.5em; height: 1.5em; }
+}
