@@ -1,0 +1,46 @@
+# key	field	value — manual fixes that win over Libib and the fetched metadata.
+# fields: title, subtitle, author, lang, year (edition), first_year (first published), pages, shelf, cover (none = use the generated cover)
+9781853260285	author	Jane Austen
+9788415689508	author	G. K. Chesterton
+9781035003792	author	Cormac McCarthy
+9781035003792	title	The Road
+9781447263227	author	Rainbow Rowell
+9781399617208	author	Arkady & Boris Strugatsky
+9788467038026	author	Erasmo de Rotterdam
+9788467038026	title	Elogio de la locura
+9780241422267	author	Sabahattin Ali
+9781529110685	author	Ocean Vuong
+9781782116615	author	David Eagleman
+9781784701994	author	Paul Kalanithi
+9788476512227	author	Guy de Forestier
+9781406393644	author	Neal Shusterman
+9781529051438	author	Douglas Adams
+9780552137034	author	Neil Gaiman & Terry Pratchett
+9780141197364	author	Clarice Lispector
+9781510104419	author	Leigh Bardugo
+9788420633244	author	Miguel de Unamuno
+9788417067328	author	Łukasz Kamieński
+9788483069400	author	Cynthia Kuhn, Scott Swartzwelder & Wilkie Wilson
+9788428209403	author	Cyril Walker & David Ward
+9788428212441	author	Monica Price & Kevin Walsh
+9788427025592	author	Koldo Royo
+9788408015062	author	Miguel García Baeza
+9789985335147	author	J. K. Rowling
+9789985335147	title	Harry Potter ja Fööniksi Ordu
+9788495282958	author	-
+9788476517154	author	-
+9788425314216	title	Guía de alfombras
+9788430943692	author	Séneca
+9798541561784	lang	es
+9798541452679	lang	es
+9798541463491	lang	es
+9798843754884	lang	es
+9798254550891	lang	es
+9780141197364	lang	en
+9789848765005	lang	bn
+8gd3azrohq	lang	et
+9783836573351	lang	en
+9783836576970	lang	en
+9783791319902	lang	en
+9783902639394	lang	en
+9789401489348	lang	en

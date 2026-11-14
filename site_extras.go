@@ -213,7 +213,8 @@ func buildSitemap(distDir string, posts []*Post) ([]byte, error) {
 // retiredURLs redirect pages that were removed (C-05) so no URL ever 404s.
 // They get a redirect stub in dist/ (keeps urls.txt stable) and stay out of the sitemap.
 var retiredURLs = map[string]string{
-	"/categories/manuscripts/": "/categories/archives/",
+	"/categories/manuscripts/": "/archives/",
+	"/categories/archives/":    "/archives/", // L-01: the books moved into /archives/ (written by me)
 }
 
 func registerRetired(mux *http.ServeMux, distDir string) error {
@@ -241,6 +242,8 @@ Disallow: /addons/map/?
 Disallow: /addons/today/?
 Disallow: /addons/places/?
 Disallow: /addons/words/?
+Disallow: /archives/library/?
+Disallow: /archives/library/covers/
 
 Sitemap: https://cptx.ee/sitemap.xml
 `
