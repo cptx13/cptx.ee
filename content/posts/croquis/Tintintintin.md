@@ -1,6 +1,6 @@
 ---
 title: "Tintintintin"
-Author: cptx
+author: cptx
 date: 2025-02-10
 draft: false
 categories: ["croquis"]
