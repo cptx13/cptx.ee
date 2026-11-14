@@ -5,8 +5,8 @@
     <h1 class="addons-title">{{ folder.Location }}</h1>
     <p class="addons-intro">{{ folder.Year }} · {{ folder.Count }} photos</p>
 
-    <div class="ph-masonry ph-masonry-lg">
-      <a v-for="photo in folder.Photos" class="ph-item" :href="photo.URL" :data-id="photo.ID">
+    <div class="ph-masonry ph-rows-lg">
+      <a v-for="photo in folder.Photos" class="ph-item" :href="photo.URL" :data-id="photo.ID" :style="'--r:' + photo.Ratio">
         <img v-if="photo.HasSize" :src="photo.ThumbURL" :alt="folder.Title + ', photo ' + photo.Index" :width="photo.W" :height="photo.H" loading="lazy">
         <img v-else :src="photo.ThumbURL" :alt="folder.Title + ', photo ' + photo.Index" loading="lazy">
       </a>
