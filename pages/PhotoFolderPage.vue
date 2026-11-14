@@ -1,22 +1,19 @@
 <template>
-<AppLayout :pageTitle="folder.Title + ' | photos | cptx'" :description="folder.Title + ' - photo gallery'" :canonicalURL="'https://cptx.ee' + folder.Path" :lang="'en'" :ogType="'website'">
-  <div class="list-container" style="margin-top: 2.5em;">
-    <p style="margin-bottom: 1.5em;"><a href="/photos/">← back to photos</a></p>
-    <h1 style="font-size: 1.6em; margin-bottom: 1em;">{{ folder.Title }}</h1>
-    <p style="color: var(--content-secondary); margin-bottom: 2em;">{{ folder.Count }} photos</p>
+<AppLayout :pageTitle="folder.Title + ' | photos | cptx'" :description="folder.Location + ', ' + folder.Year + ': ' + folder.Count + ' photos'" :canonicalURL="'https://cptx.ee' + folder.Path" :lang="'en'" :ogType="'website'">
+  <div class="list-container addons ph">
+    <p class="addons-crumb"><a href="/photos/">photos</a> /</p>
+    <h1 class="addons-title">{{ folder.Location }}</h1>
+    <p class="addons-intro">{{ folder.Year }} · {{ folder.Count }} photos</p>
 
-    <div class="photo-grid">
-      <div v-for="photo in folder.Photos" class="photo-item">
-        <a :href="photo.URL" target="_blank">
-          <img :src="photo.ThumbURL" :alt="photo.ID" loading="lazy">
-          <span class="photo-id">{{ photo.ID }}</span>
-        </a>
-      </div>
+    <div class="ph-masonry ph-masonry-lg">
+      <a v-for="photo in folder.Photos" class="ph-item" :href="photo.URL" :data-id="photo.ID">
+        <img v-if="photo.HasSize" :src="photo.ThumbURL" :alt="folder.Title + ', photo ' + photo.Index" :width="photo.W" :height="photo.H" loading="lazy">
+        <img v-else :src="photo.ThumbURL" :alt="folder.Title + ', photo ' + photo.Index" loading="lazy">
+      </a>
     </div>
-  </div>
 
-  <div class="back-to-top">
-    <a href="#top">back to top</a>
+    <p class="ph-top"><a href="#top">back to top ↑</a></p>
   </div>
+  <script src="/js/photos.js" defer></script>
 </AppLayout>
 </template>
