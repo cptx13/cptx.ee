@@ -257,6 +257,8 @@ type Post struct {
 	DateYear      string
 	DateShort     string
 	ID            string
+	Lang          string // F-01: frontmatter `lang` or detected (es/en)
+	Description   string // F-03: summary, or an excerpt of the body
 }
 
 func main() {
@@ -706,11 +708,32 @@ func main() {
 		renderPage(w, engine, "FeedPage", data)
 	})
 
+	// Batch A: health, feed, sitemap, robots (B-05, B-06)
+	started := time.Now()
+	rssXML := buildRSS(published, 20)
+	var sitemapXML []byte // filled after the static build below
+	mux.HandleFunc("/healthz", healthHandler(postCount, started))
+	mux.HandleFunc("/index.xml", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/rss+xml; charset=utf-8")
+		w.Write(rssXML)
+	})
+	mux.HandleFunc("/sitemap.xml", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/xml; charset=utf-8")
+		w.Write(sitemapXML)
+	})
+	mux.HandleFunc("/robots.txt", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.Write([]byte(robotsTxt))
+	})
+
 	mux.Handle("/", router)
 
 	// Build static site
 	if err := buildStaticSite(engine, published, allPostsForPool, postsByCategory, postsBySection, pocketPosts, manifestoPost, toPostMap, toPostList, shufflePoolJSON, postCount, photoFolders, toFolderMap, toFolderList, toPhotoList); err != nil {
 		log.Fatalf("building static site: %v", err)
+	}
+	if sitemapXML, err = buildSitemap("dist", published); err != nil {
+		log.Printf("sitemap: %v", err)
 	}
 
 	addr := ":8080"
@@ -718,7 +741,7 @@ func main() {
 		addr = ":" + p
 	}
 	log.Printf("Serving on http://localhost%s", addr)
-	log.Fatal(http.ListenAndServe(addr, mux))
+	log.Fatal(http.ListenAndServe(addr, withGzip(withHeaders(mux))))
 }
 
 // computePostIDs assigns IDs to posts in the recuerdos/croquis sections.
@@ -973,6 +996,11 @@ func parsePost(content, filePath, root string) (*Post, error) {
 
 	// Render markdown
 	post.Content = template.HTML(renderMarkdown(body))
+	post.Lang = postLang(fmString(fm, "lang"), body)
+	post.Description = post.Summary
+	if post.Description == "" {
+		post.Description = excerpt(body, 160)
+	}
 
 	return post, nil
 }

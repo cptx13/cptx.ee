@@ -1,5 +1,5 @@
 <template>
-<AppLayout :pageTitle="'cheatsheet feed | cptx'" :description="'RSS feed from cheatsheet blogs'" :canonicalURL="'https://cptx.ee/pockets/cheatsheet/feed/'">
+<AppLayout :pageTitle="'cheatsheet feed | cptx'" :description="'RSS feed from cheatsheet blogs'" :canonicalURL="'https://cptx.ee/pockets/cheatsheet/feed/'" :lang="'en'" :ogType="'website'">
   <div class="list-container" style="margin-top: 2.5em; padding-bottom: 3em;">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1em;">
       <h2 style="font-size: 1.1em; margin: 0; font-family: inherit;">cheatsheet feed</h2>

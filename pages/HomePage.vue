@@ -1,5 +1,5 @@
 <template>
-<AppLayout :pageTitle="'cptx'" :description="'a collection of mathoms'" :canonicalURL="'https://cptx.ee/'">
+<AppLayout :pageTitle="'cptx'" :description="'a collection of mathoms'" :canonicalURL="'https://cptx.ee/'" :lang="'en'" :ogType="'website'">
   <div class="intro">
     <p>A collection of mathoms.</p>
   </div>

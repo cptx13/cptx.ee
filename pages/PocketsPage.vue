@@ -1,5 +1,5 @@
 <template>
-<AppLayout :pageTitle="'pockets | cptx'" :description="'pockets - cptx'" :canonicalURL="'https://cptx.ee/pockets/'">
+<AppLayout :pageTitle="'pockets | cptx'" :description="'pockets - cptx'" :canonicalURL="'https://cptx.ee/pockets/'" :lang="'en'" :ogType="'website'">
   <div class="pockets-container" style="margin-top: 2.5em; padding-bottom: 3em;">
     <p style="color: #8c8c8c; font-size: 0.9em; margin-bottom: 1.5em;">A collection of stuff I would love to carry in my pockets.</p>
     <div class="pocket-grid">

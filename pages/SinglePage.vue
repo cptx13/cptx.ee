@@ -1,5 +1,5 @@
 <template>
-<AppLayout :pageTitle="post.Title + ' | cptx'" :description="post.Summary" :canonicalURL="'https://cptx.ee' + post.Path">
+<AppLayout :pageTitle="post.Title + ' | cptx'" :description="post.Description" :canonicalURL="'https://cptx.ee' + post.Path" :lang="post.Lang" :ogType="'article'">
   <article>
     <header class="single-intro-container">
       <h1 class="single-title">{{ post.Title }}</h1>

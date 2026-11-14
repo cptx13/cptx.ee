@@ -20,6 +20,8 @@ if ! go build -o "$OUT/cptx.ee" . 2> "$OUT/build.log"; then
   cat "$OUT/build.log"; echo "FAILED: build"; exit 1
 fi
 echo "  ok ($(go version | awk '{print $3}'))"
+if ! go vet ./... 2> "$OUT/vet.log"; then cat "$OUT/vet.log"; bad "go vet"; fi
+if ! go test ./... > "$OUT/test.log" 2>&1; then tail -30 "$OUT/test.log"; bad "go test"; else echo "  tests ok"; fi
 
 echo "== 2/4 content lint"
 python3 - <<'PY' || fail=1
