@@ -16,12 +16,12 @@
     <section v-for="s in shelves" class="lib-section">
       <h2 class="lib-shelf-label"><a :href="s.Href" rel="nofollow">{{ s.Label }}</a> <span class="lib-shelf-count">{{ s.Count }}</span></h2>
       <div v-if="spines" class="lib-shelf lib-shelf-spines">
-        <a v-for="b in s.Items" class="lib-slot" :href="b.Href" :title="b.Label"><span class="lib-spine" :style="b.SpineStyle"><span class="lib-spine-title">{{ b.Title }}</span></span></a>
+        <a v-for="b in s.Items" class="lib-slot" :href="b.Href" :title="b.Label"><span class="lib-spine" :style="b.SpineStyle" :lang="b.Lang"><span class="lib-spine-title">{{ b.Main }}</span><span v-if="b.ShowAuthor" class="lib-spine-author">{{ b.Surname }}</span></span></a>
       </div>
       <div v-else class="lib-shelf lib-shelf-covers">
         <a v-for="b in s.Items" class="lib-cover-link" :href="b.Href" :title="b.Label">
           <img v-if="b.HasCover" class="lib-cover" :src="b.Thumb" :alt="b.Label" height="150" :width="b.CoverW" loading="lazy">
-          <span v-else class="lib-gen" :style="b.GenStyle"><span class="lib-gen-title">{{ b.Title }}</span><span class="lib-gen-author">{{ b.Author }}</span></span>
+          <span v-else class="lib-gen" :style="b.GenStyle" :lang="b.Lang"><span class="lib-gen-author">{{ b.Author }}</span><span class="lib-gen-mid"><span class="lib-gen-title">{{ b.Main }}</span><span v-if="b.Sub" class="lib-gen-sub">{{ b.Sub }}</span></span><span class="lib-gen-year">{{ b.Year }}</span></span>
         </a>
       </div>
     </section>

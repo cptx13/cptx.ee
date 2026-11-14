@@ -5,12 +5,12 @@
     <div class="bk">
       <div class="bk-cover">
         <img v-if="book.HasCover" class="lib-cover bk-img" :src="large" :alt="book.Label" :width="coverW" :height="coverH">
-        <span v-else class="lib-gen bk-gen" :style="book.GenStyle"><span class="lib-gen-title">{{ title }}</span><span class="lib-gen-author">{{ author }}</span></span>
+        <span v-else class="lib-gen bk-gen" :style="book.GenStyle" :lang="book.Lang"><span class="lib-gen-author">{{ book.Author }}</span><span class="lib-gen-mid"><span class="lib-gen-title">{{ book.Main }}</span><span v-if="book.Sub" class="lib-gen-sub">{{ book.Sub }}</span></span><span class="lib-gen-year">{{ book.Year }}</span></span>
       </div>
       <div class="bk-info">
         <h1 class="bk-title" :lang="lang">{{ title }}</h1>
         <p v-if="subtitle" class="bk-subtitle" :lang="lang">{{ subtitle }}</p>
-        <p class="bk-author">{{ author }}<span v-if="year"> · {{ year }}</span></p>
+        <p class="bk-author"><span v-if="author">by <strong>{{ author }}</strong></span><span v-if="year" class="bk-year">{{ year }}</span></p>
         <p v-if="series" class="bk-series">{{ series }}</p>
         <dl class="bk-facts">
           <template v-for="f in facts"><dt>{{ f.Label }}</dt><dd>{{ f.Value }}</dd></template>
@@ -34,7 +34,7 @@
       <div class="lib-shelf lib-shelf-covers">
         <a v-for="b in neighbours" class="lib-cover-link" :href="b.Href" :title="b.Label">
           <img v-if="b.HasCover" class="lib-cover" :src="b.Thumb" :alt="b.Label" height="150" :width="b.CoverW" loading="lazy">
-          <span v-else class="lib-gen" :style="b.GenStyle"><span class="lib-gen-title">{{ b.Title }}</span><span class="lib-gen-author">{{ b.Author }}</span></span>
+          <span v-else class="lib-gen" :style="b.GenStyle" :lang="b.Lang"><span class="lib-gen-author">{{ b.Author }}</span><span class="lib-gen-mid"><span class="lib-gen-title">{{ b.Main }}</span><span v-if="b.Sub" class="lib-gen-sub">{{ b.Sub }}</span></span><span class="lib-gen-year">{{ b.Year }}</span></span>
         </a>
       </div>
     </div>

@@ -535,8 +535,20 @@ func (b *libBook) item() map[string]any {
 	if b.HasCover && b.ThumbH > 0 {
 		coverW = b.ThumbW * 150 / b.ThumbH
 	}
+	main, sub := b.splitTitle()
+	surname := ""
+	if ws := strings.Fields(strings.Split(b.Author, " & ")[0]); len(ws) > 0 {
+		surname = ws[len(ws)-1]
+	}
 	return map[string]any{
 		"Key":        b.Key,
+		"Main":       main,
+		"Sub":        sub,
+		"Year":       yearString(b.displayYear()),
+		"Lang":       langOr(b.Lang),
+		"Surname":    surname,
+		"ShowAuthor": w >= 24 && surname != "",
+		"CapStyle":   fmt.Sprintf("width:%dpx", coverW),
 		"Title":      b.Title,
 		"Author":     b.Author,
 		"Href":       b.path(),
@@ -548,6 +560,42 @@ func (b *libBook) item() map[string]any {
 		"SpineStyle": fmt.Sprintf("width:%dpx;height:%dpx;background-color:%s;color:%s", w, h, b.Color, b.Ink),
 		"MiniStyle":  fmt.Sprintf("width:%dpx;height:%dpx;background-color:%s", (w+2)/3, h*2/5, b.Color),
 	}
+}
+
+// splitTitle turns "Debt: The First 5,000 Years" into main + subtitle; a fetched
+// subtitle wins when the title itself has none.
+func (b *libBook) splitTitle() (string, string) {
+	main, sub := b.Title, b.Subtitle
+	if i := strings.Index(main, ": "); i > 0 {
+		main, sub = strings.TrimSpace(main[:i]), strings.TrimSpace(main[i+2:])
+	}
+	if sub == "" {
+		if i := strings.Index(main, " - "); i > 0 {
+			main, sub = strings.TrimSpace(main[:i]), strings.TrimSpace(main[i+3:])
+		}
+	}
+	return niceCase(main), niceCase(sub)
+}
+
+// niceCase fixes catalogue casing: ALL CAPS → Title Case, and a lowercase first letter.
+func niceCase(t string) string {
+	if t == "" {
+		return t
+	}
+	if strings.ToUpper(t) == t && strings.ToLower(t) != t {
+		ws := strings.Fields(strings.ToLower(t))
+		for i, w := range ws {
+			if i == 0 || len([]rune(w)) > 3 {
+				r := []rune(w)
+				r[0] = unicode.ToUpper(r[0])
+				ws[i] = string(r)
+			}
+		}
+		return strings.Join(ws, " ")
+	}
+	r := []rune(t)
+	r[0] = unicode.ToUpper(r[0])
+	return string(r)
 }
 
 func itemsOf(bs []*libBook) []any {
@@ -686,14 +734,15 @@ func buildBookData(lib *library, b *libBook) map[string]any {
 		ch = 330
 		cw = b.ThumbW * ch / b.ThumbH
 	}
+	bookMain, bookSub := b.splitTitle()
 	desc := b.Title
 	if b.Author != "" {
 		desc += " by " + b.Author
 	}
 	return map[string]any{
 		"book":          b.item(),
-		"title":         b.Title,
-		"subtitle":      b.Subtitle,
+		"title":         bookMain,
+		"subtitle":      bookSub,
 		"author":        b.Author,
 		"series":        b.Series,
 		"year":          yearString(b.displayYear()),
