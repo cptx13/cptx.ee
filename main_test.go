@@ -131,3 +131,10 @@ func TestWithDoctype(t *testing.T) {
 		t.Errorf("doubled: %q", got)
 	}
 }
+
+func TestAssetVersioning(t *testing.T) {
+	got := withDoctype(`<html><link rel="stylesheet" href="/css/style.css"><script src="/js/theme-switch.js"></script></html>`)
+	if !strings.Contains(got, `/css/style.css?v=`) || !strings.Contains(got, `/js/theme-switch.js?v=`) {
+		t.Errorf("assets not versioned: %s", got)
+	}
+}

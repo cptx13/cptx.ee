@@ -1222,15 +1222,70 @@ blockquote p {
     outline-offset: 2px;
 }
 
-/* F-02: theme toggle looks like the other menu items */
+/* F-02: theme toggle sits at the right of the title row */
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
 .theme-toggle {
     background: none;
-    border: 0;
+    border: 1px solid var(--content-secondary);
+    border-radius: 999px;
+    width: 2.4rem;
+    height: 2.4rem;
     padding: 0;
-    margin: 0;
-    font: inherit;
-    color: inherit;
+    font-size: 1.15rem;
+    line-height: 1;
+    color: var(--content-primary);
     cursor: pointer;
+    flex-shrink: 0;
+}
+.theme-toggle:hover {
+    border-color: var(--content-primary);
+}
+
+/* Post lists (home, categories): one line on wide screens, wrap on phones */
+.post-entry {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
+    margin-bottom: 0.5em;
+    min-width: 0;
+}
+.post-entry-date {
+    color: var(--content-secondary);
+    font-size: 0.95em;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.post-entry-title {
+    margin: 0;
+    font-size: 1.1em;
+    font-family: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Phones: no skip link, titles wrap, verse slightly smaller so lines stay whole */
+@media (max-width: 600px) {
+    .skip-link {
+        display: none;
+    }
+    .post-entry {
+        margin-bottom: 0.8em;
+    }
+    .post-entry-title {
+        white-space: normal;
+        overflow: visible;
+        font-size: 1.05em;
+        line-height: 1.35;
+    }
+    .single-content.poem {
+        font-size: 0.92em;
+    }
 }
 
 /* F-09: verse (tag rimas) — airier lines and clear stanza breaks */
