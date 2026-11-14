@@ -1344,8 +1344,8 @@ blockquote p {
 .hm-scroll { overflow-x: auto; margin: 1.2em 0 .4em; padding-bottom: .4em; }
 .hm { display: flex; gap: 3px; width: max-content; }
 .hm-week { display: flex; flex-direction: column; gap: 3px; }
-.hm-month { height: 1.2em; font-size: .65em; color: var(--content-secondary); white-space: nowrap; width: 11px; overflow: visible; }
-.hm-cell { display: inline-block; width: 11px; height: 11px; border-radius: 2px; }
+.hm-month { height: 1.2em; font-size: .65em; color: var(--content-secondary); white-space: nowrap; width: 10px; overflow: visible; }
+.hm-cell { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
 .hm-out { visibility: hidden; }
 .hm-l0 { background: color-mix(in srgb, var(--content-primary) 8%, transparent); }
 .hm-l1 { background: color-mix(in srgb, var(--content-primary) 30%, transparent); }
