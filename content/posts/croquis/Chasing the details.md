@@ -4,7 +4,7 @@ author: cptx
 date: 2024-08-31
 draft: false
 categories: ["croquis"]
-tags: ["rimas"]
+tags: [rimas]
 showTags: true
 ---
 I rarely write in English, not due to my lack of interest but rather a faithful commitment to my mother tongue. English, as many other languages, has its benefits, but as I have mentioned many times, the lack of two verbs to describe place and being, makes it a second tier language for any written introspective effort.
