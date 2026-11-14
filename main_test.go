@@ -251,3 +251,14 @@ func TestLibrary(t *testing.T) {
 		t.Errorf("generated cover colour missing")
 	}
 }
+
+func TestBookTitleLayout(t *testing.T) {
+	b := &libBook{Title: "GUNS, GERMS AND STEEL - A Short History of Everybody"}
+	if m, s := b.splitTitle(); m != "Guns, Germs and Steel" || s != "A Short History of Everybody" {
+		t.Errorf("got %q / %q", m, s)
+	}
+	b = &libBook{Title: "queridos mallorquines segunda parte: ahora va en serio"}
+	if m, s := b.splitTitle(); m != "Queridos mallorquines segunda parte" || s != "Ahora va en serio" {
+		t.Errorf("got %q / %q", m, s)
+	}
+}
