@@ -16,6 +16,9 @@ import csv, json, os, re, sys, time, unicodedata, urllib.request, urllib.error
 
 DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "library")
 UA = "cptx.ee-library/0.1 (+https://cptx.ee/contact/)"
+GOOGLE_KEY = os.environ.get("GOOGLE_BOOKS_KEY", "")
+google_off = False  # set after a 429: Google's anonymous quota is spent, skip it for this run
+OL_LANG = {"eng": "en", "spa": "es", "est": "et", "ben": "bn", "ger": "de", "cat": "ca", "fre": "fr", "ita": "it", "por": "pt", "dut": "nl"}
 
 
 def isbn10to13(x):
@@ -78,6 +81,7 @@ def first_author(creators):
 # --- fetching ----------------------------------------------------------------------------
 
 def get_json(url):
+    global google_off
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
     for attempt in range(3):
         try:
@@ -85,6 +89,10 @@ def get_json(url):
                 return json.load(r)
         except urllib.error.HTTPError as e:
             if e.code == 404:
+                return None
+            if e.code == 429 and "googleapis" in url:
+                google_off = True
+                print("Google Books quota spent (429): continuing with Open Library only", flush=True)
                 return None
             time.sleep(2 + attempt * 3)
         except Exception:
@@ -105,15 +113,22 @@ def get_bytes(url):
 
 def fetch_raw(key, isbn, rawdir, refetch):
     path = os.path.join(rawdir, key + ".json")
+    raw = None
     if os.path.exists(path) and not refetch:
         with open(path, encoding="utf-8") as f:
-            return json.load(f)
-    raw = {"google": None, "openlibrary": None}
-    if isbn:
-        g = get_json("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn)
-        if g and g.get("items"):
-            raw["google"] = g["items"][0]
+            raw = json.load(f)
+        if raw.get("google_tried", True) or google_off or not isbn:
+            return raw
+    if raw is None:
+        raw = {"google": None, "openlibrary": None, "google_tried": False}
+    if isbn and not google_off:
+        g = get_json("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + ("&key=" + GOOGLE_KEY if GOOGLE_KEY else ""))
+        if not google_off:
+            raw["google_tried"] = True
+            if g and g.get("items"):
+                raw["google"] = g["items"][0]
         time.sleep(0.4)
+    if isbn and raw.get("openlibrary") is None:
         o = get_json("https://openlibrary.org/search.json?isbn=" + isbn +
                      "&fields=key,title,author_name,first_publish_year,subject,cover_i,number_of_pages_median,language")
         if o and o.get("docs"):
@@ -208,6 +223,11 @@ def main():
                 b["title"], b["subtitle"] = g["title"], g.get("subtitle", "")
             if g.get("authors"):
                 b["author"] = " & ".join(g["authors"][:2])
+            elif o.get("author_name"):
+                b["author"] = " & ".join(o["author_name"][:2])
+            ol_langs = [OL_LANG.get(l, "") for l in o.get("language", [])]
+            if not b["lang"] and len(ol_langs) == 1:
+                b["lang"] = ol_langs[0]
             b["lang"] = g.get("language") or b["lang"]
             b["pages"] = g.get("pageCount") or b["pages"] or o.get("number_of_pages_median") or 0
             b["year"] = b["year"] or year_of(g.get("publishedDate"))
