@@ -12,6 +12,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
@@ -458,7 +459,10 @@ func main() {
 	// Old URL redirects: /posts/{section}/{slug}/ -> new path
 	must(router.GET("old-post-redirect", "/posts/{section}/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
-		oldPath := "/posts/" + m.Params["section"] + "/" + m.Params["slug"] + "/"
+		// dispatch matches against the escaped RequestURI, so params arrive
+		// percent-encoded (c%C3%A9sped). Decode and NFC-normalise them to match
+		// the slugs built by slugify (B-16).
+		oldPath := "/posts/" + legacyParam(m.Params["section"]) + "/" + legacyParam(m.Params["slug"]) + "/"
 		post := postsByOldPath[oldPath]
 		if post == nil {
 			renderNotFound(w, engine)
@@ -653,6 +657,9 @@ func main() {
 	}
 
 	addr := ":8080"
+	if p := os.Getenv("PORT"); p != "" { // B-16: lets a test copy run beside the live server
+		addr = ":" + p
+	}
 	log.Printf("Serving on http://localhost%s", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))
 }
@@ -991,6 +998,16 @@ func fmStringSlice(fm map[string]string, key string) []string {
 		}
 	}
 	return result
+}
+
+// legacyParam decodes a percent-encoded path parameter and NFC-normalises it.
+// On a malformed escape it returns the raw value, which simply won't match.
+func legacyParam(raw string) string {
+	v, err := url.PathUnescape(raw)
+	if err != nil {
+		return raw
+	}
+	return norm.NFC.String(v)
 }
 
 // Slugify converts a filename to a URL-safe slug, matching Hugo's behavior.
