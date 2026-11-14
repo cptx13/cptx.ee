@@ -28,7 +28,7 @@ jobs:
           for i in $(seq 1 48); do
             got=$(curl -fsS --max-time 10 https://cptx.ee/healthz | python3 -c 'import sys,json;print(json.load(sys.stdin)["commit"])' || true)
             echo "attempt $i: live=$got want=$want"
-            [ "$got" = "$want" ] && exit 0
+            case "$got" in "$want"*) exit 0 ;; esac   # may carry a "-dirty" suffix
             sleep 10
           done
           echo "::error::cptx.ee did not deploy $want (safe deploy may have kept the previous version — check journalctl --user -u cptx-ee-deploy)"
