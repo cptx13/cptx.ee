@@ -127,6 +127,21 @@ ssh cptx 'export XDG_RUNTIME_DIR=/run/user/$(id -u) && \
   journalctl --user -eu cptx-ee.service --no-pager'
 ```
 
+## Before pushing code: `scripts/check.sh`
+
+Run it in a scratch clone (never in `~/cptx-v2`). On the VM:
+
+```sh
+git clone -q --depth 1 -b <branch> https://github.com/cptx13/cptx.ee /tmp/chk && cd /tmp/chk
+~/.local/bin/mise exec -- scripts/check.sh
+cd ~ && rm -rf /tmp/chk
+```
+
+It builds, lints content frontmatter (fails on vault-only fields), starts a test
+server on `:18080` (`CHECK_PORT` to change), diffs the generated URLs against
+`urls.txt` (fails if any URL would disappear) and requests every URL. Takes ~5 s.
+After an *intended* URL change, run it with `--update-urls` and commit `urls.txt`.
+
 ## Go version
 
 The Go toolchain is pinned in `mise.toml` (currently `1.27.4`); `go.mod` only sets
