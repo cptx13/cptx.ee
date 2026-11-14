@@ -3,7 +3,7 @@
   <div class="list-container addons">
     <p class="addons-crumb"><a href="/addons/">addons</a> / archive map</p>
     <h1 class="addons-title">{{ year }}</h1>
-    <p class="hm-stats">{{ total }} posts · {{ words }} words · {{ activeDays }} days · longest run {{ bestStreak }} days</p>
+    <p class="hm-stats">{{ total }} posts · {{ words }} words · {{ activeDays }} days · longest run {{ streakLabel }}</p>
 
     <div class="hm-filters">
       <p><span class="hm-filter-label">year</span><a v-for="o in years" :href="o.Href" :class="{ 'hm-opt': true, 'hm-active': o.Active }" rel="nofollow">{{ o.Label }}</a></p>

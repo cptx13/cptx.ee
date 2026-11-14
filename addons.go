@@ -269,7 +269,7 @@ func buildMapData(idx []addonPost, tags []string, q url.Values) map[string]any {
 		dayPosts = postListMaps(a.posts)
 	}
 	return map[string]any{
-		"year": m.Year, "total": total, "words": words, "activeDays": len(byDay), "bestStreak": best,
+		"streakLabel": plural(best, "day"), "year": m.Year, "total": total, "words": words, "activeDays": len(byDay), "bestStreak": best,
 		"metric": m.Metric, "weeks": weeks,
 		"years": yearOpts, "sections": sectionOpts, "tags": tagOpts, "metrics": metricOpts,
 		"day": m.Day, "dayPosts": dayPosts, "hasDayPosts": len(dayPosts) > 0,
@@ -384,4 +384,11 @@ func writeAddonPages(engine *htmlc.Engine, distDir string, idx []addonPost, tags
 		}
 	}
 	return nil
+}
+
+func plural(n int, word string) string {
+	if n == 1 {
+		return "1 " + word
+	}
+	return strconv.Itoa(n) + " " + word + "s"
 }
