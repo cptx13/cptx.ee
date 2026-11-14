@@ -1,3 +1,3 @@
 [tools]
-go = "latest"
+go = "1.27.4"  # pinned (B-03); go.mod keeps 1.26.1 as the minimum. Upgrade deliberately: edit here, push, watch the deploy log.
 "go:github.com/dhamidi/htmlc/cmd/htmlc" = "v1.0.0"
