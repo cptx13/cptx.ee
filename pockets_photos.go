@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	_ "image/gif"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -16,10 +16,10 @@ var pocketMeta = []struct {
 	Desc string
 	Unit string // what the list items are; "" = don't show a count
 }{
-	{"bedsidetable", "📚", "books I've enjoyed", "books"},
-	{"cheatsheet", "🔗", "links at hand", "links"},
-	{"workbench", "🔧", "projects & resources", ""},
-	{"weekendreads", "📰", "articles I enjoyed", "articles"},
+	{"bedsidetable", "bedside", "books I've enjoyed", "books"},
+	{"cheatsheet", "link", "links at hand", "links"},
+	{"workbench", "wrench", "projects & resources", ""},
+	{"weekendreads", "paper", "articles I enjoyed", "articles"},
 }
 
 // buildPocketsData returns the template data for /pockets/: one entry per

@@ -285,6 +285,7 @@
 /archives/library/9798679252547/
 /archives/library/9798843754884/
 /archives/library/9798855413786/
+/archives/written-by-me/
 /categories/archives/
 /categories/croquis/
 /categories/manifesto/

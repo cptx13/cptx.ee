@@ -831,10 +831,11 @@ func buildArchivesData(lib *library) map[string]any {
 		return mine[i].(map[string]any)["Rank"].(int) < mine[j].(map[string]any)["Rank"].(int)
 	})
 	return map[string]any{
-		"count":   len(lib.Books),
-		"mine":    mine,
-		"hasMine": len(mine) > 0,
-		"strip":   itemsOf(strip),
+		"count":     len(lib.Books),
+		"mine":      mine,
+		"mineCount": len(mine),
+		"hasMine":   len(mine) > 0,
+		"strip":     itemsOf(strip),
 	}
 }
 
@@ -845,6 +846,8 @@ func registerLibrary(mux *http.ServeMux, render func(http.ResponseWriter, string
 		switch {
 		case path == "/archives/":
 			render(w, "ArchivesPage", buildArchivesData(lib))
+		case path == "/archives/written-by-me/":
+			render(w, "WrittenPage", buildArchivesData(lib))
 		case path == "/archives/library/":
 			render(w, "LibraryPage", buildLibraryData(lib, r.URL.Query()))
 		case strings.HasPrefix(path, "/archives/library/covers/"):
@@ -885,8 +888,9 @@ func writeLibraryPages(engine *htmlc.Engine, distDir string, lib *library) error
 		comp string
 		data map[string]any
 	}{
-		"archives":         {"ArchivesPage", buildArchivesData(lib)},
-		"archives/library": {"LibraryPage", buildLibraryData(lib, url.Values{})},
+		"archives":               {"ArchivesPage", buildArchivesData(lib)},
+		"archives/written-by-me": {"WrittenPage", buildArchivesData(lib)},
+		"archives/library":       {"LibraryPage", buildLibraryData(lib, url.Values{})},
 	}
 	for _, b := range lib.Books {
 		pages["archives/library/"+b.Key] = struct {
