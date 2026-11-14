@@ -70,10 +70,14 @@ var assetVersioner = strings.NewReplacer(
 	`src="/js/theme-switch.js"`, `src="/js/theme-switch.js?v=`+assetVersion+`"`,
 	`src="/js/post-search.js"`, `src="/js/post-search.js?v=`+assetVersion+`"`,
 	`src="/js/share.js"`, `src="/js/share.js?v=`+assetVersion+`"`,
+	`src="/js/photos.js"`, `src="/js/photos.js?v=`+assetVersion+`"`,
 )
 
 // contentClass marks verse (tag "rimas") so it gets poem typography (F-09).
 func contentClass(p *Post) string {
+	if p.Section == "pockets" {
+		return "single-content pk-body pk-" + p.Slug
+	}
 	for _, t := range p.Tags {
 		if t == "rimas" {
 			return "single-content poem"

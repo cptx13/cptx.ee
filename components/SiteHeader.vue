@@ -14,6 +14,7 @@
     <p class="small"><a href="/categories/recuerdos/">/recuerdos</a></p>
     <p class="small"><a href="/photos/">/photos</a></p>
     <p class="small"><a href="/addons/">/addons</a></p>
+    <p class="small"><a href="/pockets/">/pockets</a></p>
     <p class="small"><a href="/archives/">/archives</a></p>
   </nav>
 </div>

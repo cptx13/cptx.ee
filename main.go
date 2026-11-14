@@ -38,6 +38,7 @@ type Photo struct {
 	URL      string // e.g. "/photos/2016_Madrid/001.jpg"
 	ThumbURL string // e.g. "/photos/2016_Madrid/thumb_001.jpg"
 	Index    int    // 1-based
+	W, H     int    // original pixel size (0 when unknown)
 }
 
 // PhotoFolder represents a directory of photos.
@@ -392,6 +393,9 @@ func main() {
 			"URL":      p.URL,
 			"ThumbURL": p.ThumbURL,
 			"Index":    p.Index,
+			"W":        p.W,
+			"H":        p.H,
+			"HasSize":  p.W > 0 && p.H > 0,
 		}
 	}
 
@@ -411,6 +415,7 @@ func main() {
 			"Year":     f.Year,
 			"Path":     f.Path,
 			"Count":    f.Count,
+			"Cover":    folderCover(f),
 			"Photos":   toPhotoList(f.Photos),
 		}
 	}
@@ -550,34 +555,7 @@ func main() {
 	})))
 
 	// Build pockets data for the accordion page
-	pocketMeta := []struct {
-		Slug string
-		Icon string
-		Desc string
-	}{
-		{"bedsidetable", "📚", "books I've enjoyed"},
-		{"cheatsheet", "🔗", "links at hand"},
-		{"workbench", "🔧", "projects & resources"},
-		{"weekendreads", "📰", "articles I enjoyed"},
-	}
-
-	var pocketsData []any
-	for _, pm := range pocketMeta {
-		var contentHTML string
-		for _, p := range pocketPosts {
-			if p.Slug == pm.Slug {
-				contentHTML = string(p.Content)
-				break
-			}
-		}
-		pocketsData = append(pocketsData, map[string]any{
-			"Slug":        pm.Slug,
-			"Title":       pm.Slug,
-			"Icon":        pm.Icon,
-			"Desc":        pm.Desc,
-			"ContentHTML": contentHTML,
-		})
-	}
+	pocketsData := buildPocketsData(pocketPosts)
 
 	// Pockets index
 	must(router.GET("pockets.index", "/pockets/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -597,6 +575,9 @@ func main() {
 		data := map[string]any{
 			"folders":   toFolderList(photoFolders),
 			"allPhotos": allPhotos,
+			"total":     len(allPhotos),
+			"years":     photoYears(photoFolders),
+			"places":    len(photoFolders),
 		}
 		renderPage(w, engine, "PhotosPage", data)
 	})))
@@ -921,6 +902,7 @@ func loadPhotos(root string) ([]PhotoFolder, error) {
 		var photos []Photo
 		for i, file := range imageFiles {
 			idx := i + 1
+			w, h := imageSize(filepath.Join(folderPath, file))
 			photos = append(photos, Photo{
 				ID:       fmt.Sprintf("%s-%03d", folderName, idx),
 				Folder:   folderName,
@@ -928,6 +910,8 @@ func loadPhotos(root string) ([]PhotoFolder, error) {
 				URL:      fmt.Sprintf("/photos/%s/%s", folderName, file),
 				ThumbURL: fmt.Sprintf("/photos/%s/thumb_%s", folderName, file),
 				Index:    idx,
+				W:        w,
+				H:        h,
 			})
 		}
 
@@ -1307,34 +1291,7 @@ func buildStaticSite(
 	}
 
 	// Pockets index (accordion page)
-	pocketMeta := []struct {
-		Slug string
-		Icon string
-		Desc string
-	}{
-		{"bedsidetable", "📚", "books I've enjoyed"},
-		{"cheatsheet", "🔗", "links at hand"},
-		{"workbench", "🔧", "projects & resources"},
-		{"weekendreads", "📰", "articles I enjoyed"},
-	}
-
-	var pocketsData []any
-	for _, pm := range pocketMeta {
-		var contentHTML string
-		for _, p := range pocketPosts {
-			if p.Slug == pm.Slug {
-				contentHTML = string(p.Content)
-				break
-			}
-		}
-		pocketsData = append(pocketsData, map[string]any{
-			"Slug":        pm.Slug,
-			"Title":       pm.Slug,
-			"Icon":        pm.Icon,
-			"Desc":        pm.Desc,
-			"ContentHTML": contentHTML,
-		})
-	}
+	pocketsData := buildPocketsData(pocketPosts)
 
 	if err := writePage("pockets/index.html", "PocketsPage", map[string]any{
 		"pockets":     pocketsData,
@@ -1373,6 +1330,9 @@ func buildStaticSite(
 		if err := writePage("photos/index.html", "PhotosPage", map[string]any{
 			"folders":   toFolderList(photoFolders),
 			"allPhotos": allPhotos,
+			"total":     len(allPhotos),
+			"years":     photoYears(photoFolders),
+			"places":    len(photoFolders),
 		}); err != nil {
 			return err
 		}
