@@ -16,7 +16,8 @@ import csv, hashlib, json, os, re, sys, time, unicodedata, urllib.request, urlli
 
 DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "library")
 UA = "cptx.ee-library/0.1 (+https://cptx.ee/contact/)"
-PLACEHOLDERS = set(os.environ.get("COVER_PLACEHOLDERS", "").split())  # md5s of "no cover" images
+# md5s of known "no cover" images (Google Books placeholders); add more via COVER_PLACEHOLDERS
+PLACEHOLDERS = {"d7c21c65fc861fc5128753e9e091b23c", "e89e0e364e83c0ecfba5da41007c9a2c"} | set(os.environ.get("COVER_PLACEHOLDERS", "").split())
 GOOGLE_KEY = os.environ.get("GOOGLE_BOOKS_KEY", "")
 google_off = False  # set after a 429: Google's anonymous quota is spent, skip it for this run
 OL_LANG = {"eng": "en", "spa": "es", "est": "et", "ben": "bn", "ger": "de", "cat": "ca", "fre": "fr", "ita": "it", "por": "pt", "dut": "nl"}
