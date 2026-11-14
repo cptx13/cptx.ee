@@ -366,6 +366,7 @@ func main() {
 			"OldPath":       p.OldPath,
 			"Summary":       p.Summary,
 			"Lang":          p.Lang,
+			"ContentClass":  contentClass(p),
 			"Description":   p.Description,
 			"Tags":          tags,
 			"ShowTags":      p.ShowTags,
