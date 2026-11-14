@@ -3,7 +3,7 @@
   <div class="list-container" style="margin-top: 2.5em; padding-bottom: 3em;">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1em;">
       <h2 style="font-size: 1.1em; margin: 0; font-family: inherit;">cheatsheet feed</h2>
-      <a href="/pockets/cheatsheet/feed/refresh" class="feed-refresh-btn" title="Refresh feeds">↻ refresh</a>
+      <a href="/pockets/cheatsheet/feed/refresh" rel="nofollow" class="feed-refresh-btn" title="Refresh feeds">↻ refresh</a>
     </div>
     <p style="color: var(--content-secondary); font-size: 0.8em; margin-bottom: 1.5em;">
       Latest articles from <a href="/pockets/" style="text-decoration: underline;">cheatsheet</a> blogs.
@@ -12,7 +12,7 @@
 
     <div v-if="noCache" style="color: var(--content-secondary); margin-top: 2em; text-align: center;">
       <p style="font-size: 0.95em;">No cached feed data yet.</p>
-      <p style="font-size: 0.85em; margin-top: 0.5em;">Click <a href="/pockets/cheatsheet/feed/refresh" style="text-decoration: underline;">↻ refresh</a> to fetch articles.</p>
+      <p style="font-size: 0.85em; margin-top: 0.5em;">Click <a href="/pockets/cheatsheet/feed/refresh" rel="nofollow" style="text-decoration: underline;">↻ refresh</a> to fetch articles.</p>
     </div>
 
     <div v-if="hasItems" class="feed-list">
