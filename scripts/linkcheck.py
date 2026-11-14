@@ -20,8 +20,8 @@ def check(u):
             with urllib.request.urlopen(req, timeout=20) as r:
                 return u, r.status
         except urllib.error.HTTPError as e:
-            if method == "HEAD" and e.code in (403, 405, 400, 501):
-                continue
+            if method == "HEAD":
+                continue  # some sites reject HEAD (404/405/403); retry with GET
             return u, e.code
         except Exception as e:
             if method == "HEAD":
@@ -31,6 +31,9 @@ def check(u):
             return u, type(e).__name__
     return u, "?"
 
+IGNORE = {l.strip() for l in open("scripts/linkcheck-ignore.txt", encoding="utf-8") if l.strip() and not l.startswith("#")}
+for u in IGNORE:
+    links.pop(u, None)
 broken, warn = [], []
 with cf.ThreadPoolExecutor(16) as ex:
     for u, s in ex.map(check, sorted(links)):

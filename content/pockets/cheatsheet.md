@@ -23,7 +23,7 @@ Some links I like to have at hand,
 * [Matthew Ball](https://www.matthewball.co/)
 * [Mark Qvist](https://unsigned.io)
 * [Matthew Green](https://blog.cryptographyengineering.com/all-posts/)
-* [Shank Space](https://blog.knhash.in/)
+* [Shank Space](https://knhash.in/)
 * [Uncharted Territories by Tomás Pueyo](https://unchartedterritories.tomaspueyo.com/)
 * [Fitness Revolucionario](https://www.fitnessrevolucionario.com/articulos/)
 * [Adam Thiede](https://adamthiede.com/posts.html)
@@ -33,7 +33,6 @@ Some links I like to have at hand,
 
 #### Databases/Archives
 * [The New York Public Library](https://digitalcollections.nypl.org/)
-* [Metastem Wiki](https://wiki.metastem.su/)
 * [Audiobooks](https://www.audiobookshelf.org/)
 * [LibremDB](https://libremdb.iket.me/find)
 * [PDF Books](https://en.pdfdrive.to/)
