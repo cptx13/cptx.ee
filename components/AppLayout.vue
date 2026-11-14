@@ -2,7 +2,7 @@
 <html :lang="lang" dir="ltr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <script>(function () { var t; try { t = localStorage.getItem("theme"); } catch (e) {} if (!t) t = window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; if (t === "dark") document.documentElement.classList.add("dark"); })();</script>
   <link rel="icon" type="image/ico" href="/favicon.ico">

@@ -53,12 +53,23 @@ func postLang(fmLang, body string) string {
 
 // withDoctype makes every rendered page start with <!DOCTYPE html> so browsers
 // use standards mode instead of quirks mode (Lighthouse "doctype").
+// It also versions local CSS/JS URLs (?v=<commit>) so a deploy always reaches
+// browsers that cached the previous files.
 func withDoctype(html string) string {
+	html = assetVersioner.Replace(html)
 	if strings.HasPrefix(strings.ToLower(strings.TrimSpace(html)), "<!doctype") {
 		return html
 	}
 	return "<!DOCTYPE html>\n" + html
 }
+
+var assetVersion = strings.TrimSuffix(buildRevision(), "-dirty")
+
+var assetVersioner = strings.NewReplacer(
+	`href="/css/style.css"`, `href="/css/style.css?v=`+assetVersion+`"`,
+	`src="/js/theme-switch.js"`, `src="/js/theme-switch.js?v=`+assetVersion+`"`,
+	`src="/js/post-search.js"`, `src="/js/post-search.js?v=`+assetVersion+`"`,
+)
 
 // contentClass marks verse (tag "rimas") so it gets poem typography (F-09).
 func contentClass(p *Post) string {
