@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
+  <meta name="color-scheme" content="light dark">
+  <script>(function () { var t; try { t = localStorage.getItem("theme"); } catch (e) {} if (!t) t = window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; if (t === "dark") document.documentElement.classList.add("dark"); })();</script>
   <link rel="icon" type="image/ico" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -23,18 +25,18 @@
   <link rel="preload" href="/fonts/jetbrains-mono/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/css/style.css" media="all">
 </head>
-<body class="dark">
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <div class="content">
     <header>
       <SiteHeader></SiteHeader>
     </header>
-    <main class="main">
+    <main class="main" id="main">
       <slot />
     </main>
   </div>
   <SiteFooter></SiteFooter>
   <script src="/js/theme-switch.js"></script>
-  <script defer src="/js/copy-code.js"></script>
   <script defer src="/js/post-search.js"></script>
   <script>
   (function () {

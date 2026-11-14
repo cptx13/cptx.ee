@@ -1199,3 +1199,67 @@ blockquote p {
     border-color: var(--content-primary);
     outline: none;
 }
+
+/* ==== Batch D (F-02, F-05, F-09, F-13) ==== */
+
+/* F-05: skip link + visible keyboard focus */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    padding: .5em 1em;
+    background: var(--background);
+    color: var(--content-primary);
+    border: 1px solid var(--content-primary);
+}
+.skip-link:focus {
+    left: 1em;
+    top: 1em;
+}
+:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+/* F-02: theme toggle looks like the other menu items */
+.theme-toggle {
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* F-09: verse (tag rimas) — airier lines and clear stanza breaks */
+.single-content.poem p {
+    line-height: 1.9;
+    margin: 0 0 1.75em;
+}
+
+/* F-13: print — content only, black on white, show link targets */
+@media print {
+    header, footer, .single-pagination, .back-to-top, .skip-link, .theme-toggle,
+    .header, .toolbar-icon, #random-post-button {
+        display: none !important;
+    }
+    html, html.dark, body {
+        --content-primary: #000;
+        --background: #fff;
+        background: #fff !important;
+        color: #000 !important;
+    }
+    body {
+        font-size: 11pt;
+    }
+    .single-content a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        font-size: .8em;
+        word-break: break-all;
+    }
+    .single-content p {
+        break-inside: avoid-page;
+    }
+}

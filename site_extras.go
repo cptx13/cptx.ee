@@ -51,6 +51,16 @@ func postLang(fmLang, body string) string {
 	return "es"
 }
 
+// contentClass marks verse (tag "rimas") so it gets poem typography (F-09).
+func contentClass(p *Post) string {
+	for _, t := range p.Tags {
+		if t == "rimas" {
+			return "single-content poem"
+		}
+	}
+	return "single-content"
+}
+
 // ---- excerpt for meta description / feed (F-03, B-05) ------------------------
 
 var (

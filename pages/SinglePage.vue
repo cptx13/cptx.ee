@@ -16,7 +16,7 @@
         </div>
       </div>
     </header>
-    <div class="single-content" v-html="post.Content"></div>
+    <div :class="post.ContentClass" v-html="post.Content"></div>
   </article>
   <Pagination :prevPost="prevPost" :nextPost="nextPost"></Pagination>
   <div class="back-to-top">
