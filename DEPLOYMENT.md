@@ -133,6 +133,7 @@ Run it in a scratch clone (never in `~/cptx-v2`). On the VM:
 
 ```sh
 git clone -q --depth 1 -b <branch> https://github.com/cptx13/cptx.ee /tmp/chk && cd /tmp/chk
+~/.local/bin/mise trust -q mise.toml        # mise ignores an untrusted mise.toml
 ~/.local/bin/mise exec -- scripts/check.sh
 cd ~ && rm -rf /tmp/chk
 ```
