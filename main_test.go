@@ -153,24 +153,51 @@ func TestMapParams(t *testing.T) {
 	idx := testIdx()
 	tags := addonTags(idx)
 	data := buildMapData(idx, tags, url.Values{"year": {"2023"}, "section": {"recuerdos"}, "metric": {"words"}, "day": {"2023-02-01"}})
-	if data["year"] != 2023 || data["total"] != 3 || data["activeDays"] != 2 || data["bestStreak"] != 2 {
-		t.Errorf("stats: year=%v total=%v days=%v streak=%v", data["year"], data["total"], data["activeDays"], data["bestStreak"])
+	if data["title"] != "2023" || data["total"] != 3 || data["activeDays"] != 2 || data["streakLabel"] != "2 days" {
+		t.Errorf("stats: %v total=%v days=%v streak=%v", data["title"], data["total"], data["activeDays"], data["streakLabel"])
 	}
 	if n := len(data["dayPosts"].([]any)); n != 2 {
 		t.Errorf("day posts = %d", n)
 	}
-	if !strings.Contains(data["shareURL"].(string), "metric=words") || !strings.Contains(data["shareURL"].(string), "section=recuerdos") {
-		t.Errorf("share url %v", data["shareURL"])
+	if s := data["shareURL"].(string); !strings.Contains(s, "metric=words") || !strings.Contains(s, "section=recuerdos") || !strings.Contains(s, "year=2023") {
+		t.Errorf("share url %v", s)
 	}
-	// junk params fall back to defaults (latest year, all sections)
+	// default and junk params: all years, one grid per year, newest first
 	data = buildMapData(idx, tags, url.Values{"year": {"1999"}, "section": {"<x>"}, "tag": {"nope"}, "day": {"zzz"}})
-	if data["year"] != 2025 || data["total"] != 1 || data["hasDayPosts"] != false {
-		t.Errorf("fallback: %v %v", data["year"], data["total"])
+	grids := data["grids"].([]any)
+	if data["title"] != "all years" || data["total"] != 5 || len(grids) != 3 || grids[0].(map[string]any)["Year"] != 2025 {
+		t.Errorf("all years: %v total=%v grids=%d", data["title"], data["total"], len(grids))
 	}
-	// tag filter
-	data = buildMapData(idx, tags, url.Values{"tag": {"retales"}})
-	if data["year"] != 2024 {
-		t.Errorf("tag year %v", data["year"])
+	if data["shareURL"] != siteURL+"/addons/map/" {
+		t.Errorf("default share url %v", data["shareURL"])
+	}
+	// a day can be selected in the all-years view
+	data = buildMapData(idx, tags, url.Values{"day": {"2024-02-01"}})
+	if data["hasDayPosts"] != true {
+		t.Errorf("day in all-years view not selected")
+	}
+}
+
+func TestPlacesAndWords(t *testing.T) {
+	m := placeMentions("Vuelo de Tallin a Londres. Madrid, Madrid y Palma. Pero Una casa en Nueva York.")
+	if m["Tallinn"] != 1 || m["London"] != 1 || m["Madrid"] != 2 || m["Palma"] != 1 || m["New York City"] != 1 {
+		t.Errorf("places: %v", m)
+	}
+	if _, bad := m["Pero"]; bad {
+		t.Errorf("excluded word matched: %v", m)
+	}
+	w := wordCounts("El café y la casa; the coffee and THE house. Café café")
+	if w["café"] != 3 || w["casa"] != 1 || w["coffee"] != 1 || w["the"] != 0 || w["la"] != 0 {
+		t.Errorf("words: %v", w)
+	}
+	idx := testIdx()
+	d := buildPlacesData(idx, url.Values{"region": {"europe"}, "place": {"Nowhere"}})
+	if d["hasSelected"] != false || !strings.Contains(d["svg"].(string), "<svg") {
+		t.Errorf("places page data")
+	}
+	wd := buildWordsData(idx, url.Values{"word": {"tres"}})
+	if wd["selected"] != "tres" || wd["selCount"] != 5 {
+		t.Errorf("words page: %v %v", wd["selected"], wd["selCount"])
 	}
 }
 
