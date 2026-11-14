@@ -396,6 +396,7 @@ func main() {
 			"W":        p.W,
 			"H":        p.H,
 			"HasSize":  p.W > 0 && p.H > 0,
+			"Ratio":    photoRatio(p),
 		}
 	}
 

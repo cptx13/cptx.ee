@@ -3,6 +3,7 @@ package main
 import (
 	"image"
 	_ "image/gif"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -101,4 +102,12 @@ func photoYears(folders []PhotoFolder) string {
 		return lo
 	}
 	return lo + "–" + hi
+}
+
+// photoRatio is width/height as a CSS number, for justified rows ("--r").
+func photoRatio(p Photo) string {
+	if p.W <= 0 || p.H <= 0 {
+		return "1.5"
+	}
+	return fmt.Sprintf("%.3f", float64(p.W)/float64(p.H))
 }

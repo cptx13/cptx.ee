@@ -23,7 +23,7 @@
       <section v-for="folder in folders" class="ph-group">
         <h2 class="lib-shelf-label"><a :href="folder.Path">{{ folder.Location }}</a> <span class="lib-shelf-count">{{ folder.Year }} · {{ folder.Count }}</span></h2>
         <div class="ph-masonry">
-          <a v-for="photo in folder.Photos" class="ph-item" :href="photo.URL" :data-id="photo.ID">
+          <a v-for="photo in folder.Photos" class="ph-item" :href="photo.URL" :data-id="photo.ID" :style="'--r:' + photo.Ratio">
             <img v-if="photo.HasSize" :src="photo.ThumbURL" :alt="folder.Title + ', photo ' + photo.Index" :width="photo.W" :height="photo.H" loading="lazy">
             <img v-else :src="photo.ThumbURL" :alt="folder.Title + ', photo ' + photo.Index" loading="lazy">
           </a>
