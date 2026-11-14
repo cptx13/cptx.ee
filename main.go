@@ -69,6 +69,65 @@ type FeedCache struct {
 
 const feedCacheFile = "feed-cache.json"
 
+// Feed refresh limits (B-04): the server refreshes on its own every
+// feedAutoInterval; the public refresh link is a no-op if a refresh is running
+// or one finished less than feedManualGap ago, so crawlers can't hammer feeds.
+const (
+	feedAutoInterval = 6 * time.Hour
+	feedManualGap    = 10 * time.Minute
+)
+
+var feedRefresh struct {
+	sync.Mutex
+	running bool
+	last    time.Time
+}
+
+// refreshFeeds fetches all feeds unless a refresh is running or the last one
+// finished less than minGap ago. It reports whether it fetched.
+func refreshFeeds(minGap time.Duration, why string) bool {
+	feedRefresh.Lock()
+	if feedRefresh.running || time.Since(feedRefresh.last) < minGap {
+		feedRefresh.Unlock()
+		return false
+	}
+	feedRefresh.running = true
+	feedRefresh.Unlock()
+	defer func() {
+		feedRefresh.Lock()
+		feedRefresh.running = false
+		feedRefresh.last = time.Now()
+		feedRefresh.Unlock()
+	}()
+
+	log.Printf("Refreshing feeds (%s)...", why)
+	cache := fetchAllFeeds()
+	if err := saveFeedCache(cache); err != nil {
+		log.Printf("error saving feed cache: %v", err)
+	}
+	log.Printf("Feed refresh complete: %d items, %d errors", len(cache.Items), len(cache.Errors))
+	return true
+}
+
+// startFeedAutoRefresh refreshes the feed cache in the background whenever it
+// is older than feedAutoInterval. FEEDS_AUTO_REFRESH=0 turns it off (tests).
+func startFeedAutoRefresh() {
+	if os.Getenv("FEEDS_AUTO_REFRESH") == "0" {
+		return
+	}
+	if cache, err := loadFeedCache(); err == nil {
+		feedRefresh.Lock()
+		feedRefresh.last = cache.LastRefreshed
+		feedRefresh.Unlock()
+	}
+	go func() {
+		for {
+			refreshFeeds(feedAutoInterval, "scheduled")
+			time.Sleep(10 * time.Minute)
+		}
+	}()
+}
+
 // feedSources maps a display name to the RSS/Atom feed URL.
 var feedSources = []struct {
 	Name    string
@@ -592,13 +651,11 @@ func main() {
 		}
 	})
 	// Feed page handlers (server-side only)
+	startFeedAutoRefresh()
 	mux.HandleFunc("/pockets/cheatsheet/feed/refresh", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Refreshing feeds...")
-		cache := fetchAllFeeds()
-		if err := saveFeedCache(cache); err != nil {
-			log.Printf("error saving feed cache: %v", err)
+		if !refreshFeeds(feedManualGap, "manual") {
+			log.Println("Feed refresh skipped: running or refreshed recently")
 		}
-		log.Printf("Feed refresh complete: %d items, %d errors", len(cache.Items), len(cache.Errors))
 		http.Redirect(w, r, "/pockets/cheatsheet/feed/", http.StatusSeeOther)
 	})
 	// Redirect old /pockets/feed/ to new location

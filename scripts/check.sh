@@ -45,7 +45,7 @@ sys.exit(1 if errors else 0)
 PY
 
 echo "== 3/4 start a test server on :$PORT (builds dist/)"
-PORT="$PORT" "$OUT/cptx.ee" > "$OUT/server.log" 2>&1 &
+FEEDS_AUTO_REFRESH=0 PORT="$PORT" "$OUT/cptx.ee" > "$OUT/server.log" 2>&1 &
 pid=$!
 trap 'kill $pid 2>/dev/null || true' EXIT
 for _ in $(seq 1 120); do
