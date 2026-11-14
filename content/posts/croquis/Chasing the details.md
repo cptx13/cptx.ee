@@ -1,4 +1,3 @@
-
 ---
 title: "Chasing the details."
 author: cptx
