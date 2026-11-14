@@ -734,6 +734,9 @@ func main() {
 	if err := buildStaticSite(engine, published, allPostsForPool, postsByCategory, postsBySection, pocketPosts, manifestoPost, toPostMap, toPostList, shufflePoolJSON, postCount, photoFolders, toFolderMap, toFolderList, toPhotoList); err != nil {
 		log.Fatalf("building static site: %v", err)
 	}
+	if err := registerRetired(mux, "dist"); err != nil {
+		log.Printf("retired URLs: %v", err)
+	}
 	if sitemapXML, err = buildSitemap("dist", published); err != nil {
 		log.Printf("sitemap: %v", err)
 	}

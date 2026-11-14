@@ -110,3 +110,15 @@ func TestGzipAndHeaders(t *testing.T) {
 		t.Errorf("unexpected encoding without Accept-Encoding")
 	}
 }
+
+func TestRetiredRedirect(t *testing.T) {
+	mux := http.NewServeMux()
+	if err := registerRetired(mux, t.TempDir()); err != nil {
+		t.Fatal(err)
+	}
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, httptest.NewRequest("GET", "/categories/manuscripts/", nil))
+	if rec.Code != 301 || rec.Header().Get("Location") != "/categories/archives/" {
+		t.Errorf("got %d %q", rec.Code, rec.Header().Get("Location"))
+	}
+}
