@@ -1199,7 +1199,7 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .ph-group { margin: 1.4em 0 2em; }
 /* justified rows: each photo keeps its shape, order reads left to right */
 .ph-masonry { display: flex; flex-wrap: wrap; gap: .4em; --ph-h: 110px; }
-.ph-rows-lg { gap: .55em; margin-top: 1.4em; --ph-h: 190px; }
+.ph-rows-lg { gap: .55em; margin-top: 1.4em; --ph-h: 160px; }
 .ph-masonry::after { content: ""; flex-grow: 999999; }
 .ph-item {
     flex: calc(var(--r, 1.5) * 100) 1 calc(var(--r, 1.5) * var(--ph-h));
