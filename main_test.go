@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -119,7 +121,7 @@ func TestRetiredRedirect(t *testing.T) {
 	}
 	rec := httptest.NewRecorder()
 	mux.ServeHTTP(rec, httptest.NewRequest("GET", "/categories/manuscripts/", nil))
-	if rec.Code != 301 || rec.Header().Get("Location") != "/categories/archives/" {
+	if rec.Code != 301 || rec.Header().Get("Location") != "/archives/" {
 		t.Errorf("got %d %q", rec.Code, rec.Header().Get("Location"))
 	}
 }
@@ -215,5 +217,37 @@ func TestOnThisDay(t *testing.T) {
 	d = buildTodayData(idx, url.Values{"date": {"13-45"}}, now) // invalid -> today
 	if d["md"] != "02-01" {
 		t.Errorf("invalid date fallback: %v", d["md"])
+	}
+}
+
+func TestLibrary(t *testing.T) {
+	dir := t.TempDir()
+	books := `[{"key":"9780000000001","title":"Cosmos","author":"Carl Sagan","pages":432,"shelf":"science","lang":"en","year":2013,"first_year":1980},
+{"key":"9780000000002","title":"Poemas","author":"Carlos Pinedo Texidor","shelf":"mine","own":true,"buy":"https://example.com","lang":"es","year":2021}]`
+	os.WriteFile(filepath.Join(dir, "books.json"), []byte(books), 0o644)
+	posts := []addonPost{{Title: "p", Path: "/posts/croquis/p/", Date: time.Now()}}
+	lib, err := loadLibrary(dir, posts, map[string]string{"/posts/croquis/p/": "Hoy leí algo de Carl Sagan en el tren."})
+	if err != nil || len(lib.Books) != 2 {
+		t.Fatalf("load: %v %d", err, len(lib.Books))
+	}
+	if len(lib.ByKey["9780000000001"].Mentions) != 1 {
+		t.Errorf("author mention not found")
+	}
+	d := buildLibraryData(lib, url.Values{"by": {"decade"}, "view": {"spines"}})
+	if !d["spines"].(bool) || len(d["shelves"].([]any)) != 2 {
+		t.Errorf("decade/spines view: %v", d["shelves"])
+	}
+	if got := (libParams{By: "colour", View: "spines", Group: "red"}).url(nil); got != "/archives/library/?by=colour&g=red&view=spines" {
+		t.Errorf("url %q", got)
+	}
+	if id, _, _ := groupOf("decade", lib.ByKey["9780000000001"]); id != "1980" {
+		t.Errorf("decade uses first published year, got %s", id)
+	}
+	a := buildArchivesData(lib)
+	if len(a["mine"].([]any)) != 1 {
+		t.Errorf("own books")
+	}
+	if b := lib.ByKey["9780000000002"]; b.Color == "" || b.Ink == "" {
+		t.Errorf("generated cover colour missing")
 	}
 }

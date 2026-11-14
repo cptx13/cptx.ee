@@ -435,6 +435,15 @@ func main() {
 	// Home page
 	addonIdx := buildAddonIndex(published) // F-15
 	addonTagList := addonTags(addonIdx)
+	postTexts := map[string]string{}
+	for _, p := range published {
+		postTexts[p.Path] = plainText(string(p.Content))
+	}
+	lib, err := loadLibrary(libraryDir(), addonIdx, postTexts) // L-01
+	if err != nil {
+		log.Printf("library: %v", err)
+		lib = &library{ByKey: map[string]*libBook{}}
+	}
 	must(router.GET("home", "/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		otd, hasOTD := homeOnThisDay(addonIdx, time.Now())
 		data := map[string]any{
@@ -722,6 +731,8 @@ func main() {
 	var sitemapXML []byte // filled after the static build below
 	mux.HandleFunc("/healthz", healthHandler(postCount, started))
 	registerAddons(mux, func(w http.ResponseWriter, c string, d map[string]any) { renderPage(w, engine, c, d) }, addonIdx, addonTagList)
+	registerLibrary(mux, func(w http.ResponseWriter, c string, d map[string]any) { renderPage(w, engine, c, d) },
+		func(w http.ResponseWriter, r *http.Request) { renderNotFound(w, engine) }, lib)
 	mux.HandleFunc("/index.xml", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/rss+xml; charset=utf-8")
 		w.Write(rssXML)
@@ -743,6 +754,9 @@ func main() {
 	}
 	if err := writeAddonPages(engine, "dist", addonIdx, addonTagList); err != nil {
 		log.Printf("addons dist: %v", err)
+	}
+	if err := writeLibraryPages(engine, "dist", lib); err != nil {
+		log.Printf("library dist: %v", err)
 	}
 	if err := registerRetired(mux, "dist"); err != nil {
 		log.Printf("retired URLs: %v", err)
@@ -1184,8 +1198,8 @@ func buildStaticSite(
 
 	// Home page
 	if err := writePage("index.html", "HomePage", map[string]any{
-		"posts":     toPostList(allPostsForPool),
-		"postCount": postCount,
+		"posts":        toPostList(allPostsForPool),
+		"postCount":    postCount,
 		"onThisDay":    []any{},
 		"hasOnThisDay": false,
 	}); err != nil {
