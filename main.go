@@ -796,7 +796,7 @@ func renderPage(w http.ResponseWriter, engine *htmlc.Engine, component string, d
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprint(w, html)
+	fmt.Fprint(w, withDoctype(html))
 }
 
 func renderNotFound(w http.ResponseWriter, engine *htmlc.Engine) {
@@ -807,7 +807,7 @@ func renderNotFound(w http.ResponseWriter, engine *htmlc.Engine) {
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusNotFound)
-	fmt.Fprint(w, html)
+	fmt.Fprint(w, withDoctype(html))
 }
 
 func must(err error) {
@@ -1160,7 +1160,7 @@ func buildStaticSite(
 		if err := os.MkdirAll(filepath.Dir(outPath), 0o755); err != nil {
 			return err
 		}
-		return os.WriteFile(outPath, []byte(html), 0o644)
+		return os.WriteFile(outPath, []byte(withDoctype(html)), 0o644)
 	}
 
 	// Helper to write a redirect page

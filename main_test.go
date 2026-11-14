@@ -122,3 +122,12 @@ func TestRetiredRedirect(t *testing.T) {
 		t.Errorf("got %d %q", rec.Code, rec.Header().Get("Location"))
 	}
 }
+
+func TestWithDoctype(t *testing.T) {
+	if got := withDoctype("<html></html>"); !strings.HasPrefix(got, "<!DOCTYPE html>") {
+		t.Errorf("no doctype: %q", got)
+	}
+	if got := withDoctype("<!doctype html><html></html>"); strings.Count(strings.ToLower(got), "<!doctype") != 1 {
+		t.Errorf("doubled: %q", got)
+	}
+}
