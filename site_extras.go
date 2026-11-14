@@ -51,6 +51,15 @@ func postLang(fmLang, body string) string {
 	return "es"
 }
 
+// withDoctype makes every rendered page start with <!DOCTYPE html> so browsers
+// use standards mode instead of quirks mode (Lighthouse "doctype").
+func withDoctype(html string) string {
+	if strings.HasPrefix(strings.ToLower(strings.TrimSpace(html)), "<!doctype") {
+		return html
+	}
+	return "<!DOCTYPE html>\n" + html
+}
+
 // contentClass marks verse (tag "rimas") so it gets poem typography (F-09).
 func contentClass(p *Post) string {
 	for _, t := range p.Tags {
