@@ -6,6 +6,7 @@ package main
 
 import (
 	"fmt"
+	"html"
 	"os"
 	"path/filepath"
 
@@ -32,11 +33,13 @@ type addonPost struct {
 	Tags                      []string
 	Words                     int
 	Date                      time.Time
+	Places                    map[string]int // place name → mentions
+	WordCounts                map[string]int // content word → uses
 }
 
 var tagRe = regexp.MustCompile(`<[^>]+>`)
 
-func countWords(html string) int { return len(strings.Fields(tagRe.ReplaceAllString(html, " "))) }
+func plainText(h string) string { return html.UnescapeString(tagRe.ReplaceAllString(h, " ")) }
 
 // buildAddonIndex keeps published croquis and recuerdos, newest first.
 func buildAddonIndex(posts []*Post) []addonPost {
@@ -45,9 +48,11 @@ func buildAddonIndex(posts []*Post) []addonPost {
 		if p.Draft || p.Date.IsZero() || (p.Section != "croquis" && p.Section != "recuerdos") {
 			continue
 		}
+		text := plainText(string(p.Content))
 		out = append(out, addonPost{
 			Title: p.Title, Path: p.Path, Section: p.Section, Tags: p.Tags,
-			Words: countWords(string(p.Content)), Date: p.Date, Day: p.Date.Format("2006-01-02"),
+			Words: len(strings.Fields(text)), Date: p.Date, Day: p.Date.Format("2006-01-02"),
+			Places: placeMentions(text), WordCounts: wordCounts(text),
 		})
 	}
 	sort.SliceStable(out, func(i, j int) bool { return out[i].Date.After(out[j].Date) })
@@ -70,7 +75,7 @@ func postListMaps(ps []addonPost) []any {
 // ---- map params ---------------------------------------------------------------
 
 type mapParams struct {
-	Year         int
+	Year         int    // 0 = all years
 	Section, Tag string // section: all|croquis|recuerdos; tag: "" or a tag
 	Metric, Day  string // metric: posts|words; day: YYYY-MM-DD or ""
 }
@@ -81,7 +86,9 @@ func (m mapParams) url(change func(*mapParams)) string {
 		change(&c)
 	}
 	q := url.Values{}
-	q.Set("year", strconv.Itoa(c.Year))
+	if c.Year != 0 {
+		q.Set("year", strconv.Itoa(c.Year))
+	}
 	if c.Section != "all" {
 		q.Set("section", c.Section)
 	}
@@ -93,6 +100,9 @@ func (m mapParams) url(change func(*mapParams)) string {
 	}
 	if c.Day != "" {
 		q.Set("day", c.Day)
+	}
+	if len(q) == 0 {
+		return "/addons/map/"
 	}
 	return "/addons/map/?" + q.Encode()
 }
@@ -117,7 +127,22 @@ func filterPosts(idx []addonPost, section, tag string) []addonPost {
 	return out
 }
 
-// parseMapParams whitelists every parameter; anything unknown falls back to a default.
+// yearsOf lists the years that have posts, ascending.
+func yearsOf(ps []addonPost) []int {
+	set := map[int]bool{}
+	for _, p := range ps {
+		set[p.Date.Year()] = true
+	}
+	var ys []int
+	for y := range set {
+		ys = append(ys, y)
+	}
+	sort.Ints(ys)
+	return ys
+}
+
+// parseMapParams whitelists every parameter; anything unknown falls back to a
+// default. The default year is "all" (0).
 func parseMapParams(q url.Values, idx []addonPost, tags map[string]bool) (mapParams, []int) {
 	m := mapParams{Section: "all", Metric: "posts"}
 	switch s := q.Get("section"); s {
@@ -130,27 +155,30 @@ func parseMapParams(q url.Values, idx []addonPost, tags map[string]bool) (mapPar
 	if q.Get("metric") == "words" {
 		m.Metric = "words"
 	}
-	yearSet := map[int]bool{}
-	for _, p := range filterPosts(idx, m.Section, m.Tag) {
-		yearSet[p.Date.Year()] = true
-	}
-	var years []int
-	for y := range yearSet {
-		years = append(years, y)
-	}
-	sort.Ints(years)
-	y, err := strconv.Atoi(q.Get("year"))
-	if err != nil || !yearSet[y] {
-		y = 0
-		if len(years) > 0 {
-			y = years[len(years)-1]
+	years := yearsOf(filterPosts(idx, m.Section, m.Tag))
+	if y, err := strconv.Atoi(q.Get("year")); err == nil {
+		for _, yy := range years {
+			if yy == y {
+				m.Year = y
+			}
 		}
 	}
-	m.Year = y
-	if d, err := time.Parse("2006-01-02", q.Get("day")); err == nil && d.Year() == y {
+	if d, err := time.Parse("2006-01-02", q.Get("day")); err == nil && (m.Year == 0 || d.Year() == m.Year) {
 		m.Day = d.Format("2006-01-02")
 	}
 	return m, years
+}
+
+type dayAgg struct {
+	n, words int
+	posts    []addonPost
+}
+
+func plural(n int, word string) string {
+	if n == 1 {
+		return "1 " + word
+	}
+	return strconv.Itoa(n) + " " + word + "s"
 }
 
 // buildMapData returns the template data for /addons/map/.
@@ -162,19 +190,15 @@ func buildMapData(idx []addonPost, tags []string, q url.Values) map[string]any {
 	m, years := parseMapParams(q, idx, tagSet)
 	posts := filterPosts(idx, m.Section, m.Tag)
 
-	type agg struct {
-		n, words int
-		posts    []addonPost
-	}
-	byDay := map[string]*agg{}
+	byDay := map[string]*dayAgg{}
 	total, words := 0, 0
 	for _, p := range posts {
-		if p.Date.Year() != m.Year {
+		if m.Year != 0 && p.Date.Year() != m.Year {
 			continue
 		}
 		a := byDay[p.Day]
 		if a == nil {
-			a = &agg{}
+			a = &dayAgg{}
 			byDay[p.Day] = a
 		}
 		a.n++
@@ -183,7 +207,7 @@ func buildMapData(idx []addonPost, tags []string, q url.Values) map[string]any {
 		total++
 		words += p.Words
 	}
-	val := func(a *agg) int {
+	val := func(a *dayAgg) int {
 		if a == nil {
 			return 0
 		}
@@ -192,65 +216,53 @@ func buildMapData(idx []addonPost, tags []string, q url.Values) map[string]any {
 		}
 		return a.n
 	}
-	max := 0
+	max := 1
 	for _, a := range byDay {
 		if v := val(a); v > max {
 			max = v
 		}
 	}
 
-	// Calendar: columns are weeks (Mon–Sun) covering the whole year.
-	jan1 := time.Date(m.Year, 1, 1, 0, 0, 0, 0, time.UTC)
-	start := jan1.AddDate(0, 0, -((int(jan1.Weekday()) + 6) % 7))
-	var weeks []any
-	streak, best := 0, 0
-	for d := start; d.Year() <= m.Year; {
-		var cells []any
-		label := ""
-		for i := 0; i < 7; i++ {
-			day := d.Format("2006-01-02")
-			a := byDay[day]
-			v := val(a)
-			cell := map[string]any{"In": d.Year() == m.Year, "Has": v > 0, "Class": "hm-cell hm-l0", "Href": "", "Label": ""}
-			if d.Year() == m.Year {
-				if d.Day() == 1 {
-					label = d.Format("Jan")
-				}
-				if v > 0 {
-					lvl := (4*v + max - 1) / max // 1..4
-					cls := fmt.Sprintf("hm-cell hm-l%d", lvl)
-					if day == m.Day {
-						cls += " hm-sel"
-					}
-					cell["Class"] = cls
-					dd := day
-					cell["Href"] = m.url(func(c *mapParams) { c.Day = dd }) + "#day"
-					cell["Label"] = fmt.Sprintf("%s · %d post(s) · %d words", day, a.n, a.words)
-					streak++
-				} else {
-					cell["Label"] = day
-					streak = 0
-				}
-				if streak > best {
-					best = streak
-				}
-			} else {
-				cell["Class"] = "hm-cell hm-out"
-			}
-			cells = append(cells, cell)
-			d = d.AddDate(0, 0, 1)
+	// longest run of consecutive days with posts
+	var days []string
+	for d := range byDay {
+		days = append(days, d)
+	}
+	sort.Strings(days)
+	best, run := 0, 0
+	var prev time.Time
+	for i, d := range days {
+		t, _ := time.Parse("2006-01-02", d)
+		if i > 0 && t.Sub(prev) == 24*time.Hour {
+			run++
+		} else {
+			run = 1
 		}
-		weeks = append(weeks, map[string]any{"Days": cells, "Label": label})
+		if run > best {
+			best = run
+		}
+		prev = t
+	}
+
+	showYears := years
+	if m.Year != 0 {
+		showYears = []int{m.Year}
+	}
+	var grids []any
+	for i := len(showYears) - 1; i >= 0; i-- { // newest first
+		y := showYears[i]
+		grids = append(grids, map[string]any{"Year": y, "Weeks": yearWeeks(m, y, byDay, val, max)})
 	}
 
 	opt := func(label string, active bool, href string) any {
 		return map[string]any{"Label": label, "Active": active, "Href": href}
 	}
-	var yearOpts, sectionOpts, tagOpts, metricOpts []any
+	yearOpts := []any{opt("all", m.Year == 0, m.url(func(c *mapParams) { c.Year = 0; c.Day = "" }))}
 	for _, y := range years {
 		yy := y
 		yearOpts = append(yearOpts, opt(strconv.Itoa(y), y == m.Year, m.url(func(c *mapParams) { c.Year = yy; c.Day = "" })))
 	}
+	var sectionOpts, tagOpts, metricOpts []any
 	for _, s := range []string{"all", "croquis", "recuerdos"} {
 		ss := s
 		sectionOpts = append(sectionOpts, opt(s, s == m.Section, m.url(func(c *mapParams) { c.Section = ss; c.Day = "" })))
@@ -268,13 +280,60 @@ func buildMapData(idx []addonPost, tags []string, q url.Values) map[string]any {
 	if a := byDay[m.Day]; a != nil {
 		dayPosts = postListMaps(a.posts)
 	}
+	title := "all years"
+	yearLabel := "all"
+	if m.Year != 0 {
+		title = strconv.Itoa(m.Year)
+		yearLabel = title
+	}
 	return map[string]any{
-		"streakLabel": plural(best, "day"), "year": m.Year, "total": total, "words": words, "activeDays": len(byDay), "bestStreak": best,
-		"metric": m.Metric, "weeks": weeks,
+		"title": title, "yearLabel": yearLabel, "total": total, "words": words,
+		"activeDays": len(byDay), "streakLabel": plural(best, "day"),
+		"metric": m.Metric, "grids": grids,
 		"years": yearOpts, "sections": sectionOpts, "tags": tagOpts, "metrics": metricOpts,
 		"day": m.Day, "dayPosts": dayPosts, "hasDayPosts": len(dayPosts) > 0,
 		"shareURL": siteURL + m.url(nil),
 	}
+}
+
+// yearWeeks builds the Mon–Sun week columns of one year's calendar.
+func yearWeeks(m mapParams, year int, byDay map[string]*dayAgg, val func(*dayAgg) int, max int) []any {
+	jan1 := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
+	start := jan1.AddDate(0, 0, -((int(jan1.Weekday()) + 6) % 7))
+	var weeks []any
+	for d := start; d.Year() <= year; {
+		var cells []any
+		label := ""
+		for i := 0; i < 7; i++ {
+			day := d.Format("2006-01-02")
+			a := byDay[day]
+			v := val(a)
+			cell := map[string]any{"Has": false, "Class": "hm-cell hm-l0", "Href": "", "Label": day}
+			switch {
+			case d.Year() != year:
+				cell["Class"] = "hm-cell hm-out"
+				cell["Label"] = ""
+			case v > 0:
+				lvl := (4*v + max - 1) / max // 1..4
+				cls := fmt.Sprintf("hm-cell hm-l%d", lvl)
+				if day == m.Day {
+					cls += " hm-sel"
+				}
+				dd := day
+				cell["Has"] = true
+				cell["Class"] = cls
+				cell["Href"] = m.url(func(c *mapParams) { c.Day = dd }) + "#day"
+				cell["Label"] = fmt.Sprintf("%s · %s · %d words", day, plural(a.n, "post"), a.words)
+			}
+			if d.Year() == year && d.Day() == 1 {
+				label = d.Format("Jan")
+			}
+			cells = append(cells, cell)
+			d = d.AddDate(0, 0, 1)
+		}
+		weeks = append(weeks, map[string]any{"Days": cells, "Label": label})
+	}
+	return weeks
 }
 
 // ---- on this day --------------------------------------------------------------
@@ -332,6 +391,20 @@ func registerAddons(mux *http.ServeMux, render func(http.ResponseWriter, string,
 		}
 		render(w, "MapPage", buildMapData(idx, tags, r.URL.Query()))
 	})
+	mux.HandleFunc("/addons/places/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/addons/places/" {
+			http.NotFound(w, r)
+			return
+		}
+		render(w, "PlacesPage", buildPlacesData(idx, r.URL.Query()))
+	})
+	mux.HandleFunc("/addons/words/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/addons/words/" {
+			http.NotFound(w, r)
+			return
+		}
+		render(w, "WordsPage", buildWordsData(idx, r.URL.Query()))
+	})
 	mux.HandleFunc("/addons/today/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/addons/today/" {
 			http.NotFound(w, r)
@@ -366,9 +439,11 @@ func writeAddonPages(engine *htmlc.Engine, distDir string, idx []addonPost, tags
 		comp string
 		data map[string]any
 	}{
-		"addons":       {"AddonsPage", map[string]any{"count": len(idx)}},
-		"addons/map":   {"MapPage", buildMapData(idx, tags, url.Values{})},
-		"addons/today": {"TodayPage", buildTodayData(idx, url.Values{}, time.Now())},
+		"addons":        {"AddonsPage", map[string]any{"count": len(idx)}},
+		"addons/map":    {"MapPage", buildMapData(idx, tags, url.Values{})},
+		"addons/today":  {"TodayPage", buildTodayData(idx, url.Values{}, time.Now())},
+		"addons/places": {"PlacesPage", buildPlacesData(idx, url.Values{})},
+		"addons/words":  {"WordsPage", buildWordsData(idx, url.Values{})},
 	}
 	for dir, pg := range pages {
 		html, err := engine.RenderPageString(pg.comp, pg.data)
@@ -384,11 +459,4 @@ func writeAddonPages(engine *htmlc.Engine, distDir string, idx []addonPost, tags
 		}
 	}
 	return nil
-}
-
-func plural(n int, word string) string {
-	if n == 1 {
-		return "1 " + word
-	}
-	return strconv.Itoa(n) + " " + word + "s"
 }

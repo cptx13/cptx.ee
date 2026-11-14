@@ -69,6 +69,7 @@ var assetVersioner = strings.NewReplacer(
 	`href="/css/style.css"`, `href="/css/style.css?v=`+assetVersion+`"`,
 	`src="/js/theme-switch.js"`, `src="/js/theme-switch.js?v=`+assetVersion+`"`,
 	`src="/js/post-search.js"`, `src="/js/post-search.js?v=`+assetVersion+`"`,
+	`src="/js/share.js"`, `src="/js/share.js?v=`+assetVersion+`"`,
 )
 
 // contentClass marks verse (tag "rimas") so it gets poem typography (F-09).
@@ -238,6 +239,8 @@ const robotsTxt = `User-agent: *
 Disallow: /pockets/cheatsheet/feed/refresh
 Disallow: /addons/map/?
 Disallow: /addons/today/?
+Disallow: /addons/places/?
+Disallow: /addons/words/?
 
 Sitemap: https://cptx.ee/sitemap.xml
 `

@@ -43,3 +43,5 @@ My works are organized and distributed using the following system:
   - **weekendreads**: Articles from other people I have recently enjoyed.
 
 - **[photos](/photos/)** are collections of photographs from various places and years, served directly from the server.
+
+- **[addons](/addons/)** are my playground, where I try new features that make the blog more immersive: an archive map of every day I wrote, what I wrote on this day in other years, the cities that light up across my posts and the words I keep coming back to.

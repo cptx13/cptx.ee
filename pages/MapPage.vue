@@ -1,8 +1,8 @@
 <template>
-<AppLayout :pageTitle="'archive map ' + year + ' | cptx'" :description="'Heatmap of every croquis and recuerdo written in ' + year + '.'" :canonicalURL="'https://cptx.ee/addons/map/'" :lang="'en'" :ogType="'website'">
+<AppLayout :pageTitle="'archive map · ' + title + ' | cptx'" :description="'Heatmap of every croquis and recuerdo, day by day.'" :canonicalURL="'https://cptx.ee/addons/map/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons">
     <p class="addons-crumb"><a href="/addons/">addons</a> / archive map</p>
-    <h1 class="addons-title">{{ year }}</h1>
+    <h1 class="addons-title">{{ title }}</h1>
     <p class="hm-stats">{{ total }} posts · {{ words }} words · {{ activeDays }} days · longest run {{ streakLabel }}</p>
 
     <div class="hm-filters">
@@ -12,14 +12,17 @@
       <p><span class="hm-filter-label">colour</span><a v-for="o in metrics" :href="o.Href" :class="{ 'hm-opt': true, 'hm-active': o.Active }" rel="nofollow">{{ o.Label }}</a></p>
     </div>
 
-    <div class="hm-scroll">
-      <div class="hm" role="grid" :aria-label="'Posts per day in ' + year">
-        <div v-for="week in weeks" class="hm-week">
-          <span class="hm-month">{{ week.Label }}</span>
-          <template v-for="c in week.Days">
-            <a v-if="c.Has" :class="c.Class" :href="c.Href" :title="c.Label" :aria-label="c.Label" rel="nofollow"></a>
-            <span v-else :class="c.Class" :title="c.Label"></span>
-          </template>
+    <div v-for="g in grids" class="hm-year">
+      <p class="hm-year-label">{{ g.Year }}</p>
+      <div class="hm-scroll">
+        <div class="hm" :aria-label="'Posts per day in ' + g.Year">
+          <div v-for="week in g.Weeks" class="hm-week">
+            <span class="hm-month">{{ week.Label }}</span>
+            <template v-for="c in week.Days">
+              <a v-if="c.Has" :class="c.Class" :href="c.Href" :title="c.Label" :aria-label="c.Label" rel="nofollow"></a>
+              <span v-else :class="c.Class" :title="c.Label"></span>
+            </template>
+          </div>
         </div>
       </div>
     </div>
@@ -33,7 +36,7 @@
       </article>
     </div>
 
-    <p class="hm-share">link to this view: <a :href="shareURL">{{ shareURL }}</a></p>
+    <p class="addon-share"><a class="share-link" :href="shareURL" :data-share-url="shareURL">share this view</a></p>
   </div>
 </AppLayout>
 </template>
