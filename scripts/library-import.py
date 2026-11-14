@@ -176,6 +176,8 @@ def fetch_cover(key, isbn, raw, coverdir, refetch, isbn10="", asin=""):
     for a in [x for x in (asin, isbn10) if x]:
         tries.append(("amazon", "https://images-na.ssl-images-amazon.com/images/P/%s.01._SCLZZZZZZZ_.jpg" % a))
         tries.append(("amazon", "https://m.media-amazon.com/images/P/%s.01._SCLZZZZZZZ_.jpg" % a))
+    if isbn.startswith("97884"):  # Casa del Libro, good for Spanish editions
+        tries.append(("casadellibro", "https://imagessl.casadellibro.com/a/l/t0/%s/%s.jpg" % (isbn[-2:], isbn)))
     if isbn:  # Google's public cover image by ISBN (no API quota)
         tries.append(("google", "https://books.google.com/books/content?vid=ISBN%s&printsec=frontcover&img=1&zoom=1" % isbn))
     for src, url in tries:
