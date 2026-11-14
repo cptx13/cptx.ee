@@ -62,12 +62,12 @@ scripts/urls.sh dist > "$OUT/urls.new"
 comm -23 urls.txt "$OUT/urls.new" > "$OUT/removed"
 comm -13 urls.txt "$OUT/urls.new" > "$OUT/added"
 echo "  $(wc -l < "$OUT/urls.new") URLs; $(wc -l < "$OUT/added") added, $(wc -l < "$OUT/removed") removed"
-sed 's/^/  + /' "$OUT/added" | head -20
+head -20 "$OUT/added" | sed 's/^/  + /'   # head first: no broken pipe under pipefail
 if grep -rlE '\[missing|="undefined"' dist --include=index.html > "$OUT/placeholders" 2>/dev/null; then
   head -5 "$OUT/placeholders" | sed 's/^/    /'; bad "template placeholders ([missing / \"undefined\") in $(wc -l < "$OUT/placeholders") page(s)"
 fi
 if [ -s "$OUT/removed" ]; then
-  sed 's/^/  - /' "$OUT/removed" | head -20
+  head -20 "$OUT/removed" | sed 's/^/  - /'
   if [ "$UPDATE" = 1 ]; then echo "  (removals accepted: --update-urls)"
   else bad "URLs would disappear or change (same-day posts shift IDs). If intended: --update-urls"; fi
 fi
