@@ -1,4 +1,7 @@
 /
+/addons/
+/addons/map/
+/addons/today/
 /categories/archives/
 /categories/croquis/
 /categories/manifesto/
