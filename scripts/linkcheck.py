@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Monthly external link check (T-05): python3 scripts/linkcheck.py
 Finds http(s) links in content/ and pages/, checks each once, and fails on links
-that are gone (404/410/DNS errors). 401/403/429 and timeouts are reported as
-warnings only, since many sites block bots."""
-import concurrent.futures as cf, pathlib, re, sys, urllib.error, urllib.request
+that are gone (404/410, or the domain no longer resolves). Everything else
+(401/403/429, TLS errors, timeouts, Amazon short links) is a warning only."""
+import concurrent.futures as cf, pathlib, re, socket, sys, urllib.error, urllib.parse, urllib.request
 
 LINK = re.compile(r"https?://[^\s)\]\"'<>`]+")
 links = {}
@@ -26,13 +26,17 @@ def check(u):
         except Exception as e:
             if method == "HEAD":
                 continue
+            if isinstance(getattr(e, "reason", None), socket.gaierror):
+                return u, "DNS"  # domain no longer resolves
             return u, type(e).__name__
     return u, "?"
 
 broken, warn = [], []
 with cf.ThreadPoolExecutor(16) as ex:
     for u, s in ex.map(check, sorted(links)):
-        if s in (404, 410) or s in ("URLError", "gaierror"):
+        host = urllib.parse.urlsplit(u).hostname or ""
+        botwall = host.endswith(("amzn.eu", "amazon.es", "amazon.com", "amzn.to"))  # 404 to scripts, fine in browsers
+        if (s in (404, 410, "DNS")) and not botwall:
             broken.append((u, s))
         elif not (isinstance(s, int) and s < 400):
             warn.append((u, s))
