@@ -15,7 +15,7 @@ Some links I like to have at hand,
 
 * [No One's Happy](https://nooneshappy.com/)
 * [Invokation Games](https://www.invokation.games/blog)
-* [Andrulis](https://andrulis.de/blog/)
+* [Andrulis](https://andrulis.de/)
 * [Mrus](https://マリウス.com/)
 * [Karri Saarineen](https://karrisaarinen.com/)
 * [Seth For Privacy](https://sethforprivacy.com/)
@@ -28,7 +28,7 @@ Some links I like to have at hand,
 * [Fitness Revolucionario](https://www.fitnessrevolucionario.com/articulos/)
 * [Adam Thiede](https://adamthiede.com/posts.html)
 * [Bunnies Studio](https://www.bunniestudios.com/blog/)
-* [Privacy Guides Blog](https://blog.privacyguides.org/)
+* [Privacy Guides Blog](https://www.privacyguides.org/articles/)
 * [Brutalist Report](https://brutalist.report/)
 
 #### Databases/Archives

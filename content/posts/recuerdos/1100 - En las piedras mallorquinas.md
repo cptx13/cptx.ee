@@ -14,6 +14,6 @@ La bahía de Palma, en su inmensidad, ha dejado atrás las grandes extensiones d
 
 En la extensa costa mallorquina uno puede toparse con resquicios de aquella mentalidad isleña tan bien descrita en *"Queridos Mallorquines"*, construir en la costa era abrir la puerta a los corsarios y maleantes. Los mallorquines de antaño, protegidos en diversos puntos por cordillera y acantilados, necesitaron erigir ciertos puntos de vigilancia, entre ellos la fortaleza decimonónica donde hoy hemos cenado.
 
-Hoy, desde el cabo de Enderrocat, rodeados de preciosas piedras de marés talladas, he vuelto a [sentirme aquel niño](https://www.cptx13.com/post/piratas-en-la-cena) que soñaba con las historias de piratas, corsarios y estraperlistas, y es que Cap Rocat, además de ser un grandísimo restaurante, es la materialización de todo lo que le pido a la arquitectura, respeto por la historia y cohesión con lo que rodea a la edificación.
+Hoy, desde el cabo de Enderrocat, rodeados de preciosas piedras de marés talladas, he vuelto a [sentirme aquel niño](/croquis/202008251/) que soñaba con las historias de piratas, corsarios y estraperlistas, y es que Cap Rocat, además de ser un grandísimo restaurante, es la materialización de todo lo que le pido a la arquitectura, respeto por la historia y cohesión con lo que rodea a la edificación.
 
 Recuerdo #1100 / Lunes 19 de agosto de 2024 (Mallorca, España)

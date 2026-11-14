@@ -144,7 +144,7 @@ var feedSources = []struct {
 	{"Fitness Revolucionario", "https://www.fitnessrevolucionario.com/feed/"},
 	{"Adam Thiede", "https://adamthiede.com/rss.xml"},
 	{"Bunnie Studios", "https://www.bunniestudios.com/blog/?feed=rss2"},
-	{"Privacy Guides", "https://blog.privacyguides.org/feed_rss_created.xml"},
+	{"Privacy Guides", "https://www.privacyguides.org/articles/feed_rss_created.xml"},
 }
 
 func loadFeedCache() (*FeedCache, error) {

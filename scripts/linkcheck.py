@@ -15,7 +15,7 @@ for p in list(pathlib.Path("content").rglob("*.md")) + list(pathlib.Path("pages"
 
 def check(u):
     for method in ("HEAD", "GET"):
-        req = urllib.request.Request(u, method=method, headers={"User-Agent": "Mozilla/5.0 (cptx-linkcheck)"})
+        req = urllib.request.Request(u, method=method, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"})
         try:
             with urllib.request.urlopen(req, timeout=20) as r:
                 return u, r.status
