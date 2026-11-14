@@ -143,6 +143,19 @@ server on `:18080` (`CHECK_PORT` to change), diffs the generated URLs against
 `urls.txt` (fails if any URL would disappear) and requests every URL. Takes ~5 s.
 After an *intended* URL change, run it with `--update-urls` and commit `urls.txt`.
 
+## Automation (GitHub Actions)
+
+| Workflow | When | What |
+|---|---|---|
+| `check` | every push / PR | `scripts/check.sh` (build, vet, tests, lint, URL diff, smoke). On `main` it then waits until `https://cptx.ee/healthz` reports the new commit and runs `scripts/smoke.sh` against the live site — a red run means the deploy didn't land |
+| `uptime` | every 15 min | `GET /healthz`, 3 tries; a failed run is emailed by GitHub |
+| `linkcheck` | 1st of each month | `scripts/linkcheck.py` — fails on external links that are gone (404/410/DNS) |
+
+Failure emails: GitHub → Settings → Notifications → Actions → "Send notifications for failed workflows only" (email).
+GitHub pauses scheduled workflows after 60 days without repo activity; re-enable from the Actions tab.
+
+Manual live check: `scripts/smoke.sh [https://cptx.ee] [commit]`.
+
 ## Go version
 
 The Go toolchain is pinned in `mise.toml` (currently `1.27.4`); `go.mod` only sets

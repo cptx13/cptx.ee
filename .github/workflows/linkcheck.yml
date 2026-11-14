@@ -1,0 +1,13 @@
+# T-05: monthly external link check (fails, and emails, if links are gone).
+name: linkcheck
+on:
+  schedule:
+    - cron: "17 6 1 * *"
+  workflow_dispatch:
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/linkcheck.py

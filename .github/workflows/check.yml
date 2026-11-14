@@ -1,0 +1,36 @@
+# T-02: run scripts/check.sh on every push and PR; on main, also verify the
+# deploy (wait until /healthz reports the new commit) and run the live smoke test.
+name: check
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: go
+        run: echo "version=$(sed -n 's/^go = "\([0-9.]*\)".*/\1/p' mise.toml)" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ steps.go.outputs.version }}
+      - run: scripts/check.sh
+  deploy-verify:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for the VM to deploy this commit (up to 8 min)
+        run: |
+          want="${GITHUB_SHA:0:7}"
+          for i in $(seq 1 48); do
+            got=$(curl -fsS --max-time 10 https://cptx.ee/healthz | python3 -c 'import sys,json;print(json.load(sys.stdin)["commit"])' || true)
+            echo "attempt $i: live=$got want=$want"
+            [ "$got" = "$want" ] && exit 0
+            sleep 10
+          done
+          echo "::error::cptx.ee did not deploy $want (safe deploy may have kept the previous version — check journalctl --user -u cptx-ee-deploy)"
+          exit 1
+      - run: scripts/smoke.sh https://cptx.ee "$GITHUB_SHA"

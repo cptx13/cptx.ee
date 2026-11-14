@@ -1,0 +1,20 @@
+# B-07: every 15 minutes, check https://cptx.ee/healthz. A failed run is emailed
+# by GitHub (Settings → Notifications → Actions: failed workflows).
+# Note: GitHub pauses scheduled workflows after 60 days without repo activity.
+name: uptime
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+jobs:
+  healthz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          for i in 1 2 3; do
+            curl -fsS --max-time 15 https://cptx.ee/healthz && exit 0
+            sleep 30
+          done
+          echo "::error::https://cptx.ee/healthz is not answering"
+          exit 1

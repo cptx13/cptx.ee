@@ -10,6 +10,7 @@ import (
 	"encoding/xml"
 	"io/fs"
 	"net/http"
+	"os"
 	"path/filepath"
 	"regexp"
 	"runtime/debug"
@@ -153,7 +154,7 @@ func buildSitemap(distDir string, posts []*Post) ([]byte, error) {
 		if rel != "." {
 			u = "/" + filepath.ToSlash(rel) + "/"
 		}
-		if strings.HasPrefix(u, "/posts/") || u == "/categories/pockets/" {
+		if strings.HasPrefix(u, "/posts/") || u == "/categories/pockets/" || retiredURLs[u] != "" {
 			return nil
 		}
 		paths = append(paths, u)
@@ -176,6 +177,31 @@ func buildSitemap(distDir string, posts []*Post) ([]byte, error) {
 	}
 	b.WriteString("</urlset>\n")
 	return b.Bytes(), nil
+}
+
+// retiredURLs redirect pages that were removed (C-05) so no URL ever 404s.
+// They get a redirect stub in dist/ (keeps urls.txt stable) and stay out of the sitemap.
+var retiredURLs = map[string]string{
+	"/categories/manuscripts/": "/categories/archives/",
+}
+
+func registerRetired(mux *http.ServeMux, distDir string) error {
+	for from, to := range retiredURLs {
+		to := to
+		mux.HandleFunc(from, func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, to, http.StatusMovedPermanently)
+		})
+		dir := filepath.Join(distDir, filepath.FromSlash(strings.Trim(from, "/")))
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			return err
+		}
+		stub := `<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=` + to +
+			`"><link rel="canonical" href="` + siteURL + to + `"><title>Redirecting...</title></head><body><a href="` + to + `">` + to + `</a></body></html>`
+		if err := os.WriteFile(filepath.Join(dir, "index.html"), []byte(stub), 0o644); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 const robotsTxt = `User-agent: *
