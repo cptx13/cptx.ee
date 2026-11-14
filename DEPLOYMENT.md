@@ -62,25 +62,54 @@ GitHub Actions cannot be used for deploys: hosted runners can't reach this VM.
 
 ## Systemd units
 
-There are two user-level systemd units, kept in this repo and installed to `~/.config/systemd/user/` on the remote:
+All four user units are kept in this repo and installed (copied) to
+`~/.config/systemd/user/` on the VM:
 
-- **`cptx-ee-build.service`** — oneshot unit that builds the Go binary using `mise exec` (so the Go version from `mise.toml` is used). The binary is placed at `~/.local/bin/cptx.ee`, outside the worktree.
-- **`cptx-ee.service`** — runs the server on port 8080. Depends on the build unit. Restarts on failure.
+| Unit | Role | Enabled |
+|---|---|---|
+| `cptx-ee.service` | Runs `~/.local/bin/cptx.ee` on :8080 from `~/cptx-v2`; restarts on failure | yes (`default.target`) |
+| `cptx-ee-deploy.timer` | Fires `cptx-ee-deploy.service` every minute | yes (`timers.target`) |
+| `cptx-ee-deploy.service` | Runs `deploy.sh` (safe build → swap → health check) | via the timer |
+| `cptx-ee-build.service` | Manual bootstrap build for a fresh VM only | no |
 
-## Deploying updated unit files
+The server does not depend on the build unit: `deploy.sh` builds and swaps the
+binary, and the binary in `~/.local/bin` survives reboots, so a reboot simply
+starts the last good build.
+
+## Installing / updating unit files (on the VM)
+
+Unit files are *not* applied by a deploy. After a change to any unit reaches
+`main` (and the VM has pulled it), run on the VM:
 
 ```sh
-scp cptx-ee-build.service cptx-ee.service cptx:/tmp/
-ssh cptx 'export XDG_RUNTIME_DIR=/run/user/$(id -u) && \
-  mv /tmp/cptx-ee-build.service /tmp/cptx-ee.service ~/.config/systemd/user/ && \
-  systemctl --user daemon-reload'
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+cd ~/cptx-v2
+cp cptx-ee.service cptx-ee-build.service cptx-ee-deploy.service cptx-ee-deploy.timer ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemd-analyze --user verify ~/.config/systemd/user/cptx-ee*.service
 ```
 
-## Building and starting the service
+Check that what is installed matches the repo:
+
+```sh
+for f in cptx-ee.service cptx-ee-build.service cptx-ee-deploy.service cptx-ee-deploy.timer; do
+  diff -q ~/cptx-v2/$f ~/.config/systemd/user/$f || echo "DIFFERS: $f"; done
+```
+
+### Fresh VM bootstrap
+
+```sh
+mise trust ~/cptx-v2/mise.toml
+cp ~/cptx-v2/cptx-ee*.service ~/cptx-v2/cptx-ee-deploy.timer ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user start cptx-ee-build.service      # first binary
+systemctl --user enable --now cptx-ee.service cptx-ee-deploy.timer
+```
+
+## Restarting the server
 
 ```sh
 ssh cptx 'export XDG_RUNTIME_DIR=/run/user/$(id -u) && \
-  systemctl --user start cptx-ee-build.service && \
   systemctl --user restart cptx-ee.service'
 ```
 

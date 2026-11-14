@@ -1,0 +1,14 @@
+[Unit]
+Description=Build cptx.ee server (manual bootstrap only; deploys use deploy.sh)
+After=network-online.target
+Wants=network-online.target
+
+# Not enabled at boot and nothing depends on it (B-02). Use it only to build a
+# first binary on a fresh VM:  systemctl --user start cptx-ee-build.service
+# It builds in place, so never use it on a live site; push to main instead.
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/cptx-v2
+ExecStart=%h/.local/bin/mise exec -- go build -o %h/.local/bin/cptx.ee .
+Environment=HOME=%h
