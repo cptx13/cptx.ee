@@ -433,10 +433,15 @@ func main() {
 	postCount := len(allPostsForPool)
 
 	// Home page
+	addonIdx := buildAddonIndex(published) // F-15
+	addonTagList := addonTags(addonIdx)
 	must(router.GET("home", "/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		otd, hasOTD := homeOnThisDay(addonIdx, time.Now())
 		data := map[string]any{
-			"posts":     toPostList(allPostsForPool),
-			"postCount": postCount,
+			"posts":        toPostList(allPostsForPool),
+			"postCount":    postCount,
+			"onThisDay":    otd,
+			"hasOnThisDay": hasOTD,
 		}
 		renderPage(w, engine, "HomePage", data)
 	})))
@@ -716,6 +721,7 @@ func main() {
 	rssXML := buildRSS(published, 20)
 	var sitemapXML []byte // filled after the static build below
 	mux.HandleFunc("/healthz", healthHandler(postCount, started))
+	registerAddons(mux, func(w http.ResponseWriter, c string, d map[string]any) { renderPage(w, engine, c, d) }, addonIdx, addonTagList)
 	mux.HandleFunc("/index.xml", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/rss+xml; charset=utf-8")
 		w.Write(rssXML)
@@ -734,6 +740,9 @@ func main() {
 	// Build static site
 	if err := buildStaticSite(engine, published, allPostsForPool, postsByCategory, postsBySection, pocketPosts, manifestoPost, toPostMap, toPostList, shufflePoolJSON, postCount, photoFolders, toFolderMap, toFolderList, toPhotoList); err != nil {
 		log.Fatalf("building static site: %v", err)
+	}
+	if err := writeAddonPages(engine, "dist", addonIdx, addonTagList); err != nil {
+		log.Printf("addons dist: %v", err)
 	}
 	if err := registerRetired(mux, "dist"); err != nil {
 		log.Printf("retired URLs: %v", err)
@@ -1177,6 +1186,8 @@ func buildStaticSite(
 	if err := writePage("index.html", "HomePage", map[string]any{
 		"posts":     toPostList(allPostsForPool),
 		"postCount": postCount,
+		"onThisDay":    []any{},
+		"hasOnThisDay": false,
 	}); err != nil {
 		return err
 	}

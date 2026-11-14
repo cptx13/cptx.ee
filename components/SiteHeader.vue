@@ -15,6 +15,7 @@
     <p class="small"><a href="/categories/archives/">/archives</a></p>
     <p class="small"><a href="/photos/">/photos</a></p>
     <p class="small"><a href="/contact/">/contact</a></p>
+    <p class="small"><a href="/addons/">/addons</a></p>
   </nav>
 </div>
 </template>

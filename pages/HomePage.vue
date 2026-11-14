@@ -3,6 +3,13 @@
   <div class="intro">
     <p>A collection of mathoms.</p>
   </div>
+  <div v-if="hasOnThisDay" class="home-today">
+    <p class="home-today-title">on this day <a href="/addons/today/">→</a></p>
+    <article v-for="p in onThisDay" class="post-entry">
+      <span class="post-entry-date">{{ p.Year }}</span>
+      <h2 class="post-entry-title"><a :href="p.Path">{{ p.Title }}</a></h2>
+    </article>
+  </div>
   <div class="list-container">
     <div class="list-toolbar">
       <span class="list-toolbar-title">posts ({{ postCount }})</span>
