@@ -218,7 +218,9 @@ def main():
     os.makedirs(coverdir, exist_ok=True)
 
     shelves = {k: v for k, v in read_tsv("shelves.tsv")}
-    own = {k: v for k, v in read_tsv("own-books.tsv")}
+    own_rows = read_tsv("own-books.tsv")
+    own = {k: v for k, v in own_rows}
+    own_rank = {k: i + 1 for i, (k, _) in enumerate(own_rows)}  # display order = order in the file
     over = {}
     for k, field, value in read_tsv("overrides.tsv"):
         over.setdefault(k, {})[field] = value
@@ -238,7 +240,7 @@ def main():
             "year": year_of(r["publish_date"]), "first_year": 0,
             "pages": int(r["pages"]) if r["pages"].isdigit() else 0,
             "lang": lang_from_isbn(isbn), "subjects": [], "categories": [],
-            "shelf": shelves.get(key, ""), "own": key in own, "buy": own.get(key, ""),
+            "shelf": shelves.get(key, ""), "own": key in own, "own_rank": own_rank.get(key, 0), "buy": own.get(key, ""),
             "cover": "", "openlibrary": "", "google": "",
         }
         if not offline:

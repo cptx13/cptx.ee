@@ -45,6 +45,7 @@ type libBook struct {
 	Categories  []string `json:"categories"`
 	Shelf       string   `json:"shelf"`
 	Own         bool     `json:"own"`
+	OwnRank     int      `json:"own_rank"` // order of Carlos's own books (own-books.tsv)
 	Buy         string   `json:"buy"`
 	Cover       string   `json:"cover"`
 	OpenLibrary string   `json:"openlibrary"`
@@ -62,7 +63,8 @@ type libBook struct {
 type library struct {
 	Books []*libBook
 	ByKey map[string]*libBook
-	Dir   string
+	Dir   string // books.json
+	Media string // covers/ + thumbs/
 }
 
 var libShelves = []struct{ ID, Label string }{
@@ -91,11 +93,27 @@ var libLangs = map[string]string{"es": "español", "en": "English", "et": "eesti
 // cloth colours for books without a cover image
 var libCloth = []string{"#7a2e2e", "#2f4858", "#5b6d3a", "#8a6d1f", "#3d3b6e", "#6b3f5b", "#2e5e4e", "#9a4b2b", "#4a4a4a", "#1f3a5f", "#7d5a50", "#3f6e6e"}
 
+// libraryDir holds books.json (in git: data/library). LIBRARY_DIR overrides it.
 func libraryDir() string {
 	if d := os.Getenv("LIBRARY_DIR"); d != "" {
 		return d
 	}
 	return filepath.Join("data", "library")
+}
+
+// libraryMediaDir holds covers/ and thumbs/, kept outside git like photos:
+// LIBRARY_MEDIA_DIR, else ~/cptx-data/library if it exists, else the data dir.
+func libraryMediaDir(dataDir string) string {
+	if d := os.Getenv("LIBRARY_MEDIA_DIR"); d != "" {
+		return d
+	}
+	if h, err := os.UserHomeDir(); err == nil {
+		d := filepath.Join(h, "cptx-data", "library")
+		if st, err := os.Stat(filepath.Join(d, "covers")); err == nil && st.IsDir() {
+			return d
+		}
+	}
+	return dataDir
 }
 
 func hashOf(s string) uint32 {
@@ -107,7 +125,7 @@ func hashOf(s string) uint32 {
 // loadLibrary reads books.json, makes missing thumbnails and measures cover colours.
 // A missing books.json is not an error: the library is simply empty.
 func loadLibrary(dir string, posts []addonPost, texts map[string]string) (*library, error) {
-	lib := &library{ByKey: map[string]*libBook{}, Dir: dir}
+	lib := &library{ByKey: map[string]*libBook{}, Dir: dir, Media: libraryMediaDir(dir)}
 	raw, err := os.ReadFile(filepath.Join(dir, "books.json"))
 	if os.IsNotExist(err) {
 		return lib, nil
@@ -118,12 +136,12 @@ func loadLibrary(dir string, posts []addonPost, texts map[string]string) (*libra
 	if err := json.Unmarshal(raw, &lib.Books); err != nil {
 		return nil, fmt.Errorf("books.json: %w", err)
 	}
-	os.MkdirAll(filepath.Join(dir, "thumbs"), 0o755)
+	os.MkdirAll(filepath.Join(lib.Media, "thumbs"), 0o755)
 	for _, b := range lib.Books {
 		lib.ByKey[b.Key] = b
 		b.sortName = authorSortName(b.Author)
 		if b.Cover != "" {
-			if w, h, c, err := ensureThumb(dir, b.Key); err == nil {
+			if w, h, c, err := ensureThumb(lib.Media, b.Key); err == nil {
 				b.HasCover, b.ThumbW, b.ThumbH = true, w, h
 				b.setColor(c)
 			}
@@ -499,6 +517,9 @@ func sortBooks(bs []*libBook, by string) {
 			}
 			return a.Light > b.Light
 		}
+		if a.Own && b.Own && a.OwnRank != b.OwnRank && by != "colour" && by != "size" {
+			return a.OwnRank < b.OwnRank
+		}
 		if by == "size" && a.Pages != b.Pages {
 			return a.Pages < b.Pages
 		}
@@ -790,6 +811,7 @@ func buildArchivesData(lib *library) map[string]any {
 		if b.Own {
 			it := b.item()
 			it["Buy"] = b.Buy
+			it["Rank"] = b.OwnRank
 			it["Year"] = yearString(b.Year)
 			mine = append(mine, it)
 		}
@@ -806,7 +828,7 @@ func buildArchivesData(lib *library) map[string]any {
 		strip = s
 	}
 	sort.SliceStable(mine, func(i, j int) bool {
-		return mine[i].(map[string]any)["Year"].(string) < mine[j].(map[string]any)["Year"].(string)
+		return mine[i].(map[string]any)["Rank"].(int) < mine[j].(map[string]any)["Rank"].(int)
 	})
 	return map[string]any{
 		"count":   len(lib.Books),
@@ -853,7 +875,7 @@ func serveCover(w http.ResponseWriter, r *http.Request, lib *library, name strin
 		return
 	}
 	w.Header().Set("Cache-Control", "public, max-age=604800")
-	http.ServeFile(w, r, filepath.Join(lib.Dir, sub, key+".jpg"))
+	http.ServeFile(w, r, filepath.Join(lib.Media, sub, key+".jpg"))
 }
 
 // writeLibraryPages writes /archives/, the default shelf and every book page into dist/
