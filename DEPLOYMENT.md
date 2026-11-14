@@ -97,3 +97,11 @@ ssh cptx 'export XDG_RUNTIME_DIR=/run/user/$(id -u) && \
 ssh cptx 'export XDG_RUNTIME_DIR=/run/user/$(id -u) && \
   journalctl --user -eu cptx-ee.service --no-pager'
 ```
+
+## Go version
+
+The Go toolchain is pinned in `mise.toml` (currently `1.27.4`); `go.mod` only sets
+the minimum (`1.26.1`). To upgrade: change the version in `mise.toml`, push, and
+watch `journalctl --user -u cptx-ee-deploy -n 20`. `mise exec` installs the new
+toolchain on the first build; if that build fails, the safe deploy keeps the
+current version running.
