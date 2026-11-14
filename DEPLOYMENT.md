@@ -9,10 +9,33 @@ GitHub itself, so nothing needs to reach into the VM:
 
 - **`cptx-ee-deploy.timer`** — fires every minute
 - **`cptx-ee-deploy.service`** — runs `deploy.sh`, which fetches `origin/main`
-  and, if it moved, does `git reset --hard origin/main`, rebuilds, and restarts
-  the server. If nothing changed it exits immediately.
+  and, if it moved since the last good deploy, deploys it safely (below).
+  If nothing changed it exits immediately.
 
 Watch a deploy: `journalctl --user -u cptx-ee-deploy -n 20`
+(problems are logged with `FAILED:` — `journalctl --user -u cptx-ee-deploy | grep FAILED`)
+
+### Safe deploy
+
+1. `git reset --hard` to the new commit and build it with `mise exec -- go build`
+   into `~/.local/bin/cptx.ee.new`. The live binary is not touched.
+2. **Build fails** → the worktree goes back to the running commit, the site keeps
+   serving the old version, and that commit is not retried. Push a fix.
+3. **Build passes** → the live binary becomes `~/.local/bin/cptx.ee.prev`, the new
+   one is moved into place, and `cptx-ee.service` is restarted.
+4. **Health check**: `http://127.0.0.1:8080/` must answer within 90 s. If it doesn't,
+   the previous binary and commit are restored automatically and the bad commit
+   is not retried.
+
+State lives in `~/.local/state/cptx-ee/` (`deployed-sha`, `prev-sha`, `failed-sha`).
+`deploy.sh` no longer uses `cptx-ee-build.service`; it builds directly.
+
+### Rollback
+
+- **Instant (on the VM):** `~/cptx-v2/deploy.sh rollback` — restores the previous
+  binary + commit and restarts. Main on GitHub is unchanged, so it stays rolled
+  back only until the next push.
+- **Permanent:** `git revert <sha> && git push origin main` — redeploys within ~2 min.
 
 Note: `deploy.sh` hard-resets the worktree, so never leave uncommitted or
 unpushed work on the VM — it will be discarded.
