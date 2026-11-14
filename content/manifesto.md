@@ -44,21 +44,21 @@ Since creating this site, I have developed various ways to organize my existing 
 My works are organized and distributed using the following system:
 
 - **[croquis](/categories/croquis/)** are quick, often rough notes made to capture the essence or form of a subject that may lead to more detailed work.
-  - **retales**: This refers to "re-tales," emphasizing the act of retelling and rewriting. In Spanish, "retales" refers to leftover scraps that can be repurposed, representing forgotten stories—fragments of thoughts that evoke nostalgia and inspire me to return to writing.
-  - **rimas**: The Spanish term for "rhyme," often used in my earlier poems to distinguish the quality and immediacy of some works.
+  - **[retales](/addons/map/?tag=retales)**: This refers to "re-tales," emphasizing the act of retelling and rewriting. In Spanish, "retales" refers to leftover scraps that can be repurposed, representing forgotten stories—fragments of thoughts that evoke nostalgia and inspire me to return to writing.
+  - **[rimas](/addons/map/?tag=rimas)**: The Spanish term for "rhyme," often used in my earlier poems to distinguish the quality and immediacy of some works.
 
 - **[recuerdos](/categories/recuerdos/)** are daily memories written from 2021 to 2024, a project that began as a naive attempt to document lived experiences but evolved into something far more demanding. What started as voluntary writing gradually transformed into a disciplined obligation, eventually stirring feelings of guilt with each passing day. Over 1,000 entries reflect the tension between the desire to preserve memory and the burden of maintaining the practice.
 
 - **[photos](/photos/)** are collections of photographs from various places and years, served directly from the server.
 
-- **[addons](/addons/)** are my playground, where I try new features that make the blog more immersive: an archive map of every day I wrote, what I wrote on this day in other years, the cities that light up across my posts and the words I keep coming back to.
-
-- **[archives](/archives/)** are the things we keep: mathoms of a more physical kind.
-  - **written by me**: published books—manuscripts that have been formatted, reviewed, and are considered complete.
-  - **[library](/archives/library/)**: some of the books Merzeede and I own, shown as covers or spines and shelved by genre, colour, author, decade, language or size. Not all of them have been scanned yet. Records, films and other collections will follow.
+- **[addons](/addons/)** are my playground, where I try new features that make the blog more immersive: an [archive map](/addons/map/) of every day I wrote, [what I wrote on this day](/addons/today/) in other years, the [cities that light up](/addons/places/) across my posts and the [words](/addons/words/) I keep coming back to.
 
 - **[pockets](/pockets/)** comprise my daily resources, everything I would carry around if I could.
-  - **bedsidetable**: Some books I have enjoyed recently.
-  - **cheatsheet**: Some links I like to have at hand.
-  - **workbench**: Some of my projects.
-  - **weekendreads**: Articles from other people I have recently enjoyed.
+  - **[bedsidetable](/pockets/bedsidetable/)**: Some books I have enjoyed recently.
+  - **[cheatsheet](/pockets/cheatsheet/)**: Some links I like to have at hand.
+  - **[workbench](/pockets/workbench/)**: Some of my projects.
+  - **[weekendreads](/pockets/weekendreads/)**: Articles from other people I have recently enjoyed.
+
+- **[archives](/archives/)** are the things we keep: mathoms of a more physical kind.
+  - **[written by me](/archives/written-by-me/)**: published books—manuscripts that have been formatted, reviewed, and are considered complete.
+  - **[library](/archives/library/)**: some of the books Merzeede and I own, shown as covers or spines and shelved by genre, colour, author, decade, language or size. Not all of them have been scanned yet. Records, films and other collections will follow.
