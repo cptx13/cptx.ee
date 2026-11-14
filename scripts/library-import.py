@@ -12,10 +12,11 @@ Metadata: Google Books (title, authors, language, categories, pages) and Open Li
 (subjects, first published year, cover). Covers: Open Library first, then Google Books.
 Priority for every field: overrides.tsv > fetched > Libib.
 """
-import csv, json, os, re, sys, time, unicodedata, urllib.request, urllib.error
+import csv, hashlib, json, os, re, sys, time, unicodedata, urllib.request, urllib.error
 
 DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "library")
 UA = "cptx.ee-library/0.1 (+https://cptx.ee/contact/)"
+PLACEHOLDERS = set(os.environ.get("COVER_PLACEHOLDERS", "").split())  # md5s of "no cover" images
 GOOGLE_KEY = os.environ.get("GOOGLE_BOOKS_KEY", "")
 google_off = False  # set after a 429: Google's anonymous quota is spent, skip it for this run
 OL_LANG = {"eng": "en", "spa": "es", "est": "et", "ben": "bn", "ger": "de", "cat": "ca", "fre": "fr", "ita": "it", "por": "pt", "dut": "nl"}
@@ -120,7 +121,7 @@ def amazon_asin(link):
 def get_bytes(url):
     req = urllib.request.Request(url, headers={"User-Agent": BROWSER_UA if "amazon" in url else UA})
     try:
-        with urllib.request.urlopen(req, timeout=30) as r:
+        with urllib.request.urlopen(req, timeout=15) as r:
             if r.status == 200 and r.headers.get("Content-Type", "").startswith("image/"):
                 return r.read()
     except Exception:
@@ -175,17 +176,12 @@ def fetch_cover(key, isbn, raw, coverdir, refetch, isbn10="", asin=""):
     for a in [x for x in (asin, isbn10) if x]:
         tries.append(("amazon", "https://images-na.ssl-images-amazon.com/images/P/%s.01._SCLZZZZZZZ_.jpg" % a))
         tries.append(("amazon", "https://m.media-amazon.com/images/P/%s.01._SCLZZZZZZZ_.jpg" % a))
-    if isbn:
-        tries.append(("goodreads", "lookup"))
+    if isbn:  # Google's public cover image by ISBN (no API quota)
+        tries.append(("google", "https://books.google.com/books/content?vid=ISBN%s&printsec=frontcover&img=1&zoom=1" % isbn))
     for src, url in tries:
-        if url == "lookup":  # Goodreads-based lookup, only when everything else failed
-            lt = get_json("https://bookcover.longitood.com/bookcover/" + isbn)
-            url = (lt or {}).get("url", "")
-            if not url:
-                continue
         b = get_bytes(url)
         time.sleep(0.3)
-        if b and len(b) > 2000:  # Google sends a ~1 KB "image not available" placeholder
+        if b and len(b) > 2000 and hashlib.md5(b).hexdigest() not in PLACEHOLDERS:
             with open(path, "wb") as f:
                 f.write(b)
             return src
