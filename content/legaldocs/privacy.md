@@ -14,7 +14,7 @@ cptx.ee is a personal website run by me, Carlos (cptx). This page explains what 
 - No cookies. See [cookies](/legaldocs/cookies/).
 - The site itself does not log your IP address or keep records of your visits; it only keeps daily totals (see [counting readers](#counting-readers)).
 - Nothing on a page loads from another company's servers: fonts, images and scripts all come from cptx.ee.
-- If you subscribe to the newsletter, your email address is kept only for sending it. See [newsletter](/legaldocs/newsletter/).
+- If you subscribe to the newsletter, your email address is kept only for sending it. See [the newsletter](#newsletter).
 
 ## Who is responsible
 
@@ -43,6 +43,19 @@ The site keeps simple public counts, shown on the [readers](/addons/readers/) pa
 - **Countries:** your IP address is looked up in a local country list ([DB-IP](https://db-ip.com), a file on the server, so no one else is asked) and only the country is added to the day's total.
 
 What is stored is only daily totals per page, per post and per country. No IP address, no identifier, no history of who read what. Bots and link previews are left out. If JavaScript is off, your visit still counts but reads don't.
+
+<a id="newsletter"></a>
+
+## The newsletter
+
+The newsletter is everything sent to subscribers by email. Most weeks that is an **issue**: what changed on the site, what was written, what is being written, and a few other things worth passing on. Now and then it may be a short note about the site that is not an issue. Every issue is also kept on the site, on the [kiosk](/newsletter/kiosk/), so nothing is only in your inbox; notes that are not issues are not kept.
+
+- **What is collected:** your email address, and nothing else. No name is needed.
+- **Signing up:** you enter your address in the form on [/newsletter](/newsletter/). You then get one email asking you to confirm, and nothing is sent until you do (double opt-in).
+- **Who sends it:** [Buttondown](https://buttondown.com), a small newsletter service. Your address is stored with Buttondown, in the United States, only to send this newsletter. Its own [privacy policy](https://buttondown.com/legal/privacy) applies to how it keeps that data.
+- **No tracking in the emails:** open and link tracking are switched off. Emails contain no tracking pixels, and links go straight to where they say.
+- **Leaving:** every email has a one-click unsubscribe link, which stops all emails at once. You can also write to [hello@cptx.ee](mailto:hello@cptx.ee) to have your address deleted completely.
+- **Never:** your address is never sold, shared or used for anything other than this newsletter.
 
 ## Links to other sites
 

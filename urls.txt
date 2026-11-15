@@ -336,7 +336,6 @@
 /legaldocs/
 /legaldocs/cookies/
 /legaldocs/how-it-works/
-/legaldocs/newsletter/
 /legaldocs/privacy/
 /manifesto/
 /newsletter/

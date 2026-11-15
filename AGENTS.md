@@ -27,8 +27,8 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for the full deployment setup (systemd user u
 | `addons.go`, `places.go`, `words.go` | `/addons/` pages |
 | `library.go` | `/archives/` and the library |
 | `stats.go`, `geo.go`, `static/js/read.js` | Readers' counters (visits, reads, countries; daily totals in `~/cptx-data/stats/`) and `/addons/readers/` |
-| `newsletter.go` + `content/newsletter/` | Newsletter issues (`NNN.md` → `/newsletter/<n>/`), kiosk at `/newsletter/kiosk/`; `scripts/newsletter-draft.py` drafts the weekly issue |
+| `newsletter.go` + `content/newsletter/` | Newsletter = every email; the weekly ones are issues (`NNN.md` → `/newsletter/<n>/`, "issue 01", read-counted, generated cover art) kept on the kiosk `/newsletter/kiosk/`; how it works is the `#newsletter` section of the privacy policy; `scripts/newsletter-draft.py` drafts the weekly issue |
 | `search.go` | `/search/?q=`: full text of posts + library, accent-insensitive, server-side |
-| `legal.go` + `content/legaldocs/` | `/legaldocs/`: privacy, cookies, how it works, newsletter |
+| `legal.go` + `content/legaldocs/` | `/legaldocs/`: privacy, cookies, how the site works |
 
 Before pushing: `scripts/check.sh` (runs in CI on every push).

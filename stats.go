@@ -379,10 +379,17 @@ func countryName(cc string) string {
 	return cc
 }
 
+// readerExtras are readable pages outside the addon index (newsletter issues),
+// set at startup so /addons/readers/ can name them.
+var readerExtras []addonPost
+
 // buildReadersData returns the template data for /addons/readers/.
 func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]any {
 	titles := map[string]addonPost{}
 	for _, p := range idx {
+		titles[p.Path] = p
+	}
+	for _, p := range readerExtras {
 		titles[p.Path] = p
 	}
 	visits, visitors, reads := 0, 0, 0

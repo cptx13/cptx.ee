@@ -1,4 +1,5 @@
-// Legal docs (/legaldocs/): privacy, cookies, how the site works, newsletter.
+// Legal docs (/legaldocs/): privacy, cookies, how the site works.
+// How the newsletter works is a section of the privacy policy (#newsletter).
 
 package main
 
@@ -12,7 +13,6 @@ var legalMeta = map[string]struct {
 	"privacy":      {"shield", 1},
 	"cookies":      {"cookie", 2},
 	"how-it-works": {"gear", 3},
-	"newsletter":   {"mail", 4},
 }
 
 // buildLegalData returns the cards for the /legaldocs/ hub.

@@ -1203,7 +1203,8 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .site-footer p { margin: 0; }
 
 /* /newsletter/: digest sections, sign-up form, kiosk of issues */
-.nl-sections { margin: 1.2em 0 1.6em; font-size: .9em; }
+.nl-lead { margin: 1.2em 0 0; font-size: .8em; color: var(--content-secondary); }
+.nl-sections { margin: .4em 0 1.6em; font-size: .9em; }
 .nl-sections p { margin: .35em 0; }
 .nl-k { display: inline-block; min-width: 13em; font-weight: bold; }
 .nl-form { margin: 1.4em 0 2em; padding: 1em 1.1em; border: 1px solid color-mix(in srgb, var(--content-primary) 18%, transparent); border-radius: 6px; }
@@ -1229,6 +1230,16 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .kiosk-ghost:hover { transform: none; }
 .nl-more { font-weight: normal; font-size: .8em; margin-left: .6em; color: var(--content-secondary); }
 .kiosk-issue .kiosk-head { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+/* U: every cover has its own paper (kiosk-p0…p4, in turn) and pattern (inline SVG from newsletter.go) */
+.kiosk-issue { position: relative; overflow: hidden; }
+.kiosk-issue > span:not(.kiosk-art-wrap) { position: relative; z-index: 1; }
+.kiosk-art-wrap, .kiosk-art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.kiosk-p0 { background: #ffd166; color: #1a1406 !important; }
+.kiosk-p1 { background: #1d1a14; color: #fff1d6 !important; outline: 1px solid rgba(255, 183, 3, .25); }
+.kiosk-p2 { background: #fff1d0; color: #2a1a00 !important; }
+.kiosk-p3 { background: #e85d04; color: #1a0a00 !important; }
+.kiosk-p4 { background: #6b4a12; color: #fff1d6 !important; }
+.kiosk-issue .kiosk-head { text-wrap: balance; }
 
 /* F-06: search */
 .toolbar-text { font-size: .8em; color: var(--content-secondary); margin-left: .4em; }

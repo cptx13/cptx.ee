@@ -251,3 +251,29 @@ func TestSearch(t *testing.T) {
 		t.Errorf("empty query: %v", d)
 	}
 }
+
+func TestIssues(t *testing.T) {
+	how := &Post{Section: "newsletter", Slug: "how-it-works", Title: "How the newsletter works"}
+	one := &Post{Section: "newsletter", Slug: "1", Title: "A week of changes", Path: "/newsletter/1/", Date: day("2026-11-15")}
+	if isIssue(how) || !isIssue(one) || isIssue(&Post{Section: "croquis", Slug: "1"}) {
+		t.Errorf("isIssue wrong")
+	}
+	if issueLabel("1") != "issue 01" || issueLabel("12") != "issue 12" || issueLabel("x") != "" {
+		t.Errorf("issueLabel wrong")
+	}
+	if pageTitleFor(one) != "issue 01: A week of changes | cptx" || pageTitleFor(how) != "How the newsletter works | cptx" {
+		t.Errorf("pageTitleFor = %q", pageTitleFor(one))
+	}
+	words := map[string]int{"2026-11-10": 900, "2026-11-12": 50}
+	a, b := coverArt(one, 1, words), coverArt(one, 1, words)
+	if a != b || !strings.HasPrefix(a, "<svg") || !strings.HasSuffix(a, "</svg>") || !strings.Contains(a, ">01</text>") {
+		t.Errorf("coverArt not stable or malformed: %s", a)
+	}
+	if strings.Count(a, `y="186`) != 7 {
+		t.Errorf("week strip should have 7 days: %s", a)
+	}
+	d := newsletterData([]*Post{how, one}, 0)
+	if d["issueCount"] != 1 || d["issueCountLabel"] != "1 issue" {
+		t.Errorf("how-it-works counted as an issue: %v", d)
+	}
+}

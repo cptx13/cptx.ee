@@ -138,7 +138,10 @@ func main() {
 			"ID":            p.ID,
 			"ReadsLabel":    readsLabel(siteStats.readsOf(p.Path)),
 			"Words":         postWords[p.Path],
-			"Readable":      p.Section == "croquis" || p.Section == "recuerdos",
+			"Readable":      p.Section == "croquis" || p.Section == "recuerdos" || isIssue(p),
+			"IsIssue":       isIssue(p),
+			"IssueLabel":    issueLabel(p.Slug),
+			"PageTitle":     pageTitleFor(p),
 		}
 	}
 
@@ -217,6 +220,15 @@ func main() {
 	readable := map[string]bool{}
 	for _, p := range addonIdx {
 		readable[p.Path] = true
+	}
+	// newsletter issues are read and counted like posts
+	coverIdx = addonIdx
+	readerExtras = nil
+	for _, p := range published {
+		if isIssue(p) {
+			readable[p.Path] = true
+			readerExtras = append(readerExtras, addonPost{Title: issueLabel(p.Slug) + ": " + p.Title, Path: p.Path, Section: "newsletter", Day: p.Date.Format("2006-01-02")})
+		}
 	}
 	statsDir, geoFile := statsDirs()
 	geo := &geoKeeper{path: geoFile}

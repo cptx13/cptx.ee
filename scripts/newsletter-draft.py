@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Draft the next weekly newsletter issue (batch K).
+"""Draft the next weekly newsletter issue (batch K; issues are "issue 01", "issue 02"…).
 
     scripts/newsletter-draft.py [--since YYYY-MM-DD] [--dry-run]
 
@@ -78,9 +78,9 @@ def main():
 
     written = sorted((d, t, u) for d, t, u in croquis_urls() if since <= d <= today)
     changes = site_changes(since)
-    lines = ["---", f'title: "No. {n}"', "author: cptx", f"date: {today.isoformat()}", "draft: true",
+    lines = ["---", 'title: "This week on cptx.ee"', "author: cptx", f"date: {today.isoformat()}", "draft: true",
              f'summary: "{since:%-d %b} – {today:%-d %b %Y}"', "---", "",
-             "<!-- Give the issue a title above (it becomes the cover headline), edit freely,",
+             "<!-- Give the issue a title above (it becomes the cover headline; the cover already says 'issue NN'), edit freely,",
              "     then set draft: false and push. Nothing is sent until the issue is published. -->", "",
              "## what changed", ""]
     lines += [f"- {c}" for c in changes] or ["- (nothing new on the site this week)"]

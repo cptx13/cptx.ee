@@ -21,7 +21,7 @@
       <LineIcon :name="'shield'"></LineIcon>
       <span class="ic-text">
       <span class="addon-card-title">legal docs →</span>
-      <span class="addon-card-desc">Privacy, cookies, how the site works, and the newsletter. No trackers, no ads, no cookies.</span>
+      <span class="addon-card-desc">Privacy, cookies and how the site works. No trackers, no ads, no cookies.</span>
     </span>
     </a>
   </div>
