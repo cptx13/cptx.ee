@@ -36,3 +36,15 @@ jobs:
           echo "::error::cptx.ee did not deploy $want (safe deploy may have kept the previous version — check journalctl --user -u cptx-ee-deploy)"
           exit 1
       - run: scripts/smoke.sh https://cptx.ee "$GITHUB_SHA"
+  lighthouse:
+    # T-08: scores for four live pages after each verified deploy (informational)
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: deploy-verify
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - name: Lighthouse
+        run: |
+          { echo "### Lighthouse — cptx.ee @ ${GITHUB_SHA:0:7}"; echo; scripts/lighthouse.sh https://cptx.ee; } | tee -a "$GITHUB_STEP_SUMMARY"
