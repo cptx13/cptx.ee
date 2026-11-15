@@ -245,13 +245,14 @@ func main() {
 	}
 	must(router.GET("home", "/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		otd, hasOTD := homeOnThisDay(addonIdx, time.Now())
-		data := map[string]any{
-			"posts":        toPostList(allPostsForPool),
-			"postCount":    postCount,
-			"onThisDay":    otd,
-			"hasOnThisDay": hasOTD,
-		}
+		data := homeData(allPostsForPool, toPostList, postsBySection, len(photoFolders))
+		data["onThisDay"], data["hasOnThisDay"] = otd, hasOTD
 		renderPage(w, engine, "HomePage", data)
+	})))
+
+	// D-03: the full list of posts (search + shuffle) now lives at /all/
+	must(router.GET("all", "/all/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		renderPage(w, engine, "AllPage", map[string]any{"posts": toPostList(allPostsForPool), "postCount": postCount})
 	})))
 
 	// Manifesto

@@ -5,6 +5,7 @@
 /addons/readers/
 /addons/today/
 /addons/words/
+/all/
 /archives/
 /archives/library/
 /archives/library/8gd3azrohq/
