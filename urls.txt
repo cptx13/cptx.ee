@@ -339,6 +339,7 @@
 /legaldocs/privacy/
 /manifesto/
 /newsletter/
+/newsletter/1/
 /newsletter/kiosk/
 /pockets/
 /pockets/bedsidetable/
