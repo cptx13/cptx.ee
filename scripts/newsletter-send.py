@@ -20,7 +20,8 @@ language, need a paid plan.)
 Environment:
   BUTTONDOWN_API_KEY   the API key (GitHub secret). Unset: nothing happens.
   NEWSLETTER_MODE      "draft" (default): emails wait in Buttondown as drafts for
-                       you to send. "send": they go out straight away.
+                       you to send. "send" (cptx.ee since 2026-11-15): they go out
+                       straight away, and a draft still waiting is sent too.
 Only the Python standard library is used.
 """
 import argparse, datetime as dt, json, os, re, sys, urllib.error, urllib.request
@@ -177,9 +178,13 @@ def main():
                 if status != "draft":
                     print(f"newsletter: {k} already {status} in Buttondown, left alone")
                     continue
-                # still a draft: refresh it with the published text
-                call("PATCH", f"{API}/emails/{eid}", key, {f: p[f] for f in ("subject", "body", "canonical_url")})
-                print(f"newsletter: {k} draft updated")
+                # still a draft: refresh it with the published text, and in
+                # "send" mode send it (an issue drafted before sending was automatic)
+                fields = {f: p[f] for f in ("subject", "body", "canonical_url")}
+                if p["status"] == "about_to_send":
+                    fields["status"] = "about_to_send"
+                call("PATCH", f"{API}/emails/{eid}", key, fields)
+                print(f"newsletter: {k} draft {'sent' if 'status' in fields else 'updated'}")
                 continue
             extra = {"X-Buttondown-Live-Dangerously": "true"} if p["status"] == "about_to_send" else None
             e = call("POST", API + "/emails", key, p, extra)

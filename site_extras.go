@@ -414,3 +414,18 @@ func withGzip(next http.Handler) http.Handler {
 		next.ServeHTTP(g, r)
 	})
 }
+
+// pathOnly hands a request to h with its RequestURI cut to the escaped path,
+// for routers that match the RequestURI (query strings would make them miss).
+// r.URL, and so r.URL.Query(), is unchanged.
+func pathOnly(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.RawQuery != "" || strings.Contains(r.RequestURI, "?") {
+			r2 := r.Clone(r.Context())
+			r2.RequestURI = r.URL.EscapedPath()
+			h.ServeHTTP(w, r2)
+			return
+		}
+		h.ServeHTTP(w, r)
+	})
+}

@@ -51,7 +51,7 @@ jobs:
   newsletter:
     # Hands newly published issues to Buttondown (once each, per language) after
     # the deploy is verified, so every link in the email already works.
-    # Drafts by default; repository variable NEWSLETTER_MODE=send sends at once.
+    # Repository variable NEWSLETTER_MODE: send (sends at once) or draft (default).
     # Does nothing until the BUTTONDOWN_API_KEY secret exists.
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: deploy-verify

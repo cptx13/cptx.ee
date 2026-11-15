@@ -31,7 +31,7 @@ A small Go server renders markdown into HTML pages. No JavaScript framework, no 
 - **Hosting:** an [exe.dev](https://exe.dev) VM checks this repository every minute. When `main` moves, it builds the new version, swaps it in only if it starts and answers its health check, and keeps the previous one otherwise.
 - **Checks:** every push runs [`scripts/check.sh`](scripts/check.sh) (build, tests, content lint, a snapshot of all ~2,500 URLs so none silently disappear, and a request to every page). On `main`, CI then waits for the live site to report the new commit and smoke-tests it.
 - **Photos and book covers** live only on the server, not in git.
-- **Newsletter:** issues are markdown files too (`content/newsletter/NNN.md`, Spanish `NNN.es.md`), drafted by [`scripts/newsletter-draft.py`](scripts/newsletter-draft.py). Once an issue is live, CI hands it to [Buttondown](https://buttondown.com) as one bilingual email ([`scripts/newsletter-send.py`](scripts/newsletter-send.py)); Buttondown handles sign-ups, confirmation and unsubscribes. Open and click tracking are off.
+- **Newsletter:** issues are markdown files too (`content/newsletter/NNN.md`, Spanish `NNN.es.md`), drafted by [`scripts/newsletter-draft.py`](scripts/newsletter-draft.py). Once an issue is live, CI sends it through [Buttondown](https://buttondown.com) as one bilingual email ([`scripts/newsletter-send.py`](scripts/newsletter-send.py)); Buttondown handles sign-ups, confirmation and unsubscribes. Open and click tracking are off.
 
 ```
 content/*.md ──► GitHub (main) ──► check ──► VM pulls, builds, swaps ──► https://cptx.ee

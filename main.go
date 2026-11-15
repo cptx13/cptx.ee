@@ -69,7 +69,11 @@ func main() {
 		log.Fatalf("creating htmlc engine: %v", err)
 	}
 
-	router := dispatch.New()
+	routes := dispatch.New()
+	// dispatch matches against the whole RequestURI, so "/croquis/?x=1" or
+	// Buttondown's "/newsletter/thanks/?email=…" would 404. Match on the path
+	// alone; handlers still read the query from r.URL.
+	router := pathOnly(routes)
 
 	// Group posts by section and category
 	postsBySection := map[string][]*Post{}
@@ -264,7 +268,7 @@ func main() {
 	// F-06: site-wide search over posts' full text and the library
 	searchIdx := buildSearchIndex(addonIdx, postTexts, lib)
 
-	must(router.GET("home", "/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("home", "/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		otd, hasOTD := homeOnThisDay(addonIdx, time.Now())
 		data := map[string]any{
 			"posts":        toPostList(allPostsForPool),
@@ -276,7 +280,7 @@ func main() {
 	})))
 
 	// Manifesto
-	must(router.GET("manifesto", "/manifesto/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("manifesto", "/manifesto/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if manifestoPost == nil {
 			http.NotFound(w, r)
 			return
@@ -291,16 +295,16 @@ func main() {
 
 	// Contact page
 	// About: hub for manifesto, contact and legal docs (same layout as addons)
-	must(router.GET("about", "/about/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("about", "/about/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		renderPage(w, engine, "AboutPage", map[string]any{})
 	})))
 
 	// Newsletter (batch K): what the digest is, the sign-up form and the kiosk of past issues
-	must(router.GET("newsletter", "/newsletter/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("newsletter", "/newsletter/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		renderPage(w, engine, "NewsletterPage", newsletterData(published, 3))
 	})))
 	// Spanish versions of the issues: /newsletter/<n>/es/
-	must(router.GET("newsletter.es", "/newsletter/{slug}/es/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("newsletter.es", "/newsletter/{slug}/es/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
 		post := postsByPath["/newsletter/"+m.Params["slug"]+"/es/"]
 		if post == nil {
@@ -310,7 +314,7 @@ func main() {
 		renderPage(w, engine, "SinglePage", map[string]any{"post": toPostMap(post), "prevPost": false, "nextPost": false})
 	})))
 	// /newsletter/kiosk/ and the issues (/newsletter/<n>/) share one pattern
-	must(router.GET("newsletter.page", "/newsletter/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("newsletter.page", "/newsletter/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
 		if m.Params["slug"] == "kiosk" {
 			renderPage(w, engine, "KioskPage", newsletterData(published, 0))
@@ -331,12 +335,12 @@ func main() {
 		renderPage(w, engine, "SinglePage", map[string]any{"post": toPostMap(post), "prevPost": false, "nextPost": false})
 	})))
 
-	must(router.GET("contact", "/contact/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("contact", "/contact/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		renderPage(w, engine, "ContactPage", map[string]any{})
 	})))
 
 	// Category pages
-	must(router.GET("category", "/categories/{name}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("category", "/categories/{name}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
 		name := m.Params["name"]
 		if name == "pockets" {
@@ -363,7 +367,7 @@ func main() {
 	})))
 
 	// Individual posts (new URL scheme: /{category}/{id}/)
-	must(router.GET("post", "/{category}/{id}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("post", "/{category}/{id}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
 		postPath := "/" + m.Params["category"] + "/" + m.Params["id"] + "/"
 		post := postsByPath[postPath]
@@ -396,7 +400,7 @@ func main() {
 	})))
 
 	// Old URL redirects: /posts/{section}/{slug}/ -> new path
-	must(router.GET("old-post-redirect", "/posts/{section}/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("old-post-redirect", "/posts/{section}/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
 		// dispatch matches against the escaped RequestURI, so params arrive
 		// percent-encoded (c%C3%A9sped). Decode and NFC-normalise them to match
@@ -414,7 +418,7 @@ func main() {
 	pocketsData := buildPocketsData(pocketPosts)
 
 	// Pockets index
-	must(router.GET("pockets.index", "/pockets/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("pockets.index", "/pockets/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		data := map[string]any{
 			"pockets":     pocketsData,
 			"activeIndex": 0,
@@ -423,7 +427,7 @@ func main() {
 	})))
 
 	// Photos index
-	must(router.GET("photos.index", "/photos/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("photos.index", "/photos/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var allPhotos []any
 		for _, f := range photoFolders {
 			allPhotos = append(allPhotos, toPhotoList(f.Photos)...)
@@ -439,7 +443,7 @@ func main() {
 	})))
 
 	// Photo folder page
-	must(router.GET("photos.folder", "/photos/{folder}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("photos.folder", "/photos/{folder}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
 		folderName := m.Params["folder"]
 		var folder *PhotoFolder
@@ -461,10 +465,10 @@ func main() {
 
 	// Legal docs: hub + pages (privacy, cookies, how the site works, newsletter)
 	legalData := buildLegalData(legalPosts)
-	must(router.GET("legal.index", "/legaldocs/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("legal.index", "/legaldocs/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		renderPage(w, engine, "LegalPage", map[string]any{"docs": legalData})
 	})))
-	must(router.GET("legal", "/legaldocs/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("legal", "/legaldocs/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
 		post := postsByPath["/legaldocs/"+m.Params["slug"]+"/"]
 		if post == nil {
@@ -475,7 +479,7 @@ func main() {
 	})))
 
 	// Individual pocket pages
-	must(router.GET("pocket", "/pockets/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	must(routes.GET("pocket", "/pockets/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())
 		postPath := "/pockets/" + m.Params["slug"] + "/"
 		post := postsByPath[postPath]

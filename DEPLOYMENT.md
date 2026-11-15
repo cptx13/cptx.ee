@@ -147,7 +147,7 @@ After an *intended* URL change, run it with `--update-urls` and commit `urls.txt
 |---|---|---|
 | `check` | every push / PR | `scripts/check.sh` (build, vet, tests, lint, URL diff, smoke). On `main` it then waits until `https://cptx.ee/healthz` reports the new commit and runs `scripts/smoke.sh` against the live site — a red run means the deploy didn't land |
 | `check` → `lighthouse` | after deploy-verify on `main` | Lighthouse scores for four live pages in the run summary (informational, never fails the run) |
-| `check` → `newsletter` | after deploy-verify on `main` | `scripts/newsletter-send.py`: each issue published in the last 21 days becomes one bilingual Buttondown email, once (slug `cptx-issue-NN`). Drafts by default — send them from Buttondown; set the repository variable `NEWSLETTER_MODE=send` to send at once. Needs the `BUTTONDOWN_API_KEY` secret; without it the job does nothing |
+| `check` → `newsletter` | after deploy-verify on `main` | `scripts/newsletter-send.py`: each issue published in the last 21 days becomes one bilingual Buttondown email, once (slug `cptx-issue-NN`). The repository variable `NEWSLETTER_MODE=send` (set 2026-11-15) sends at once, and sends a draft still waiting; without it (`draft`) emails wait in Buttondown for you to send. Needs the `BUTTONDOWN_API_KEY` secret; without it the job does nothing |
 | `uptime` | every 15 min | `GET /healthz`, 3 tries; a failed run is emailed by GitHub |
 | `linkcheck` | 1st of each month | `scripts/linkcheck.py` — fails on external links that are gone (404/410/DNS) |
 
@@ -163,7 +163,7 @@ Manual live check: `scripts/smoke.sh [https://cptx.ee] [commit]`.
 - **Weekly issue:**
   1. `scripts/newsletter-draft.py` writes `content/newsletter/NNN.md` and `NNN.es.md` (`draft: true`): what changed (commit subjects, to rewrite), what was written, this week years ago, new weekendreads/bedsidetable entries, and empty sections (hidden while empty).
   2. Edit, set `draft: false` in both, add `/newsletter/<n>/` and `/newsletter/<n>/es/` to `urls.txt`, push through the usual branch → check → main.
-  3. After the deploy is verified, CI creates the Buttondown email (draft); open Buttondown and send it.
+  3. After the deploy is verified, CI hands the issue to Buttondown and, with `NEWSLETTER_MODE=send`, it goes out to every confirmed subscriber. Approving the issue for the site is approving the email.
 - **API key:** GitHub secret `BUTTONDOWN_API_KEY` (Actions). Never in chat, never on the VM.
 
 ## Library refresh (`/archives/library/`)
