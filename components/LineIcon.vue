@@ -16,6 +16,7 @@
   <g v-if="name == 'cookie'"><path d="M20.8 12.6A8.8 8.8 0 1 1 11.4 3.2a3 3 0 0 0 3.7 3.7 3 3 0 0 0 2 3.9 3 3 0 0 0 3.7 1.8z"/><circle cx="8.5" cy="10" r=".9"/><circle cx="11.5" cy="15.5" r=".9"/><circle cx="15.8" cy="14.6" r=".9"/></g>
   <g v-if="name == 'gear'"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/><circle cx="12" cy="12" r="6.4"/></g>
   <g v-if="name == 'mail'"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5 12 13l8.5-6.5"/></g>
+  <g v-if="name == 'rss'"><circle cx="5.5" cy="18.5" r="1.5"/><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/></g>
   <g v-if="name == 'eye'"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g>
 </svg>
 </template>
