@@ -296,7 +296,7 @@ func healthHandler(postCount int, started time.Time) http.HandlerFunc {
 
 const csp = "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; " +
 	"script-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; object-src 'none'; " +
-	"frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+	"frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://buttondown.com"
 
 func cacheControlFor(path string) string {
 	switch {

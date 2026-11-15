@@ -4,21 +4,37 @@
     <h1 class="addons-title">newsletter</h1>
     <p class="addons-intro">The newsletter brings a weekly <strong>issue</strong> by email, and now and then a short note about the site. Every issue is also kept here, on the <a href="/newsletter/kiosk/">kiosk</a>.</p>
 
-    <p class="nl-lead">in every issue</p>
+    <p class="nl-lead">in an issue</p>
     <div class="nl-sections">
       <p><span class="nl-k">what changed</span> on the site</p>
       <p><span class="nl-k">what was written</span> this week</p>
+      <p><span class="nl-k">this week, years ago</span> what I wrote on the same days in earlier years</p>
       <p><span class="nl-k">what is being written</span> and might come next</p>
-      <p><span class="nl-k">other stuff</span> weekend reads, music, things worth passing on</p>
+      <p><span class="nl-k">articles I enjoyed</span> worth your weekend</p>
+      <p><span class="nl-k">reading, listening, watching</span> books, music, films and series</p>
     </div>
 
-    <form class="nl-form" action="#" method="post" onsubmit="return false">
+    <form v-if="signupOpen" class="nl-form" :action="signupAction" method="post">
+      <label for="nl-email">your email</label>
+      <div class="nl-row">
+        <input id="nl-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email">
+        <button type="submit">subscribe</button>
+      </div>
+      <fieldset class="nl-lang">
+        <legend>language</legend>
+        <label><input type="radio" name="tag" value="en" checked> English</label>
+        <label lang="es"><input type="radio" name="tag" value="es"> español</label>
+      </fieldset>
+      <input type="hidden" name="embed" value="1">
+      <p class="nl-note">Only your email address is kept; you confirm by email first, and every email has a one-click unsubscribe. <a class="nl-how" href="/legaldocs/privacy/#newsletter">How the newsletter works&nbsp;→</a></p>
+    </form>
+    <form v-if="!signupOpen" class="nl-form" action="#" method="post" onsubmit="return false">
       <label for="nl-email">your email</label>
       <div class="nl-row">
         <input id="nl-email" type="email" name="email" placeholder="you@example.com" disabled>
         <button type="submit" disabled>subscribe</button>
       </div>
-      <p class="nl-note">Sign-up opens soon. Only your email address is kept; you confirm by email first, and every email has a one-click unsubscribe. <a href="/legaldocs/privacy/#newsletter">How the newsletter works →</a></p>
+      <p class="nl-note">Sign-up opens soon. Only your email address is kept; you confirm by email first, and every email has a one-click unsubscribe. <a class="nl-how" href="/legaldocs/privacy/#newsletter">How the newsletter works&nbsp;→</a></p>
     </form>
 
     <h2 class="addons-sub">latest issues <a class="nl-more" href="/newsletter/kiosk/">the kiosk →</a></h2>

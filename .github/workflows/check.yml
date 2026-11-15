@@ -48,3 +48,20 @@ jobs:
       - name: Lighthouse
         run: |
           { echo "### Lighthouse — cptx.ee @ ${GITHUB_SHA:0:7}"; echo; scripts/lighthouse.sh https://cptx.ee; } | tee -a "$GITHUB_STEP_SUMMARY"
+  newsletter:
+    # Hands newly published issues to Buttondown (once each, per language) after
+    # the deploy is verified, so every link in the email already works.
+    # Drafts by default; repository variable NEWSLETTER_MODE=send sends at once.
+    # Does nothing until the BUTTONDOWN_API_KEY secret exists.
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: deploy-verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency: newsletter
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - name: Issues → Buttondown
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          NEWSLETTER_MODE: ${{ vars.NEWSLETTER_MODE || 'draft' }}
+        run: python3 scripts/newsletter-send.py | tee -a "$GITHUB_STEP_SUMMARY"

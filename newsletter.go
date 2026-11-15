@@ -59,6 +59,11 @@ func issueLabel(slug string) string {
 	return fmt.Sprintf("issue %02d", n)
 }
 
+// buttondownUser is the newsletter's Buttondown username. While it is empty the
+// sign-up form on /newsletter/ stays closed ("opens soon"); once set, the form
+// posts to Buttondown, which sends the confirmation email (double opt-in).
+const buttondownUser = ""
+
 // coverIdx is the addon index (set at startup); its words per day light the
 // week strip on each cover.
 var coverIdx []addonPost
@@ -110,7 +115,8 @@ func newsletterData(posts []*Post, latest int) map[string]any {
 	if latest > 0 && len(shown) > latest {
 		shown = shown[:latest]
 	}
-	return map[string]any{"issues": shown, "hasIssues": len(all) > 0, "issueCount": len(all), "issueCountLabel": issueCountLabel(len(all)), "hasMore": len(all) > len(shown)}
+	return map[string]any{"signupOpen": buttondownUser != "", "signupAction": "https://buttondown.com/api/emails/embed-subscribe/" + buttondownUser,
+		"issues": shown, "hasIssues": len(all) > 0, "issueCount": len(all), "issueCountLabel": issueCountLabel(len(all)), "hasMore": len(all) > len(shown)}
 }
 
 // issueCountLabel: "1 issue", "2 issues".
