@@ -62,7 +62,7 @@ func issueLabel(slug string) string {
 // buttondownUser is the newsletter's Buttondown username. While it is empty the
 // sign-up form on /newsletter/ stays closed ("opens soon"); once set, the form
 // posts to Buttondown, which sends the confirmation email (double opt-in).
-const buttondownUser = ""
+const buttondownUser = "cptx"
 
 // coverIdx is the addon index (set at startup); its words per day light the
 // week strip on each cover.
