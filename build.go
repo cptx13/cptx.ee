@@ -97,6 +97,13 @@ func buildStaticSite(
 	if err := writePage("newsletter/kiosk/index.html", "KioskPage", newsletterData(published, 0)); err != nil {
 		return err
 	}
+	for slug, notice := range newsletterNotices {
+		d := newsletterData(published, 3)
+		d["notice"], d["noticeTitle"] = notice[1], notice[0]
+		if err := writePage("newsletter/"+slug+"/index.html", "NewsletterPage", d); err != nil {
+			return err
+		}
+	}
 	if err := writePage("contact/index.html", "ContactPage", map[string]any{}); err != nil {
 		return err
 	}

@@ -11,7 +11,8 @@ one Buttondown email for everyone:
 - body     the English issue, then the Spanish one (NNN.es.md, when published)
            under a divider; comments removed, links made absolute, each half
            opening with a link to its page on the web
-- slug and metadata "cptx-issue-01", so the same issue is never created twice
+- slug and metadata "cptx-issue-01", so the same issue is never created twice;
+  while its email is still a draft, later runs refresh its subject and body
 
 (One bilingual email because Buttondown's tags, which could split readers by
 language, need a paid plan.)
@@ -80,13 +81,27 @@ def clean(body):
     return re.sub(r"\n{3,}", "\n\n", body).strip()
 
 
+def meta_line(n, fm, lang):
+    date = dt.date.fromisoformat(fm["date"][:10])
+    week = date.isocalendar()[1]
+    if lang == "es":
+        months = "ene feb mar abr may jun jul ago sep oct nov dic".split()
+        return f"issue {n:02d} · semana {week} · {date.day} {months[date.month - 1]} {date.year}"
+    return f"issue {n:02d} · week {week} · {date:%-d %b %Y}"
+
+
 def email_body(n, en, es):
-    date = dt.date.fromisoformat(en[0]["date"][:10])
-    parts = [f"*issue {n:02d} · {date:%-d %b %Y} · [{WEB['en']}]({SITE}/newsletter/{n}/)*", clean(en[1])]
+    """English, then Spanish. Buttondown shows the subject above the body and
+    adds its own unsubscribe footer."""
+    web_en, web_es = f"{SITE}/newsletter/{n}/", f"{SITE}/newsletter/{n}/es/"
+    top = f"*{meta_line(n, en[0], 'en')}* · [{WEB['en']}]({web_en})"
+    if es:
+        top += "  \n*Versión en español más abajo.*"
+    parts = [top, clean(en[1])]
     if es:
         parts += ["---", f"# {es[0].get('title', '').strip()}",
-                  f"*issue {n:02d} · en español · [{WEB['es']}]({SITE}/newsletter/{n}/es/)*", clean(es[1])]
-    parts += ["---", KIOSK.format(site=SITE)]
+                  f"*{meta_line(n, es[0], 'es')}* · [{WEB['es']}]({web_es})", clean(es[1])]
+    parts += ["---", "*cptx · a collection of mathoms*  \n" + KIOSK.format(site=SITE)]
     return "\n\n".join(parts) + "\n"
 
 
@@ -115,18 +130,19 @@ def call(method, url, key, data=None, extra=None):
         return json.loads(r.read() or b"{}")
 
 
-def existing_keys(key):
-    """Slugs/metadata of every email already in Buttondown, any status."""
-    seen = set()
+def existing(key):
+    """cptx issue key -> (id, status) for every email already in Buttondown."""
+    found = {}
     url = API + "/emails?" + "&".join(f"status={s}" for s in
                                        ("draft", "scheduled", "about_to_send", "in_flight", "sent", "imported", "throttled"))
     while url:
         page = call("GET", url, key)
         for e in page.get("results", []):
-            seen.add(e.get("slug") or "")
-            seen.add((e.get("metadata") or {}).get("cptx_issue", ""))
+            k = (e.get("metadata") or {}).get("cptx_issue") or e.get("slug") or ""
+            if k.startswith("cptx-issue-"):
+                found[k] = (e.get("id"), e.get("status"))
         url = page.get("next")
-    return seen
+    return found
 
 
 def main():
@@ -148,18 +164,24 @@ def main():
     if not todo:
         print("newsletter: no recent published issues")
         return
-    seen = existing_keys(key)
+    seen = existing(key)
     for k, p in todo:
-        if k in seen:
-            print(f"newsletter: {k} already in Buttondown")
-            continue
-        extra = {"X-Buttondown-Live-Dangerously": "true"} if p["status"] == "about_to_send" else None
         try:
+            if k in seen:
+                eid, status = seen[k]
+                if status != "draft":
+                    print(f"newsletter: {k} already {status} in Buttondown, left alone")
+                    continue
+                # still a draft: refresh it with the published text
+                call("PATCH", f"{API}/emails/{eid}", key, {f: p[f] for f in ("subject", "body", "canonical_url")})
+                print(f"newsletter: {k} draft updated")
+                continue
+            extra = {"X-Buttondown-Live-Dangerously": "true"} if p["status"] == "about_to_send" else None
             e = call("POST", API + "/emails", key, p, extra)
+            print(f"newsletter: {k} created as {e.get('status', p['status'])}")
         except urllib.error.HTTPError as err:
             print(f"newsletter: {k} failed: {err.code} {err.read()[:300]!r}", file=sys.stderr)
             sys.exit(1)
-        print(f"newsletter: {k} created as {e.get('status', p['status'])}")
 
 
 if __name__ == "__main__":

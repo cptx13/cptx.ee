@@ -316,6 +316,13 @@ func main() {
 			renderPage(w, engine, "KioskPage", newsletterData(published, 0))
 			return
 		}
+		// where Buttondown sends readers after signing up and after confirming
+		if notice, ok := newsletterNotices[m.Params["slug"]]; ok {
+			d := newsletterData(published, 3)
+			d["notice"], d["noticeTitle"] = notice[1], notice[0]
+			renderPage(w, engine, "NewsletterPage", d)
+			return
+		}
 		post := postsByPath["/newsletter/"+m.Params["slug"]+"/"]
 		if post == nil {
 			renderNotFound(w, engine)

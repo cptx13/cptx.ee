@@ -2,6 +2,7 @@
 <AppLayout :pageTitle="'newsletter | cptx'" :description="'The cptx.ee newsletter: a weekly issue (what changed, what was written, what is being written, other things worth passing on) and the occasional note about the site.'" :canonicalURL="'https://cptx.ee/newsletter/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons">
     <h1 class="addons-title">newsletter</h1>
+    <div v-if="notice" class="nl-notice" role="status"><p class="nl-notice-title">{{ noticeTitle }}</p><p>{{ notice }}</p></div>
     <p class="addons-intro">The newsletter brings a weekly <strong>issue</strong> by email, in English and Spanish, and now and then a short note about the site. Every issue is also kept here, on the <a href="/newsletter/kiosk/">kiosk</a>.</p>
 
     <p class="nl-lead">in an issue</p>

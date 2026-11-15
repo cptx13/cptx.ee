@@ -64,6 +64,13 @@ func issueLabel(slug string) string {
 // posts to Buttondown, which sends the confirmation email (double opt-in).
 const buttondownUser = "cptx"
 
+// newsletterNotices are the pages Buttondown redirects to (Settings →
+// Subscribing → Redirects): slug → {title, text}.
+var newsletterNotices = map[string][2]string{
+	"thanks":  {"almost there", "Thanks for subscribing. Check your inbox: an email from Buttondown asks you to confirm, and nothing is sent until you do. If it isn't there in a few minutes, look in spam."},
+	"welcome": {"welcome", "You're subscribed. The next issue arrives by email, in English and Spanish; until then, every past issue is on the kiosk."},
+}
+
 // coverIdx is the addon index (set at startup); its words per day light the
 // week strip on each cover.
 var coverIdx []addonPost
@@ -115,7 +122,7 @@ func newsletterData(posts []*Post, latest int) map[string]any {
 	if latest > 0 && len(shown) > latest {
 		shown = shown[:latest]
 	}
-	return map[string]any{"signupOpen": buttondownUser != "", "signupAction": "https://buttondown.com/api/emails/embed-subscribe/" + buttondownUser,
+	return map[string]any{"notice": "", "noticeTitle": "", "signupOpen": buttondownUser != "", "signupAction": "https://buttondown.com/api/emails/embed-subscribe/" + buttondownUser,
 		"issues": shown, "hasIssues": len(all) > 0, "issueCount": len(all), "issueCountLabel": issueCountLabel(len(all)), "hasMore": len(all) > len(shown)}
 }
 

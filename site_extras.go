@@ -244,6 +244,8 @@ func registerRetired(mux *http.ServeMux, distDir string) error {
 const robotsTxt = `User-agent: *
 Disallow: /pockets/cheatsheet/feed/refresh
 Disallow: /addons/map/?
+Disallow: /newsletter/thanks/
+Disallow: /newsletter/welcome/
 Disallow: /addons/today/?
 Disallow: /addons/places/?
 Disallow: /addons/words/?

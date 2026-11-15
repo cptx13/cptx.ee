@@ -159,7 +159,7 @@ Manual live check: `scripts/smoke.sh [https://cptx.ee] [commit]`.
 ## Newsletter (Buttondown)
 
 - **Account:** `cptx` on [Buttondown](https://buttondown.com) (free plan). Open and click tracking and UTM parameters are off — the privacy policy promises it. Tags need a paid plan, so each issue is one email with English, then Spanish.
-- **Sign-up form:** `/newsletter/` posts to `https://buttondown.com/api/emails/embed-subscribe/cptx` (`buttondownUser` in `newsletter.go`; empty = form closed). The CSP allows `form-action https://buttondown.com`. Buttondown sends the confirmation email.
+- **Sign-up form:** `/newsletter/` posts to `https://buttondown.com/api/emails/embed-subscribe/cptx` (`buttondownUser` in `newsletter.go`; empty = form closed). The CSP allows `form-action https://buttondown.com`. Buttondown sends the confirmation email. Its redirects (Settings → Subscribing → Redirects) point to `https://cptx.ee/newsletter/thanks/` (after subscribing) and `https://cptx.ee/newsletter/welcome/` (after confirming); both pages are `newsletterNotices` in `newsletter.go`. Email look: accent `#b54d00`, Modern template, UTM/open/click tracking off.
 - **Weekly issue:**
   1. `scripts/newsletter-draft.py` writes `content/newsletter/NNN.md` and `NNN.es.md` (`draft: true`): what changed (commit subjects, to rewrite), what was written, this week years ago, new weekendreads/bedsidetable entries, and empty sections (hidden while empty).
   2. Edit, set `draft: false` in both, add `/newsletter/<n>/` and `/newsletter/<n>/es/` to `urls.txt`, push through the usual branch → check → main.

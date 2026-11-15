@@ -10,7 +10,8 @@ draft: true (hidden until you publish them). Sections, in order:
                           left out): raw material to rewrite for readers
 - what was written        croquis dated in the week, with their URLs
 - this week, years ago    croquis and recuerdos written on the same days in
-                          earlier years, by year, opening with a few lines of one
+                          earlier years, newest year first, one post per line,
+                          opening with a few lines of the longest one
 - what is being written   yours
 - articles I enjoyed      new entries in the weekendreads pocket (not in an
                           earlier issue), else yours
@@ -143,25 +144,35 @@ def section(title, lines, placeholder=""):
     return [f"<!-- ## {title}", "", placeholder or "(fill in, or leave this comment: it shows nowhere)", "-->", ""]
 
 
+MONTHS = {"en": "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(),
+          "es": "ene feb mar abr may jun jul ago sep oct nov dic".split()}
+
+
+def short_title(t):
+    return t.strip().rstrip(".")
+
+
 def past_years(all_posts, since, until, lang):
-    days = {(since + dt.timedelta(days=i)).strftime("%m-%d") for i in range((until - since).days + 1)}
-    by_year = {}
+    """What was written on the same days in earlier years: newest year first,
+    one post per line with its date; opens with a few lines from the longest."""
+    span = [since + dt.timedelta(days=i) for i in range((until - since).days + 1)]
+    by_day = {d.strftime("%m-%d"): [] for d in span}
     for d, t, u, body in all_posts:
-        if d.year < until.year and d.strftime("%m-%d") in days:
-            by_year.setdefault(d.year, []).append((d, t, u, body))
-    if not by_year:
+        k = d.strftime("%m-%d")
+        if d.year < until.year and k in by_day:
+            by_day[k].append((d, t, u, body))
+    found = [p for ps in by_day.values() for p in ps]
+    if not found:
         return []
-    lines = []
-    # a few opening lines of the longest one, as a taste
-    d, t, u, body = max((p for ps in by_year.values() for p in ps), key=lambda p: len(p[3]))
-    lines += [f"> {opening(body)}", ">", f"> — [{t}]({SITE}{u}), {d.year}", ""]
-    for y in sorted(by_year, reverse=True):
-        ps = sorted(by_year[y])
-        shown = ps[:8]
-        links = " · ".join(f"[{t}]({SITE}{u})" for _, t, u, _ in shown)
-        if len(ps) > len(shown):
-            links += " · " + HEAD[lang]["more"].format(n=len(ps) - len(shown))
-        lines.append(f"- **{y}:** {links}")
+    d, t, u, body = max(found, key=lambda p: len(p[3]))
+    lines = [f"> {opening(body)}", ">",
+             f"> — *[{short_title(t)}]({SITE}{u})*, {d.day} {MONTHS[lang][d.month - 1]} {d.year}", ""]
+    years = sorted({p[0].year for p in found}, reverse=True)
+    for y in years:
+        lines += [f"**{y}**", ""]
+        for p in sorted((p for p in found if p[0].year == y), key=lambda p: p[0]):
+            lines.append(f"- {p[0].day} {MONTHS[lang][p[0].month - 1]} · [{short_title(p[1])}]({SITE}{p[2]})")
+        lines.append("")
     return lines
 
 
