@@ -138,3 +138,40 @@ func TestSortHelpers(t *testing.T) {
 		t.Error("plural")
 	}
 }
+
+func TestComputePostIDsPinned(t *testing.T) {
+	// a pins the slot b would get by filename order; b and c fill the free ones.
+	a := &Post{Section: "croquis", Categories: []string{"croquis"}, Date: day("2026-10-05"), FilePath: "z-moved.md", Slug: "z", FixedID: "202610031"}
+	b := &Post{Section: "croquis", Categories: []string{"croquis"}, Date: day("2026-10-03"), FilePath: "b.md", Slug: "b"}
+	c := &Post{Section: "croquis", Categories: []string{"croquis"}, Date: day("2026-10-03"), FilePath: "c.md", Slug: "c"}
+	if err := computePostIDs([]*Post{b, c, a}); err != nil {
+		t.Fatal(err)
+	}
+	for _, tc := range []struct {
+		p    *Post
+		path string
+	}{{a, "/croquis/202610031/"}, {b, "/croquis/202610032/"}, {c, "/croquis/202610033/"}} {
+		if tc.p.Path != tc.path {
+			t.Errorf("%s: %s, want %s", tc.p.FilePath, tc.p.Path, tc.path)
+		}
+	}
+	if a.OldPath != "/posts/croquis/z/" {
+		t.Errorf("pinned post keeps its legacy path, got %q", a.OldPath)
+	}
+
+	dup := &Post{Section: "croquis", Categories: []string{"croquis"}, Date: day("2026-10-03"), FilePath: "d.md", FixedID: "202610031"}
+	if err := computePostIDs([]*Post{a, dup}); err == nil {
+		t.Error("two posts pinning the same ID should fail")
+	}
+	bad := &Post{Section: "croquis", Date: day("2026-10-03"), FilePath: "e.md", FixedID: "2026-10-03"}
+	if err := computePostIDs([]*Post{bad}); err == nil {
+		t.Error("a non-numeric id should fail")
+	}
+}
+
+func TestParsePostFixedID(t *testing.T) {
+	p, err := parsePost("---\ntitle: T\ndate: 2026-10-03\nid: 202610031\ncategories: [croquis]\n---\nx\n", "content/posts/croquis/T.md", "content")
+	if err != nil || p.FixedID != "202610031" {
+		t.Errorf("FixedID = %q, err %v", p.FixedID, err)
+	}
+}
