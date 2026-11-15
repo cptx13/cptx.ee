@@ -1229,3 +1229,13 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .kiosk-ghost:hover { transform: none; }
 .nl-more { font-weight: normal; font-size: .8em; margin-left: .6em; color: var(--content-secondary); }
 .kiosk-issue .kiosk-head { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* F-06: search */
+.toolbar-text { font-size: .8em; color: var(--content-secondary); margin-left: .4em; }
+.search-full { font-size: .8em; margin: .5em 0 0; }
+.search-full a { color: var(--content-secondary); }
+.sr-hit { margin: 0 0 1.4em; }
+.sr-meta { margin: 0; font-size: .75em; color: var(--content-secondary); }
+.sr-title { white-space: normal; margin: .1em 0 .2em; }
+.sr-snippet { margin: 0; font-family: var(--font-read); font-size: .95em; line-height: 1.55; color: var(--content-secondary); }
+.sr-snippet mark { background: color-mix(in srgb, #ffb703 45%, transparent); color: var(--content-primary); border-radius: 2px; padding: 0 .1em; }

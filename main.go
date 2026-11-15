@@ -243,6 +243,12 @@ func main() {
 		log.Printf("library: %v", err)
 		lib = &library{ByKey: map[string]*libBook{}}
 	}
+	// F-06: site-wide search over posts' full text and the library
+	searchIdx := buildSearchIndex(addonIdx, postTexts, lib)
+	must(router.GET("search", "/search/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		renderPage(w, engine, "SearchPage", searchData(searchIdx, r.URL.Query().Get("q")))
+	})))
+
 	must(router.GET("home", "/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		otd, hasOTD := homeOnThisDay(addonIdx, time.Now())
 		data := map[string]any{
@@ -569,6 +575,12 @@ func main() {
 	}
 	if err := writeAddonPages(engine, "dist", addonIdx, addonTagList); err != nil {
 		log.Printf("addons dist: %v", err)
+	}
+	if html, err := engine.RenderPageString("SearchPage", searchData(searchIdx, "")); err == nil {
+		os.MkdirAll(filepath.Join("dist", "search"), 0o755)
+		os.WriteFile(filepath.Join("dist", "search", "index.html"), []byte(withDoctype(html)), 0o644)
+	} else {
+		log.Printf("search dist: %v", err)
 	}
 	if err := writeLibraryPages(engine, "dist", lib); err != nil {
 		log.Printf("library dist: %v", err)

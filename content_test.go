@@ -4,6 +4,7 @@ package main
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 )
@@ -214,5 +215,39 @@ func TestNewsletterIssues(t *testing.T) {
 	}
 	if w := issues[0].(map[string]any)["Week"]; w != "week 47" {
 		t.Errorf("week = %v", w)
+	}
+}
+
+func TestSearch(t *testing.T) {
+	idx := []addonPost{
+		{Title: "Café de mañana", Path: "/croquis/1/", Day: "2026-10-07", Section: "croquis"},
+		{Title: "Lluvia", Path: "/recuerdos/2/", Day: "2023-01-02", Section: "recuerdos"},
+	}
+	texts := map[string]string{
+		"/croquis/1/":   "Un café en Tallinn, temprano. <b>no html</b>",
+		"/recuerdos/2/": "Llovía sobre Tallinn todo el día.",
+	}
+	s := buildSearchIndex(idx, texts, &library{Books: []*libBook{{Key: "k", Title: "Cien años de soledad", Author: "Gabriel García Márquez"}}})
+	posts, books, total := s.search("tallinn", 10)
+	if total != 2 || len(books) != 0 {
+		t.Fatalf("tallinn: %d posts, %d books", total, len(books))
+	}
+	posts, _, total = s.search("cafe tallinn", 10)
+	if total != 1 || posts[0].(map[string]any)["Path"] != "/croquis/1/" {
+		t.Errorf("accents and all terms: %v", posts)
+	}
+	if snip := posts[0].(map[string]any)["Snippet"].(string); !strings.Contains(snip, "<mark>café</mark>") || strings.Contains(snip, "<b>") {
+		t.Errorf("snippet = %q", snip)
+	}
+	_, _, total = s.search("llov", 10)
+	if total != 1 {
+		t.Errorf("prefix match: %d", total)
+	}
+	_, books, _ = s.search("garcia marquez", 10)
+	if len(books) != 1 {
+		t.Errorf("library: %v", books)
+	}
+	if d := searchData(s, "  "); d["hasQuery"] != false || d["none"] != false {
+		t.Errorf("empty query: %v", d)
 	}
 }

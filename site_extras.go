@@ -249,6 +249,7 @@ Disallow: /addons/places/?
 Disallow: /addons/words/?
 Disallow: /archives/library/?
 Disallow: /archives/library/covers/
+Disallow: /search/?
 
 Sitemap: https://cptx.ee/sitemap.xml
 `
