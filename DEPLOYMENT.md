@@ -156,6 +156,35 @@ GitHub pauses scheduled workflows after 60 days without repo activity; re-enable
 
 Manual live check: `scripts/smoke.sh [https://cptx.ee] [commit]`.
 
+## Library refresh (`/archives/library/`)
+
+`data/library/books.json` is in git; covers and thumbnails live only on the VM in
+`~/cptx-data/library` (outside the repo, so deploys never touch them). Fetches run
+on the VM — Claude's workspace can't reach Open Library or Google Books.
+
+1. **Export** the books library from Libib as CSV.
+2. **Trim** it to the public columns, same header as today:
+   `libib_id,isbn13,isbn10,title,creators,publisher,publish_date,pages`
+   (no prices, notes, loans or tags) and replace `data/library/libib-books.csv` on a branch.
+3. **Shelve** new books: add `key<TAB>shelf` lines to `shelves.tsv` (key = ISBN-13, or the
+   Libib id without one); fixes go in `overrides.tsv`.
+4. **Import** on the VM in a scratch clone of that branch:
+   ```sh
+   git clone -q -b <branch> https://github.com/cptx13/cptx.ee /tmp/lib && cd /tmp/lib
+   ~/.local/bin/mise trust -q mise.toml
+   python3 scripts/library-import.py ~/cptx-data/library     # only new books are fetched
+   cp ~/cptx-data/library/books.json data/library/books.json
+   ~/.local/bin/mise exec -- scripts/check.sh --update-urls  # new book pages → urls.txt
+   ```
+   The import prints the books still without a cover. Hand-made covers go to
+   `~/cptx-data/library/covers/<key>.jpg`; the server makes missing thumbnails at start-up
+   (when replacing a cover, also delete `~/cptx-data/library/thumbs/<key>.jpg`).
+5. **Commit** `libib-books.csv`, `*.tsv`, `books.json` and `urls.txt`; push the branch,
+   wait for `check`, then fast-forward `main`. Delete `/tmp/lib`.
+
+`LIBRARY_DIR` / `LIBRARY_MEDIA_DIR` override the two locations; `GOOGLE_BOOKS_KEY` lifts
+Google's anonymous quota (the VM's IP is often rate-limited).
+
 ## Go version
 
 The Go toolchain is pinned in `mise.toml` (currently `1.27.4`); `go.mod` only sets

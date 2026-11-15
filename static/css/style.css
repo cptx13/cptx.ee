@@ -161,8 +161,6 @@ img {
 
     --code-padding: 1.5rem;
     --code-border-radius: 10px;
-    --copy-code-button-border-radius: 7px;
-
 
     --footer-height: 3rem;
 
@@ -308,25 +306,6 @@ a {
   color-scheme: dark;
 }
 
-/* Code blocks */
-.copy-code-button {
-  background-color: var(--background);
-  font-family: var(--font-mono);
-  padding: 3px 6px;
-  font-size: 0.8em;
-  border-radius: var(--copy-code-button-border-radius);
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1;
-  display: none;
-  border: 1px solid var(--code-border);
-}
-
-pre:hover .copy-code-button {
-  display: block;
-}
-
 pre {
   position: relative;
   padding: var(--code-padding);
@@ -435,39 +414,6 @@ footer a {
   margin-right: .2rem;
 }
 
-/* Posts list */
-.post-line {
-  margin-bottom: .5rem;
-  display: flex;
-  align-items: baseline;
-}
-
-.post-line p {
-  margin-top: 0rem;
-  margin-bottom: 0rem;
-}
-
-.line-date {
-  font-size: small;
-  font-family: inherit;
-  min-width: 120px;
-  max-width: 120px;
-  text-align: right;
-  padding-right: 1rem;
-  margin-top: 0rem;
-  margin-bottom: 0rem;
-}
-
-.line-title {
-  margin: 0;
-}
-
-.line-summary {
-  font-size: small;
-  margin-top: .2rem !important;
-  color: var(--content-secondary);
-}
-
 .list-container {
   padding-bottom: 3rem;
 }
@@ -478,24 +424,6 @@ footer a {
   margin-top: 1rem;
   margin-bottom: 0rem;
   justify-content: center;
-}
-
-.pagination-control {
-  min-width: 3rem;
-  margin-left: .5rem;
-  margin-right: .5rem;
-  text-align: center;
-  align-items: center;
-}
-
-.page-number {
-  min-width: 3rem;
-  margin-left: .5rem;
-  margin-right: .5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
 }
 
 /* Single post page */
@@ -529,11 +457,6 @@ footer a {
 
 .single-date {
   margin-top: 0;
-  margin-bottom: 0;
-  color: var(--content-secondary);
-}
-
-.single-summary {
   margin-bottom: 0;
   color: var(--content-secondary);
 }
@@ -624,11 +547,6 @@ figure img {
   height: auto;
 }
 
-.caption-container {
-  display: flex;
-  justify-content: center;
-}
-
 figcaption {
   color: var(--content-secondary);
   padding-left: var(--caption-padding);
@@ -660,12 +578,6 @@ figcaption {
   font-family: var(--font-mono);
   font-size: small;
   margin-bottom: 2rem;
-}
-
-/* Tables */
-.table-outer {
-  width: 100%;
-  overflow-x: auto;
 }
 
 table {
@@ -726,16 +638,8 @@ blockquote p {
     font-weight: bold;
 }
 
-.italic {
-    font-style: italic;
-}
-
 .small {
     font-size: medium;
-}
-
-.monospace {
-    font-family: var(--font-mono);
 }
 
 /* === List toolbar === */
