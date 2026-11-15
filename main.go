@@ -139,7 +139,6 @@ var feedSources = []struct {
 	{"Seth For Privacy", "https://sethforprivacy.com/index.xml"},
 	{"Bartosz Ciechanowski", "https://ciechanow.ski/atom.xml"},
 	{"Matthew Ball", "https://www.matthewball.co/matthewball?format=rss"},
-	{"Mark Qvist", "https://unsigned.io/?feed=rss2"},
 	{"Matthew Green", "https://blog.cryptographyengineering.com/feed/"},
 	{"Uncharted Territories", "https://unchartedterritories.tomaspueyo.com/feed"},
 	{"Fitness Revolucionario", "https://www.fitnessrevolucionario.com/feed/"},
