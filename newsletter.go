@@ -116,47 +116,51 @@ func coverArt(p *Post, n int, wordsByDay map[string]int) string {
 	var b strings.Builder
 	b.WriteString(`<svg class="kiosk-art" viewBox="0 0 150 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">`)
 
+	// Shapes stay in the clear zone (x ≥ 60, y 50–135) so they never sit under
+	// the masthead, the issue line or the headline.
+	fmt.Fprintf(&b, `<defs><clipPath id="kc%d"><rect x="60" y="50" width="90" height="86"/></clipPath></defs><g clip-path="url(#kc%d)">`, n, n)
 	switch seed % 5 {
-	case 0: // concentric arcs from the top-right corner
-		for r := 30; r <= 130; r += 20 {
-			fmt.Fprintf(&b, `<circle cx="150" cy="0" r="%d" fill="none" stroke="%s" stroke-width="6" opacity="%.2f"/>`, r, strong, 0.25+float64(130-r)/200)
+	case 0: // concentric arcs around a point on the right edge
+		for r := 20; r <= 80; r += 15 {
+			fmt.Fprintf(&b, `<circle cx="150" cy="93" r="%d" fill="none" stroke="%s" stroke-width="6" opacity="%.2f"/>`, r, strong, 1-float64(r)/110)
 		}
 	case 1: // dot grid that grows towards the top right
-		for y := 0; y < 7; y++ {
-			for x := 0; x < 6; x++ {
-				rad := 1.0 + float64(x+6-y)*0.45
-				fmt.Fprintf(&b, `<circle cx="%d" cy="%d" r="%.1f" fill="%s"/>`, 22+x*22, 12+y*16, rad, strong)
+		for y := 0; y < 5; y++ {
+			for x := 0; x < 4; x++ {
+				rad := 1.4 + float64(x+5-y)*0.55
+				fmt.Fprintf(&b, `<circle cx="%d" cy="%d" r="%.1f" fill="%s"/>`, 72+x*22, 60+y*18, rad, strong)
 			}
 		}
-	case 2: // diagonal stripes across the upper half
-		fmt.Fprintf(&b, `<g transform="rotate(-30 75 60)">`)
-		for i := 0; i < 7; i++ {
+	case 2: // diagonal stripes
+		b.WriteString(`<g transform="rotate(-30 105 93)">`)
+		for i := 0; i < 9; i++ {
 			c := strong
 			if i%2 == 1 {
 				c = soft
 			}
-			fmt.Fprintf(&b, `<rect x="-60" y="%d" width="270" height="9" fill="%s"/>`, 10+i*14, c)
+			fmt.Fprintf(&b, `<rect x="20" y="%d" width="170" height="8" fill="%s"/>`, 30+i*14, c)
 		}
 		b.WriteString(`</g>`)
-	case 3: // rising sun: half disc and rays on the right
+	case 3: // rising sun: half disc and rays on the right edge
 		for i := 0; i < 9; i++ {
-			fmt.Fprintf(&b, `<rect x="146" y="78" width="80" height="4" rx="2" fill="%s" transform="rotate(%d 150 80)"/>`, soft, 100+i*20)
+			fmt.Fprintf(&b, `<rect x="150" y="91" width="90" height="4" rx="2" fill="%s" transform="rotate(%d 150 93)"/>`, soft, 100+i*20)
 		}
-		fmt.Fprintf(&b, `<circle cx="150" cy="80" r="40" fill="%s"/>`, strong)
-	default: // checker of rounded tiles in the top-right corner
+		fmt.Fprintf(&b, `<circle cx="150" cy="93" r="30" fill="%s"/>`, strong)
+	default: // checker of rounded tiles
 		for y := 0; y < 4; y++ {
 			for x := 0; x < 4; x++ {
 				if (x+y)%2 == 0 {
-					fmt.Fprintf(&b, `<rect x="%d" y="%d" width="16" height="16" rx="3" fill="%s"/>`, 70+x*20, 26+y*20, strong)
+					fmt.Fprintf(&b, `<rect x="%d" y="%d" width="16" height="16" rx="3" fill="%s"/>`, 70+x*20, 54+y*20, strong)
 				} else if (x*y+int(seed))%3 == 0 {
-					fmt.Fprintf(&b, `<rect x="%d" y="%d" width="16" height="16" rx="3" fill="%s"/>`, 70+x*20, 26+y*20, soft)
+					fmt.Fprintf(&b, `<rect x="%d" y="%d" width="16" height="16" rx="3" fill="%s"/>`, 70+x*20, 54+y*20, soft)
 				}
 			}
 		}
 	}
+	b.WriteString(`</g>`)
 
 	// the issue number, large and outlined
-	fmt.Fprintf(&b, `<text x="146" y="150" text-anchor="end" font-family="JetBrains Mono, monospace" font-weight="700" font-size="64" fill="none" stroke="%s" stroke-width="1.4" opacity=".55">%02d</text>`, strong, n)
+	fmt.Fprintf(&b, `<text x="146" y="134" text-anchor="end" font-family="JetBrains Mono, monospace" font-weight="700" font-size="58" fill="none" stroke="%s" stroke-width="1.3" opacity=".5">%02d</text>`, strong, n)
 
 	// the week: Monday … Sunday of the issue's ISO week
 	wd := int(p.Date.Weekday()+6) % 7 // Monday = 0
