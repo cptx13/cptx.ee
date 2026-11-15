@@ -205,6 +205,10 @@ func parsePost(content, filePath, root string) (*Post, error) {
 			post.Slug = slugify(strings.TrimSuffix(parts[2], ".md"))
 			post.Path = "/posts/" + post.Section + "/" + post.Slug + "/"
 		}
+	} else if strings.HasPrefix(relPath, "legaldocs/") {
+		post.Section = "legaldocs"
+		post.Slug = slugify(strings.TrimSuffix(filepath.Base(relPath), ".md"))
+		post.Path = "/legaldocs/" + post.Slug + "/"
 	} else if strings.HasPrefix(relPath, "pockets/") {
 		post.Section = "pockets"
 		post.Slug = slugify(strings.TrimSuffix(filepath.Base(relPath), ".md"))

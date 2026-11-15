@@ -331,6 +331,11 @@
 /croquis/202601161/
 /croquis/202603121/
 /croquis/202610071/
+/legaldocs/
+/legaldocs/cookies/
+/legaldocs/how-it-works/
+/legaldocs/newsletter/
+/legaldocs/privacy/
 /manifesto/
 /pockets/
 /pockets/bedsidetable/

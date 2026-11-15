@@ -26,5 +26,6 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for the full deployment setup (systemd user u
 | `photos.go`, `pockets_photos.go` | Photo folders, thumbnails, pockets/photos page data |
 | `addons.go`, `places.go`, `words.go` | `/addons/` pages |
 | `library.go` | `/archives/` and the library |
+| `legal.go` + `content/legaldocs/` | `/legaldocs/`: privacy, cookies, how it works, newsletter |
 
 Before pushing: `scripts/check.sh` (runs in CI on every push).

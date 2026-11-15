@@ -4,7 +4,8 @@
     <header class="single-intro-container">
       <h1 class="single-title">{{ post.Title }}</h1>
       <div v-if="post.Section == 'pockets'" class="single-subsummary"><p class="single-date pk-sub"><a href="/pockets/">← all pockets</a> · updated {{ post.DateFormatted }}</p></div>
-      <div v-if="post.Section != 'pockets' && (post.Author || post.DateFormatted)" class="single-subsummary">
+      <div v-if="post.Section == 'legaldocs'" class="single-subsummary"><p class="single-date pk-sub"><a href="/legaldocs/">← legal docs</a> · updated {{ post.DateFormatted }}</p></div>
+      <div v-if="post.Section != 'pockets' && post.Section != 'legaldocs' && (post.Author || post.DateFormatted)" class="single-subsummary">
         <div>
           <p class="single-date">
             <span v-if="post.Author">{{ post.Author }} / </span>

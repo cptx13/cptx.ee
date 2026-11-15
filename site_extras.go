@@ -310,6 +310,15 @@ func cacheControlFor(path string) string {
 	return ""
 }
 
+// cacheControlForRequest: CSS/JS requested with the per-deploy version (?v=<commit>,
+// added by assetVersioner) never change at that URL, so browsers may keep them a year.
+func cacheControlForRequest(path, version string) string {
+	if version != "" && (strings.HasPrefix(path, "/css/") || strings.HasPrefix(path, "/js/")) {
+		return "public, max-age=31536000, immutable"
+	}
+	return cacheControlFor(path)
+}
+
 func hasImageExt(p string) bool {
 	switch strings.ToLower(filepath.Ext(p)) {
 	case ".jpg", ".jpeg", ".png", ".webp", ".gif":
@@ -326,7 +335,7 @@ func withHeaders(next http.Handler) http.Handler {
 		h.Set("X-Frame-Options", "SAMEORIGIN")
 		h.Set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
 		h.Set("Content-Security-Policy", csp)
-		if cc := cacheControlFor(r.URL.Path); cc != "" {
+		if cc := cacheControlForRequest(r.URL.Path, r.URL.Query().Get("v")); cc != "" {
 			h.Set("Cache-Control", cc)
 		}
 		next.ServeHTTP(w, r)

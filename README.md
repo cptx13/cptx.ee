@@ -39,7 +39,7 @@ content/*.md ──► GitHub (main) ──► check ──► VM pulls, builds,
 
 | Path | What lives there |
 |---|---|
-| `content/` | Posts (`posts/croquis`, `posts/recuerdos`), pockets, manifesto |
+| `content/` | Posts (`posts/croquis`, `posts/recuerdos`), pockets, manifesto, legal docs |
 | `pages/`, `components/` | Page templates (`.vue`, rendered on the server) |
 | `static/` | CSS, small JS files, fonts, icons |
 | `data/library/` | The library: Libib export, shelves, overrides, generated `books.json` |
@@ -49,6 +49,7 @@ content/*.md ──► GitHub (main) ──► check ──► VM pulls, builds,
 | `build.go` | Static build into `dist/` |
 | `addons.go`, `places.go`, `words.go` | The addons |
 | `library.go` | Archives and library pages |
+| `legal.go` | `/legaldocs/` (privacy, cookies, how it works, newsletter) |
 | `feeds.go`, `photos.go`, `pockets_photos.go` | Reading-list feeds, photos, pockets |
 | `scripts/` | `check.sh`, URL snapshot, smoke test, link check, library import |
 | `*.service`, `*.timer`, `deploy.sh` | How the VM runs and deploys the site |

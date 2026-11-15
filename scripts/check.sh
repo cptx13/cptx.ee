@@ -27,7 +27,7 @@ echo "== 2/4 content lint"
 python3 - <<'PY' || fail=1
 import pathlib, re, sys
 VAULT = {"type", "blog", "status", "collection", "source", "draft_note"}
-KNOWN = {"title", "date", "draft", "categories", "tags", "showTags", "author", "toc", "description"}
+KNOWN = {"title", "date", "draft", "categories", "tags", "showTags", "author", "toc", "description", "summary", "lang", "id"}
 errors = warns = 0
 for p in sorted(pathlib.Path("content").rglob("*.md")):
     t = p.read_text(encoding="utf-8")

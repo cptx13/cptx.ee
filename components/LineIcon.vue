@@ -12,5 +12,9 @@
   <g v-if="name == 'books'"><rect x="3.5" y="4" width="4" height="16" rx=".6"/><rect x="8.5" y="6.5" width="4" height="13.5" rx=".6"/><path d="M14.6 7.2l3.6-1 3.4 13.3-3.6 1z"/><path d="M5.5 8v2"/><path d="M10.5 10v2"/></g>
   <g v-if="name == 'vinyl'"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r=".6"/><path d="M12 6a6 6 0 0 1 6 6"/></g>
   <g v-if="name == 'film'"><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M7.5 4v16"/><path d="M16.5 4v16"/><path d="M3 8h4.5"/><path d="M3 12h4.5"/><path d="M3 16h4.5"/><path d="M16.5 8H21"/><path d="M16.5 12H21"/><path d="M16.5 16H21"/></g>
+  <g v-if="name == 'shield'"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/><path d="M8.8 12l2.2 2.2 4.2-4.4"/></g>
+  <g v-if="name == 'cookie'"><path d="M20.8 12.6A8.8 8.8 0 1 1 11.4 3.2a3 3 0 0 0 3.7 3.7 3 3 0 0 0 2 3.9 3 3 0 0 0 3.7 1.8z"/><circle cx="8.5" cy="10" r=".9"/><circle cx="11.5" cy="15.5" r=".9"/><circle cx="15.8" cy="14.6" r=".9"/></g>
+  <g v-if="name == 'gear'"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/><circle cx="12" cy="12" r="6.4"/></g>
+  <g v-if="name == 'mail'"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5 12 13l8.5-6.5"/></g>
 </svg>
 </template>

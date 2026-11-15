@@ -11,7 +11,8 @@
 
     <div id="places" class="ph-cards">
       <a v-for="folder in folders" :href="folder.Path" class="ph-card">
-        <img v-if="folder.Cover" class="ph-card-img" :src="folder.Cover" alt="" loading="lazy">
+        <img v-if="folder.Cover && folder.CoverW" class="ph-card-img" :src="folder.Cover" alt="" :width="folder.CoverW" :height="folder.CoverH" loading="lazy">
+        <img v-else-if="folder.Cover" class="ph-card-img" :src="folder.Cover" alt="" loading="lazy">
         <span class="ph-card-text">
           <span class="ph-card-title">{{ folder.Location }}</span>
           <span class="ph-card-meta">{{ folder.Year }} · {{ folder.Count }} photos</span>

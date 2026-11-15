@@ -175,3 +175,27 @@ func TestParsePostFixedID(t *testing.T) {
 		t.Errorf("FixedID = %q, err %v", p.FixedID, err)
 	}
 }
+
+func TestCacheControlVersioned(t *testing.T) {
+	if got := cacheControlForRequest("/css/style.css", "adb4dda"); got != "public, max-age=31536000, immutable" {
+		t.Errorf("versioned css: %q", got)
+	}
+	if got := cacheControlForRequest("/css/style.css", ""); got != "public, max-age=3600" {
+		t.Errorf("unversioned css: %q", got)
+	}
+	if got := cacheControlForRequest("/croquis/202610071/", "x"); got != "" {
+		t.Errorf("pages are never cached long: %q", got)
+	}
+}
+
+func TestLegalDocs(t *testing.T) {
+	p, err := parsePost("---\ntitle: Privacy\ndate: 2026-11-15\nsummary: What is collected.\n---\nx\n", "content/legaldocs/privacy.md", "content")
+	if err != nil || p.Section != "legaldocs" || p.Path != "/legaldocs/privacy/" {
+		t.Fatalf("legal doc parsed as section=%q path=%q err=%v", p.Section, p.Path, err)
+	}
+	other := &Post{Section: "legaldocs", Slug: "zz", Title: "Zz", Path: "/legaldocs/zz/"}
+	cards := buildLegalData([]*Post{other, p, {Section: "croquis", Slug: "privacy"}})
+	if len(cards) != 2 || cards[0].(map[string]any)["Href"] != "/legaldocs/privacy/" {
+		t.Errorf("cards = %v", cards)
+	}
+}

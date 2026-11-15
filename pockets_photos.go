@@ -84,6 +84,17 @@ func folderCover(f PhotoFolder) string {
 	return f.Photos[0].ThumbURL
 }
 
+// folderCoverSize is the cover's width (dim 0) or height (dim 1); 0 when unknown.
+func folderCoverSize(f PhotoFolder, dim int) int {
+	if len(f.Photos) == 0 {
+		return 0
+	}
+	if dim == 0 {
+		return f.Photos[0].W
+	}
+	return f.Photos[0].H
+}
+
 // photoYears is the span of years across the folders, e.g. "2016–2021".
 func photoYears(folders []PhotoFolder) string {
 	lo, hi := "", ""

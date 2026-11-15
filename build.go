@@ -176,6 +176,13 @@ func buildStaticSite(
 		}
 	}
 
+	// Legal docs hub (the pages themselves are written with the posts above)
+	if err := writePage("legaldocs/index.html", "LegalPage", map[string]any{
+		"docs": buildLegalData(published),
+	}); err != nil {
+		return err
+	}
+
 	// Pockets index (accordion page)
 	pocketsData := buildPocketsData(pocketPosts)
 

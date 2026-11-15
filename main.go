@@ -75,6 +75,7 @@ func main() {
 	postsByPath := map[string]*Post{}
 	postsByOldPath := map[string]*Post{}
 	pocketPosts := []*Post{}
+	legalPosts := []*Post{}
 	var manifestoPost *Post
 	var allPosts []*Post // all posts for shuffle pool (posts section only)
 
@@ -91,6 +92,8 @@ func main() {
 			allPosts = append(allPosts, p)
 		} else if p.Section == "pockets" {
 			pocketPosts = append(pocketPosts, p)
+		} else if p.Section == "legaldocs" {
+			legalPosts = append(legalPosts, p)
 		} else if p.Path == "/manifesto/" {
 			manifestoPost = p
 		}
@@ -172,6 +175,8 @@ func main() {
 			"Path":     f.Path,
 			"Count":    f.Count,
 			"Cover":    folderCover(f),
+			"CoverW":   folderCoverSize(f, 0),
+			"CoverH":   folderCoverSize(f, 1),
 			"Photos":   toPhotoList(f.Photos),
 		}
 	}
@@ -357,6 +362,21 @@ func main() {
 			"folder": toFolderMap(*folder),
 		}
 		renderPage(w, engine, "PhotoFolderPage", data)
+	})))
+
+	// Legal docs: hub + pages (privacy, cookies, how the site works, newsletter)
+	legalData := buildLegalData(legalPosts)
+	must(router.GET("legal.index", "/legaldocs/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		renderPage(w, engine, "LegalPage", map[string]any{"docs": legalData})
+	})))
+	must(router.GET("legal", "/legaldocs/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		m, _ := dispatch.MatchFromContext(r.Context())
+		post := postsByPath["/legaldocs/"+m.Params["slug"]+"/"]
+		if post == nil {
+			renderNotFound(w, engine)
+			return
+		}
+		renderPage(w, engine, "SinglePage", map[string]any{"post": toPostMap(post), "prevPost": false, "nextPost": false})
 	})))
 
 	// Individual pocket pages
