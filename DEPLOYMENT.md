@@ -41,13 +41,11 @@ Note: `deploy.sh` hard-resets the worktree, so never leave uncommitted or
 unpushed work on the VM — it will be discarded.
 
 The `origin` remote uses a tokenless public HTTPS URL, so deploys need no
-credentials. Pushing *from* the VM uses a GitHub token stored outside the repo
-in `~/.git-credentials` (mode 600) via git's `credential.helper store`.
-To set or rotate that token, run interactively on the VM:
-
-```sh
-~/set-github-token.sh
-```
+credentials, and since 2026-11-15 the VM holds **no GitHub token at all** (no
+`~/.git-credentials`, no `credential.helper`). It can fetch but not push: branch
+clean-up and anything that writes to GitHub happen from a workstation or the
+GitHub UI. If the repo ever goes private, give the VM a fine-grained token
+limited to this repo with **Contents: read-only**.
 
 GitHub Actions cannot be used for deploys: hosted runners can't reach this VM.
 
