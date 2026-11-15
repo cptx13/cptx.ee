@@ -23,7 +23,7 @@
     <div v-if="hasRead">
       <article v-for="p in mostRead" class="post-entry">
         <span class="post-entry-date">{{ p.Day }}</span>
-        <h2 class="post-entry-title"><a :href="p.Path">{{ p.Title }}</a> <span class="pl-count">{{ p.Reads }}</span></h2>
+        <h2 class="post-entry-title"><a :href="p.Path">{{ p.Title }}</a><span class="pl-count rd-reads">{{ p.Reads }}</span></h2>
       </article>
     </div>
     <p v-else class="addons-intro">Nothing read to the end yet.</p>

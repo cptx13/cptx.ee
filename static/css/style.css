@@ -1165,5 +1165,6 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .rd-month { width: 4.5em; }
 .rd-n { width: 4em; }
 .rd-pages { grid-template-columns: 1fr; }
+.rd-reads { margin-left: .8em; font-weight: normal; font-size: .8em; }
 .reads-label { color: var(--content-secondary); }
 #read-marker { height: 1px; }
