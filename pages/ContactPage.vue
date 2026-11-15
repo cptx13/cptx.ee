@@ -1,6 +1,6 @@
 <template>
 <AppLayout :pageTitle="'contact | cptx'" :description="'get in touch'" :canonicalURL="'https://cptx.ee/contact/'" :lang="'en'" :ogType="'website'">
-  <AboutNav :current="'contact'"></AboutNav>
+  <p class="addons-crumb"><a href="/about/">about</a> / contact</p>
   <div style="margin-top: 1.2em;">
     <p style="color: var(--content-secondary); margin-bottom: 2em;">Feel free to reach out.</p>
     <!-- Simple Icons brand marks are solid logos of differing optical weight

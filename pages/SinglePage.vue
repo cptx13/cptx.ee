@@ -2,10 +2,10 @@
 <AppLayout :pageTitle="post.Title + ' | cptx'" :description="post.Description" :canonicalURL="'https://cptx.ee' + post.Path" :lang="post.Lang" :ogType="'article'">
   <article>
     <header class="single-intro-container">
+      <p v-if="post.Path == '/manifesto/'" class="addons-crumb"><a href="/about/">about</a> / manifesto</p>
+      <p v-if="post.Section == 'legaldocs'" class="addons-crumb"><a href="/about/">about</a> / <a href="/legaldocs/">legal docs</a></p>
       <h1 class="single-title">{{ post.Title }}</h1>
       <div v-if="post.Section == 'pockets'" class="single-subsummary"><p class="single-date pk-sub"><a href="/pockets/">← all pockets</a> · updated {{ post.DateFormatted }}</p></div>
-      <AboutNav v-if="post.Path == '/manifesto/'" :current="'manifesto'"></AboutNav>
-      <AboutNav v-if="post.Section == 'legaldocs'" :current="'legal'"></AboutNav>
       <div v-if="post.Section == 'legaldocs'" class="single-subsummary"><p class="single-date pk-sub"><a href="/legaldocs/">← legal docs</a> · updated {{ post.DateFormatted }}</p></div>
       <div v-if="post.Section != 'pockets' && post.Section != 'legaldocs' && (post.Author || post.DateFormatted)" class="single-subsummary">
         <div>

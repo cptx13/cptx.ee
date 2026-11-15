@@ -1227,11 +1227,6 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .site-footer a { color: inherit; }
 .site-footer p { margin: 0; }
 
-/* manifesto · contact · legal docs share one corner */
-.about-nav { font-size: .85em; color: var(--content-secondary); margin: -.2em 0 1.2em; }
-.about-nav a { color: inherit; }
-.about-nav a.about-cur { color: var(--content-primary); text-decoration: none; font-weight: bold; }
-
 /* /newsletter/: digest sections, sign-up form, kiosk of issues */
 .nl-sections { margin: 1.2em 0 1.6em; font-size: .9em; }
 .nl-sections p { margin: .35em 0; }

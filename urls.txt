@@ -1,4 +1,5 @@
 /
+/about/
 /addons/
 /addons/map/
 /addons/places/

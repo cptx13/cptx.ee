@@ -269,6 +269,11 @@ func main() {
 	})))
 
 	// Contact page
+	// About: hub for manifesto, contact and legal docs (same layout as addons)
+	must(router.GET("about", "/about/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		renderPage(w, engine, "AboutPage", map[string]any{})
+	})))
+
 	// Newsletter (batch K): what the digest is, the sign-up form and the kiosk of past issues
 	must(router.GET("newsletter", "/newsletter/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		renderPage(w, engine, "NewsletterPage", map[string]any{})

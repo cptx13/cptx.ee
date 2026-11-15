@@ -8,7 +8,7 @@
   </div>
   <nav class="header-menu" aria-label="Main">
     <p class="small"><a href="/">/home</a></p>
-    <p class="small"><a href="/manifesto/">/manifesto</a></p>
+    <p class="small"><a href="/about/">/about</a></p>
     <p class="small"><a href="/newsletter/">/newsletter</a></p>
     <p class="small"><a href="/categories/croquis/">/croquis</a></p>
     <p class="small"><a href="/categories/recuerdos/">/recuerdos</a></p>
