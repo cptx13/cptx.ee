@@ -16,7 +16,7 @@ To remove it, clear this site's data in your browser settings.
 
 ## Third parties
 
-No page loads anything from another company, so no other company can set cookies through cptx.ee.
+No page loads anything from another company, so no other company can set cookies through cptx.ee. If you subscribe to the [newsletter](/newsletter/), the form takes you to Buttondown for a moment, whose own pages follow its own [privacy policy](https://buttondown.com/legal/privacy).
 
 ## Counting without cookies
 

@@ -13,7 +13,7 @@ cptx.ee is a personal website run by me, Carlos (cptx). This page explains what 
 - No ads, no trackers, no analytics scripts, no social media widgets.
 - No cookies. See [cookies](/legaldocs/cookies/).
 - The site itself does not log your IP address or keep records of your visits; it only keeps daily totals (see [counting readers](#counting-readers)).
-- Nothing on a page loads from another company's servers: fonts, images and scripts all come from cptx.ee.
+- Nothing on a page loads from another company's servers: fonts, images and scripts all come from cptx.ee. The only exception is the newsletter form, which sends your address to Buttondown when you press subscribe.
 - If you subscribe to the newsletter, your email address is kept only for sending it. See [the newsletter](#newsletter).
 
 ## Who is responsible
@@ -35,7 +35,7 @@ No name, no email (unless you subscribe), no account, no location, no device fin
 
 ## Counting readers
 
-The site keeps simple public counts, shown on the [readers](/addons/readers/) page and as "read N times" under each post. They are made on this server, without cookies, scripts from other companies or anything stored in your browser:
+The site keeps simple public counts, shown on the [readers](/addons/readers/) page and as "read N times" under each post and newsletter issue. They are made on this server, without cookies, scripts from other companies or anything stored in your browser:
 
 - **Visits:** each time a page is opened, the total for that page and day goes up by one.
 - **Visitors:** to count how many different people came on a given day, the server mixes your IP address and browser name with a random value that exists only in memory and is replaced every midnight, and keeps the result in memory for that day only. It is never written down, and after midnight it can't be linked to anything.
@@ -52,7 +52,7 @@ The newsletter is everything sent to subscribers by email. Most weeks that is an
 
 - **What is collected:** your email address, and nothing else. No name is needed.
 - **Signing up:** you enter your address in the form on [/newsletter](/newsletter/). Each issue comes in English and Spanish in the same email. You then get one email asking you to confirm, and nothing is sent until you do (double opt-in).
-- **Who sends it:** [Buttondown](https://buttondown.com), a small newsletter service. Your address is stored with Buttondown, in the United States, only to send this newsletter. Its own [privacy policy](https://buttondown.com/legal/privacy) applies to how it keeps that data.
+- **Who sends it:** [Buttondown](https://buttondown.com), a small newsletter service. Your address is stored with Buttondown, in the United States, only to send this newsletter. When you press subscribe, your browser sends the form straight to Buttondown, which also sees your IP address and uses it to keep out spam sign-ups. Its own [privacy policy](https://buttondown.com/legal/privacy) applies to how it keeps that data.
 - **No tracking in the emails:** open and link tracking are switched off. Emails contain no tracking pixels, and links go straight to where they say.
 - **Leaving:** every email has a one-click unsubscribe link, which stops all emails at once. You can also write to [hello@cptx.ee](mailto:hello@cptx.ee) to have your address deleted completely.
 - **Never:** your address is never sold, shared or used for anything other than this newsletter.
@@ -67,4 +67,4 @@ If you live in the EU or the UK you have the right to ask what personal data I h
 
 ## Changes
 
-When something changes (for example when the newsletter goes live), this page is updated and its date changes. The history of every change is public in the site's [source code](https://github.com/cptx13/cptx.ee/commits/main/content/legaldocs).
+When something changes, this page is updated and its date changes. The history of every change is public in the site's [source code](https://github.com/cptx13/cptx.ee/commits/main/content/legaldocs).

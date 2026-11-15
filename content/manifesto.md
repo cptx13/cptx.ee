@@ -51,7 +51,7 @@ My works are organized and distributed using the following system:
 
 - **[photos](/photos/)** are collections of photographs from various places and years, served directly from the server.
 
-- **[addons](/addons/)** are my playground, where I try new features that make the blog more immersive: an [archive map](/addons/map/) of every day I wrote, [what I wrote on this day](/addons/today/) in other years, the [cities that light up](/addons/places/) across my posts and the [words](/addons/words/) I keep coming back to.
+- **[addons](/addons/)** are my playground, where I try new features that make the blog more immersive: an [archive map](/addons/map/) of every day I wrote, [what I wrote on this day](/addons/today/) in other years, the [cities that light up](/addons/places/) across my posts, the [words](/addons/words/) I keep coming back to and the [readers](/addons/readers/) who come by.
 
 - **[pockets](/pockets/)** comprise my daily resources, everything I would carry around if I could.
   - **[bedsidetable](/pockets/bedsidetable/)**: Some books I have enjoyed recently.
@@ -62,3 +62,5 @@ My works are organized and distributed using the following system:
 - **[archives](/archives/)** are the things we keep: mathoms of a more physical kind.
   - **[written by me](/archives/written-by-me/)**: published books—manuscripts that have been formatted, reviewed, and are considered complete.
   - **[library](/archives/library/)**: some of the books Merzeede and I own, shown as covers or spines and shelved by genre, colour, author, decade, language or size. Not all of them have been scanned yet. Records, films and other collections will follow.
+
+- **[newsletter](/newsletter/)** is a weekly issue by email, in English and Spanish: what changed here, what I wrote, what I wrote on the same days in earlier years, and what I have been reading, listening to and watching. Every issue is kept on the [kiosk](/newsletter/kiosk/).

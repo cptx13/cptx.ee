@@ -13,13 +13,13 @@ Everything starts as a note in [Obsidian](https://obsidian.md/), on my own compu
 ## What runs it
 
 - A small program written in [Go](https://go.dev/) turns markdown into pages. It runs on a virtual server rented from [exe.dev](https://exe.dev).
-- Pages are plain HTML and CSS. The few scripts are tiny and only add conveniences (switching the theme, searching the list, sharing a view, browsing photos); every page works without them.
+- Pages are plain HTML and CSS. The few scripts are tiny and only add conveniences (switching the theme, sharing a view, browsing photos, counting a read when you reach the end of a post); every page works without them.
 - The font is [JetBrains Mono](https://www.jetbrains.com/lp/mono/), served from this site.
 - Photos and book covers are stored on the server, not in the repository.
 
 ## What your browser loads
 
-Only files from cptx.ee: the page, one stylesheet, one font in two or four styles, a few small scripts and the images on that page. No ads, no embedded videos or social buttons, no fonts or scripts from other companies, and no analytics service: the [readers](/addons/readers/) counts are made by the site itself, without cookies (see the [privacy policy](/legaldocs/privacy/#counting-readers)).
+Only files from cptx.ee: the page, one stylesheet, one font in two or four styles, a few small scripts and the images on that page. No ads, no embedded videos or social buttons, no fonts or scripts from other companies, and no analytics service (the newsletter form is the one thing that talks to another company, Buttondown, and only when you press subscribe): the [readers](/addons/readers/) counts are made by the site itself, without cookies (see the [privacy policy](/legaldocs/privacy/#counting-readers)).
 
 ## Where some content comes from
 
