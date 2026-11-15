@@ -23,7 +23,7 @@
       <fieldset class="nl-lang">
         <legend>language</legend>
         <label><input type="radio" name="tag" value="en" checked> English</label>
-        <label lang="es"><input type="radio" name="tag" value="es"> español</label>
+        <label lang="es"><input type="radio" name="tag" value="es"> Español</label>
       </fieldset>
       <input type="hidden" name="embed" value="1">
       <p class="nl-note">Only your email address is kept; you confirm by email first, and every email has a one-click unsubscribe. <a class="nl-how" href="/legaldocs/privacy/#newsletter">How the newsletter works&nbsp;→</a></p>
