@@ -1230,16 +1230,22 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .kiosk-ghost:hover { transform: none; }
 .nl-more { font-weight: normal; font-size: .8em; margin-left: .6em; color: var(--content-secondary); }
 .kiosk-issue .kiosk-head { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-/* U: every cover has its own paper (kiosk-p0…p4, in turn) and pattern (inline SVG from newsletter.go) */
-.kiosk-issue { position: relative; overflow: hidden; }
+/* U: magazine covers — masthead with the number, an art panel (inline SVG from
+   newsletter.go, y 26%–68%), the headline below it; palettes kiosk-p0…p4 in turn */
+.kiosk-issue { position: relative; overflow: hidden; container-type: inline-size; padding: 7% 7% 6% 9%; }
 .kiosk-issue > span:not(.kiosk-art-wrap) { position: relative; z-index: 1; }
 .kiosk-art-wrap, .kiosk-art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.kiosk-p0 { background: #ffd166; color: #1a1406 !important; }
-.kiosk-p1 { background: #1d1a14; color: #fff1d6 !important; outline: 1px solid rgba(255, 183, 3, .25); }
-.kiosk-p2 { background: #fff1d0; color: #2a1a00 !important; }
-.kiosk-p3 { background: #e85d04; color: #1a0a00 !important; }
-.kiosk-p4 { background: #6b4a12; color: #fff1d6 !important; }
-.kiosk-issue .kiosk-head { text-wrap: balance; }
+.kiosk-issue .kiosk-mast { display: flex; justify-content: space-between; align-items: baseline; font-size: 15cqw; line-height: 1; border-bottom-width: 1.5px; padding-bottom: 1.5cqw; }
+.kiosk-mast-no { font-size: .8em; letter-spacing: -.04em; }
+.kiosk-issue .kiosk-no { font-size: 5.6cqw; margin-top: 2cqw; letter-spacing: .01em; }
+.kiosk-issue .kiosk-head { margin-top: auto; font-size: 8.4cqw; line-height: 1.15; -webkit-line-clamp: 2; text-wrap: balance; }
+.kiosk-issue .kiosk-date { font-size: 5.4cqw; min-height: 1.2em; margin-top: 1.5cqw; }
+.kiosk-p0 { background: #ffd166; color: #1a1406 !important; } .kiosk-p0 .kiosk-mast-no { color: #9d0208; }
+.kiosk-p1 { background: #1d1a14; color: #fff1d6 !important; outline: 1px solid rgba(255, 183, 3, .25); } .kiosk-p1 .kiosk-mast-no { color: #ffb703; }
+.kiosk-p2 { background: #fff1d0; color: #2a1a00 !important; } .kiosk-p2 .kiosk-mast-no { color: #c45a00; }
+.kiosk-p3 { background: #e85d04; color: #1a0a00 !important; } .kiosk-p3 .kiosk-mast-no { color: #fff1d0; }
+.kiosk-p4 { background: #6b4a12; color: #fff1d6 !important; } .kiosk-p4 .kiosk-mast-no { color: #ffd166; }
+.kiosk-ghost .kiosk-mast { font-size: 1.5em; }
 
 /* F-06: search */
 .toolbar-text { font-size: .8em; color: var(--content-secondary); margin-left: .4em; }

@@ -138,8 +138,10 @@ func main() {
 			"ID":            p.ID,
 			"ReadsLabel":    readsLabel(siteStats.readsOf(p.Path)),
 			"Words":         postWords[p.Path],
-			"Readable":      p.Section == "croquis" || p.Section == "recuerdos" || isIssue(p),
-			"IsIssue":       isIssue(p),
+			"Readable":      p.Section == "croquis" || p.Section == "recuerdos" || isIssue(p) || isIssueES(p),
+			"IsIssue":       isIssue(p) || isIssueES(p),
+			"IssueES":       isIssueES(p),
+			"IssueAltPath":  issueAltPath(p, postsByPath),
 			"IssueLabel":    issueLabel(p.Slug),
 			"PageTitle":     pageTitleFor(p),
 		}
@@ -225,9 +227,13 @@ func main() {
 	coverIdx = addonIdx
 	readerExtras = nil
 	for _, p := range published {
-		if isIssue(p) {
+		if isIssue(p) || isIssueES(p) {
 			readable[p.Path] = true
-			readerExtras = append(readerExtras, addonPost{Title: issueLabel(p.Slug) + ": " + p.Title, Path: p.Path, Section: "newsletter", Day: p.Date.Format("2006-01-02")})
+			title := issueLabel(p.Slug) + ": " + p.Title
+			if isIssueES(p) {
+				title += " (es)"
+			}
+			readerExtras = append(readerExtras, addonPost{Title: title, Path: p.Path, Section: "newsletter", Day: p.Date.Format("2006-01-02")})
 		}
 	}
 	statsDir, geoFile := statsDirs()
@@ -292,6 +298,16 @@ func main() {
 	// Newsletter (batch K): what the digest is, the sign-up form and the kiosk of past issues
 	must(router.GET("newsletter", "/newsletter/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		renderPage(w, engine, "NewsletterPage", newsletterData(published, 3))
+	})))
+	// Spanish versions of the issues: /newsletter/<n>/es/
+	must(router.GET("newsletter.es", "/newsletter/{slug}/es/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		m, _ := dispatch.MatchFromContext(r.Context())
+		post := postsByPath["/newsletter/"+m.Params["slug"]+"/es/"]
+		if post == nil {
+			renderNotFound(w, engine)
+			return
+		}
+		renderPage(w, engine, "SinglePage", map[string]any{"post": toPostMap(post), "prevPost": false, "nextPost": false})
 	})))
 	// /newsletter/kiosk/ and the issues (/newsletter/<n>/) share one pattern
 	must(router.GET("newsletter.page", "/newsletter/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

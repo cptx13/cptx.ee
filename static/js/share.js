@@ -14,7 +14,7 @@
       e.preventDefault();
       navigator.clipboard.writeText(url).then(function () {
         var t = a.textContent;
-        a.textContent = "link copied";
+        a.textContent = a.getAttribute("data-copied") || "link copied";
         setTimeout(function () { a.textContent = t; }, 1600);
       });
     }

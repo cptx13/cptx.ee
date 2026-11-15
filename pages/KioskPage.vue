@@ -7,7 +7,7 @@
     <div class="kiosk">
       <KioskCover v-for="issue in issues" :issue="issue"></KioskCover>
       <div v-if="!hasIssues" class="kiosk-issue kiosk-ghost">
-        <span class="kiosk-mast">cptx</span>
+        <span class="kiosk-mast">cptx<span class="kiosk-mast-no">01</span></span>
         <span class="kiosk-no">issue 01</span>
         <span class="kiosk-head">coming soon</span>
         <span class="kiosk-date">the first issue is on its way</span>

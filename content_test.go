@@ -266,14 +266,35 @@ func TestIssues(t *testing.T) {
 	}
 	words := map[string]int{"2026-11-10": 900, "2026-11-12": 50}
 	a, b := coverArt(one, 1, words), coverArt(one, 1, words)
-	if a != b || !strings.HasPrefix(a, "<svg") || !strings.HasSuffix(a, "</svg>") || !strings.Contains(a, ">01</text>") {
+	if a != b || !strings.HasPrefix(a, "<svg") || !strings.HasSuffix(a, "</svg>") {
 		t.Errorf("coverArt not stable or malformed: %s", a)
 	}
-	if strings.Count(a, `y="186`) != 7 {
+	if strings.Count(a, `y="127`) != 7 {
 		t.Errorf("week strip should have 7 days: %s", a)
 	}
 	d := newsletterData([]*Post{how, one}, 0)
 	if d["issueCount"] != 1 || d["issueCountLabel"] != "1 issue" {
 		t.Errorf("how-it-works counted as an issue: %v", d)
+	}
+}
+
+func TestIssueSpanish(t *testing.T) {
+	es, err := parsePost("---\ntitle: Moviendo los muebles\ndate: 2026-11-15\nlang: es\n---\nTexto.\n", "content/newsletter/001.es.md", "content")
+	if err != nil || es.Path != "/newsletter/1/es/" || es.Slug != "1" || es.Lang != "es" {
+		t.Fatalf("es issue parsed as path=%q slug=%q lang=%q err=%v", es.Path, es.Slug, es.Lang, err)
+	}
+	en := &Post{Section: "newsletter", Slug: "1", Title: "Moving the furniture", Path: "/newsletter/1/", Date: day("2026-11-15")}
+	if isIssue(es) || !isIssueES(es) || !isIssue(en) || isIssueES(en) {
+		t.Errorf("isIssue/isIssueES wrong")
+	}
+	by := map[string]*Post{en.Path: en, es.Path: es}
+	if issueAltPath(en, by) != "/newsletter/1/es/" || issueAltPath(es, by) != "/newsletter/1/" {
+		t.Errorf("alt paths: %q %q", issueAltPath(en, by), issueAltPath(es, by))
+	}
+	if issueAltPath(en, map[string]*Post{en.Path: en}) != "" {
+		t.Errorf("no Spanish version should give no link")
+	}
+	if d := newsletterData([]*Post{en, es}, 0); d["issueCount"] != 1 {
+		t.Errorf("Spanish version counted as its own issue: %v", d)
 	}
 }

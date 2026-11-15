@@ -3,7 +3,8 @@
 
     scripts/newsletter-draft.py [--since YYYY-MM-DD] [--dry-run]
 
-Writes content/newsletter/NNN.md with draft: true (hidden until you publish it):
+Writes content/newsletter/NNN.md and its Spanish version NNN.es.md, both with
+draft: true (hidden until you publish them):
 - "what was written": croquis dated in the period, with their live URLs;
 - "what changed": the site's own changes from the commit history (content commits left out);
 - "what is being written" and "other stuff": left for you to write.
@@ -89,14 +90,26 @@ def main():
     lines += ["", "## what is being written", "", "<!-- drafts in progress, ideas, what might come next -->", "",
               "## other stuff", "", "<!-- weekend reads, music, things worth passing on -->", ""]
     text = "\n".join(lines)
-    path = os.path.join(NEWS, f"{n:03d}.md")
+    # the Spanish version: same lists, Spanish headings, to be translated
+    es = ["---", 'title: "Esta semana en cptx.ee"', "author: cptx", f"date: {today.isoformat()}", "draft: true", "lang: es",
+          f'summary: "{since:%-d %b} – {today:%-d %b %Y}"', "---", "",
+          "<!-- Versión en español de este número (/newsletter/N/es/). Traduce y publica junto con la versión en inglés. -->", "",
+          "## qué ha cambiado", ""]
+    es += [f"- {c}" for c in changes] or ["- (nada nuevo en la web esta semana)"]
+    es += ["", "## qué se ha escrito", ""]
+    es += [f"- [{t}](https://cptx.ee{u}) · {d:%-d %b}" for d, t, u in written] or ["- (ningún croquis nuevo esta semana)"]
+    es += ["", "## qué se está escribiendo", "", "## otras cosas", ""]
+    files = {os.path.join(NEWS, f"{n:03d}.md"): text, os.path.join(NEWS, f"{n:03d}.es.md"): "\n".join(es)}
     if a.dry_run:
-        print(f"--- {path}\n{text}")
+        for path, t in files.items():
+            print(f"--- {path}\n{t}")
         return
-    if os.path.exists(path):
-        sys.exit(f"{path} already exists")
-    open(path, "w", encoding="utf-8").write(text)
-    print(f"drafted {os.path.relpath(path, ROOT)}: {len(written)} croquis, {len(changes)} site changes since {since}")
+    for path in files:
+        if os.path.exists(path):
+            sys.exit(f"{path} already exists")
+    for path, t in files.items():
+        open(path, "w", encoding="utf-8").write(t)
+    print(f"drafted issue {n:02d} (en + es): {len(written)} croquis, {len(changes)} site changes since {since}")
 
 
 if __name__ == "__main__":

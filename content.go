@@ -206,10 +206,16 @@ func parsePost(content, filePath, root string) (*Post, error) {
 			post.Path = "/posts/" + post.Section + "/" + post.Slug + "/"
 		}
 	} else if strings.HasPrefix(relPath, "newsletter/") {
-		// issues: content/newsletter/007.md → /newsletter/7/
+		// issues: content/newsletter/007.md → /newsletter/7/; the Spanish
+		// version 007.es.md → /newsletter/7/es/
 		post.Section = "newsletter"
-		post.Slug = strings.TrimLeft(strings.TrimSuffix(filepath.Base(relPath), ".md"), "0")
+		base := strings.TrimSuffix(filepath.Base(relPath), ".md")
+		es := strings.HasSuffix(base, ".es")
+		post.Slug = strings.TrimLeft(strings.TrimSuffix(base, ".es"), "0")
 		post.Path = "/newsletter/" + post.Slug + "/"
+		if es {
+			post.Path += "es/" // lang comes from frontmatter (lang: es) or detection
+		}
 	} else if strings.HasPrefix(relPath, "legaldocs/") {
 		post.Section = "legaldocs"
 		post.Slug = slugify(strings.TrimSuffix(filepath.Base(relPath), ".md"))

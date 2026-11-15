@@ -13,13 +13,41 @@ import (
 	"strings"
 )
 
-// isIssue reports whether p is a weekly issue (a numbered file in content/newsletter/).
+// isIssue reports whether p is a weekly issue (a numbered file in content/newsletter/),
+// in English. Its Spanish version (NNN.es.md, /newsletter/<n>/es/) is isIssueES.
 func isIssue(p *Post) bool {
+	return isNumberedNewsletter(p) && !strings.HasSuffix(p.Path, "/es/")
+}
+
+// isIssueES reports whether p is the Spanish version of an issue.
+func isIssueES(p *Post) bool {
+	return isNumberedNewsletter(p) && strings.HasSuffix(p.Path, "/es/")
+}
+
+func isNumberedNewsletter(p *Post) bool {
 	if p.Section != "newsletter" {
 		return false
 	}
 	_, err := strconv.Atoi(p.Slug)
 	return err == nil
+}
+
+// issueAltPath gives, for an issue or its Spanish version, the path of the
+// other language when it exists ("" otherwise).
+func issueAltPath(p *Post, byPath map[string]*Post) string {
+	alt := ""
+	switch {
+	case isIssue(p):
+		alt = p.Path + "es/"
+	case isIssueES(p):
+		alt = strings.TrimSuffix(p.Path, "es/")
+	default:
+		return ""
+	}
+	if q, ok := byPath[alt]; ok && !q.Draft {
+		return alt
+	}
+	return ""
 }
 
 // issueLabel: "1" → "issue 01".
@@ -37,7 +65,7 @@ var coverIdx []addonPost
 
 // pageTitleFor is a post's <title>: "Title | cptx", "issue 01: Title | cptx".
 func pageTitleFor(p *Post) string {
-	if isIssue(p) {
+	if isIssue(p) || isIssueES(p) {
 		return issueLabel(p.Slug) + ": " + p.Title + " | cptx"
 	}
 	return p.Title + " | cptx"
@@ -65,7 +93,7 @@ func newsletterIssues(posts []*Post) []any {
 		_, week := p.Date.ISOWeek()
 		n, _ := strconv.Atoi(p.Slug)
 		out[i] = map[string]any{
-			"No": p.Slug, "Label": issueLabel(p.Slug), "Title": p.Title, "Path": p.Path,
+			"No": p.Slug, "NoPadded": fmt.Sprintf("%02d", n), "Label": issueLabel(p.Slug), "Title": p.Title, "Path": p.Path,
 			"Date": p.Date.Format("2 Jan 2006"), "Week": "week " + strconv.Itoa(week),
 			"Summary": p.Summary, "Reads": readsLabel(siteStats.readsOf(p.Path)),
 			"Palette": "kiosk-p" + strconv.Itoa((n-1+len(coverPalettes))%len(coverPalettes)),
@@ -93,88 +121,122 @@ func issueCountLabel(n int) string {
 	return strconv.Itoa(n) + " issues"
 }
 
-// coverPalettes: paper / shapes / soft shapes, one per issue in turn (CSS
-// classes kiosk-p0…p4 set the paper and text colour to match).
-var coverPalettes = [][3]string{
-	{"#ffd166", "#e85d04", "#ffb703"}, // amber paper, orange shapes
-	{"#1d1a14", "#ffb703", "#6b4a12"}, // ink paper, amber shapes
-	{"#fff1d0", "#f48c06", "#fbb454"}, // cream paper, tangerine shapes
-	{"#e85d04", "#ffd166", "#9d0208"}, // orange paper, butter shapes
-	{"#6b4a12", "#ffd166", "#b07a12"}, // bronze paper, butter shapes
+// coverPalettes: paper, then three art colours (a, b, and c for the art
+// panel's ground), one palette per issue in turn. CSS classes kiosk-p0…p4 set
+// the matching text colours.
+var coverPalettes = [][4]string{
+	{"#ffd166", "#e85d04", "#9d0208", "#fff1d0"}, // amber paper
+	{"#1d1a14", "#ffb703", "#e85d04", "#3a2a0c"}, // ink paper
+	{"#fff1d0", "#f48c06", "#6b4a12", "#fbb454"}, // cream paper
+	{"#e85d04", "#ffd166", "#3a2a0c", "#9d0208"}, // orange paper
+	{"#6b4a12", "#ffd166", "#e85d04", "#3a2a0c"}, // bronze paper
 }
 
-// coverArt draws an issue's cover pattern as an inline SVG (viewBox 150×200,
-// behind the cover's text). Each issue gets a motif picked from its title and
-// number, the issue number as a large outlined numeral, and a strip of seven
-// tiles for the days of its week, lit by how much was written each day.
+// coverArt draws an issue's cover as an inline SVG (viewBox 150×200) behind
+// its text: a paper grain, a darker spine, a full-width art panel (y 52–136)
+// with one of six motifs picked from the title and number, and a label with
+// seven tiles for the days of the issue's week, lit by how much was written.
+// The masthead (with the number) and the headline sit above and below the
+// panel, so the art never runs under text.
 func coverArt(p *Post, n int, wordsByDay map[string]int) string {
 	pal := coverPalettes[(n-1+len(coverPalettes))%len(coverPalettes)]
-	strong, soft := pal[1], pal[2]
+	paper, a, bb, c := pal[0], pal[1], pal[2], pal[3]
 	h := fnv.New32a()
 	h.Write([]byte(p.Title + "|" + p.Slug))
 	seed := h.Sum32()
 	var b strings.Builder
 	b.WriteString(`<svg class="kiosk-art" viewBox="0 0 150 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">`)
+	fmt.Fprintf(&b, `<defs><clipPath id="kc%d"><rect x="0" y="52" width="150" height="84"/></clipPath>`+
+		`<filter id="kg%d"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs>`, n, n)
+	fmt.Fprintf(&b, `<rect width="150" height="200" fill="%s"/>`, paper)
+	fmt.Fprintf(&b, `<g clip-path="url(#kc%d)"><rect x="0" y="52" width="150" height="84" fill="%s"/>`, n, c)
 
-	// Shapes stay in the clear zone (x ≥ 60, y 50–135) so they never sit under
-	// the masthead, the issue line or the headline.
-	fmt.Fprintf(&b, `<defs><clipPath id="kc%d"><rect x="60" y="50" width="90" height="86"/></clipPath></defs><g clip-path="url(#kc%d)">`, n, n)
-	switch seed % 5 {
-	case 0: // concentric arcs around a point on the right edge
-		for r := 20; r <= 80; r += 15 {
-			fmt.Fprintf(&b, `<circle cx="150" cy="93" r="%d" fill="none" stroke="%s" stroke-width="6" opacity="%.2f"/>`, r, strong, 1-float64(r)/110)
+	switch seed % 6 {
+	case 0: // sun over a horizon, with rays
+		for i := 0; i < 12; i++ {
+			fmt.Fprintf(&b, `<rect x="104" y="117" width="120" height="3" fill="%s" transform="rotate(%d 104 118)"/>`, bb, 180+i*15)
 		}
-	case 1: // dot grid that grows towards the top right
-		for y := 0; y < 5; y++ {
-			for x := 0; x < 4; x++ {
-				rad := 1.4 + float64(x+5-y)*0.55
-				fmt.Fprintf(&b, `<circle cx="%d" cy="%d" r="%.1f" fill="%s"/>`, 72+x*22, 60+y*18, rad, strong)
-			}
+		fmt.Fprintf(&b, `<circle cx="104" cy="118" r="30" fill="%s"/><rect x="0" y="118" width="150" height="18" fill="%s"/>`, a, bb)
+		for i := 0; i < 3; i++ {
+			fmt.Fprintf(&b, `<rect x="0" y="%d" width="150" height="1.6" fill="%s"/>`, 122+i*5, c)
 		}
-	case 2: // diagonal stripes
-		b.WriteString(`<g transform="rotate(-30 105 93)">`)
-		for i := 0; i < 9; i++ {
-			c := strong
+	case 1: // a rainbow of half rings rising from the bottom edge
+		for i, r := range []int{70, 58, 46, 34, 22} {
+			col := a
 			if i%2 == 1 {
-				c = soft
+				col = bb
 			}
-			fmt.Fprintf(&b, `<rect x="20" y="%d" width="170" height="8" fill="%s"/>`, 30+i*14, c)
+			fmt.Fprintf(&b, `<circle cx="%d" cy="136" r="%d" fill="%s"/>`, 40+int(seed%70), r, col)
+		}
+		fmt.Fprintf(&b, `<circle cx="%d" cy="136" r="10" fill="%s"/>`, 40+int(seed%70), c)
+	case 2: // bold diagonal stripes
+		b.WriteString(`<g transform="rotate(-35 75 94)">`)
+		for i := 0; i < 12; i++ {
+			col := a
+			if i%3 == 1 {
+				col = bb
+			} else if i%3 == 2 {
+				continue
+			}
+			fmt.Fprintf(&b, `<rect x="-40" y="%d" width="230" height="10" fill="%s"/>`, 6+i*15, col)
 		}
 		b.WriteString(`</g>`)
-	case 3: // rising sun: half disc and rays on the right edge
-		for i := 0; i < 9; i++ {
-			fmt.Fprintf(&b, `<rect x="150" y="91" width="90" height="4" rx="2" fill="%s" transform="rotate(%d 150 93)"/>`, soft, 100+i*20)
-		}
-		fmt.Fprintf(&b, `<circle cx="150" cy="93" r="30" fill="%s"/>`, strong)
-	default: // checker of rounded tiles
-		for y := 0; y < 4; y++ {
-			for x := 0; x < 4; x++ {
-				if (x+y)%2 == 0 {
-					fmt.Fprintf(&b, `<rect x="%d" y="%d" width="16" height="16" rx="3" fill="%s"/>`, 70+x*20, 54+y*20, strong)
-				} else if (x*y+int(seed))%3 == 0 {
-					fmt.Fprintf(&b, `<rect x="%d" y="%d" width="16" height="16" rx="3" fill="%s"/>`, 70+x*20, 54+y*20, soft)
+	case 3: // Bauhaus tiles: quarter circles turned by the seed
+		k := 0
+		for y := 52; y < 136; y += 21 {
+			for x := 0; x < 150; x += 21 {
+				r := (seed >> (uint(k) % 29)) & 3
+				col := a
+				if (seed>>(uint(k+7)%29))&1 == 1 {
+					col = bb
 				}
+				cx, cy := x, y
+				switch r {
+				case 1:
+					cx = x + 21
+				case 2:
+					cx, cy = x+21, y+21
+				case 3:
+					cy = y + 21
+				}
+				fmt.Fprintf(&b, `<clipPath id="kt%d-%d"><rect x="%d" y="%d" width="21" height="21"/></clipPath><circle clip-path="url(#kt%d-%d)" cx="%d" cy="%d" r="21" fill="%s"/>`, n, k, x, y, n, k, cx, cy, col)
+				k++
 			}
 		}
+	case 4: // hills under a moon
+		fmt.Fprintf(&b, `<circle cx="%d" cy="72" r="11" fill="%s"/>`, 30+int(seed%90), a)
+		fmt.Fprintf(&b, `<ellipse cx="40" cy="140" rx="80" ry="38" fill="%s"/>`, bb)
+		fmt.Fprintf(&b, `<ellipse cx="125" cy="146" rx="70" ry="36" fill="%s"/>`, a)
+		fmt.Fprintf(&b, `<ellipse cx="70" cy="150" rx="60" ry="22" fill="%s" opacity=".85"/>`, bb)
+	default: // halftone: dots growing across the panel
+		for y := 0; y < 6; y++ {
+			for x := 0; x < 11; x++ {
+				r := 0.6 + float64(x)*0.62 + float64(y%2)*0.3
+				fmt.Fprintf(&b, `<circle cx="%d" cy="%d" r="%.1f" fill="%s"/>`, 7+x*14+(y%2)*7, 58+y*14, r, a)
+			}
+		}
+		fmt.Fprintf(&b, `<rect x="0" y="126" width="150" height="10" fill="%s"/>`, bb)
 	}
 	b.WriteString(`</g>`)
 
-	// the issue number, large and outlined
-	fmt.Fprintf(&b, `<text x="146" y="134" text-anchor="end" font-family="JetBrains Mono, monospace" font-weight="700" font-size="58" fill="none" stroke="%s" stroke-width="1.3" opacity=".5">%02d</text>`, strong, n)
+	// spine and grain
+	b.WriteString(`<rect width="3.5" height="200" fill="#000" opacity=".18"/>`)
+	fmt.Fprintf(&b, `<rect width="150" height="200" filter="url(#kg%d)" opacity=".09" style="mix-blend-mode:multiply"/>`, n)
 
-	// the week: Monday … Sunday of the issue's ISO week
+	// the week, Monday … Sunday, on a paper label in the panel's corner
 	wd := int(p.Date.Weekday()+6) % 7 // Monday = 0
 	monday := p.Date.AddDate(0, 0, -wd)
+	fmt.Fprintf(&b, `<rect x="6" y="124" width="56" height="12" fill="%s"/>`, paper)
 	for d := 0; d < 7; d++ {
 		w := wordsByDay[monday.AddDate(0, 0, d).Format("2006-01-02")]
-		x := 92 + d*7
+		x := 10 + d*7
 		switch {
 		case w >= 400:
-			fmt.Fprintf(&b, `<rect x="%d" y="186" width="5" height="5" rx="1" fill="%s"/>`, x, strong)
+			fmt.Fprintf(&b, `<rect x="%d" y="127" width="5" height="5" rx="1" fill="%s"/>`, x, a)
 		case w > 0:
-			fmt.Fprintf(&b, `<rect x="%d" y="186" width="5" height="5" rx="1" fill="%s"/>`, x, soft)
+			fmt.Fprintf(&b, `<rect x="%d" y="127" width="5" height="5" rx="1" fill="%s"/>`, x, bb)
 		default:
-			fmt.Fprintf(&b, `<rect x="%d.5" y="186.5" width="4" height="4" rx="1" fill="none" stroke="%s" stroke-width=".8" opacity=".6"/>`, x, strong)
+			fmt.Fprintf(&b, `<rect x="%d.5" y="127.5" width="4" height="4" rx="1" fill="none" stroke="%s" stroke-width=".8" opacity=".7"/>`, x, a)
 		}
 	}
 	b.WriteString(`</svg>`)

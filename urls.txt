@@ -340,6 +340,7 @@
 /manifesto/
 /newsletter/
 /newsletter/1/
+/newsletter/1/es/
 /newsletter/kiosk/
 /pockets/
 /pockets/bedsidetable/
