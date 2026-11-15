@@ -340,6 +340,7 @@
 /legaldocs/privacy/
 /manifesto/
 /newsletter/
+/newsletter/kiosk/
 /pockets/
 /pockets/bedsidetable/
 /pockets/cheatsheet/

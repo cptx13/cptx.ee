@@ -276,7 +276,21 @@ func main() {
 
 	// Newsletter (batch K): what the digest is, the sign-up form and the kiosk of past issues
 	must(router.GET("newsletter", "/newsletter/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		renderPage(w, engine, "NewsletterPage", map[string]any{})
+		renderPage(w, engine, "NewsletterPage", newsletterData(published, 3))
+	})))
+	// /newsletter/kiosk/ and the issues (/newsletter/<n>/) share one pattern
+	must(router.GET("newsletter.page", "/newsletter/{slug}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		m, _ := dispatch.MatchFromContext(r.Context())
+		if m.Params["slug"] == "kiosk" {
+			renderPage(w, engine, "KioskPage", newsletterData(published, 0))
+			return
+		}
+		post := postsByPath["/newsletter/"+m.Params["slug"]+"/"]
+		if post == nil {
+			renderNotFound(w, engine)
+			return
+		}
+		renderPage(w, engine, "SinglePage", map[string]any{"post": toPostMap(post), "prevPost": false, "nextPost": false})
 	})))
 
 	must(router.GET("contact", "/contact/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

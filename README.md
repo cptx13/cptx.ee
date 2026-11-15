@@ -50,6 +50,7 @@ content/*.md ──► GitHub (main) ──► check ──► VM pulls, builds,
 | `addons.go`, `places.go`, `words.go` | The addons |
 | `library.go` | Archives and library pages |
 | `stats.go`, `geo.go` | Readers' counters: visits, reads, countries, without cookies (`/addons/readers/`) |
+| `newsletter.go` | Newsletter issues and the kiosk (`/newsletter/`) |
 | `legal.go` | `/legaldocs/` (privacy, cookies, how it works, newsletter) |
 | `feeds.go`, `photos.go`, `pockets_photos.go` | Reading-list feeds, photos, pockets |
 | `scripts/` | `check.sh`, URL snapshot, smoke test, link check, library import |

@@ -199,3 +199,20 @@ func TestLegalDocs(t *testing.T) {
 		t.Errorf("cards = %v", cards)
 	}
 }
+
+func TestNewsletterIssues(t *testing.T) {
+	p, err := parsePost("---\ntitle: Autumn notes\ndate: 2026-11-16\n---\n## what changed\n", "content/newsletter/007.md", "content")
+	if err != nil || p.Section != "newsletter" || p.Path != "/newsletter/7/" || p.Slug != "7" {
+		t.Fatalf("issue parsed as section=%q path=%q err=%v", p.Section, p.Path, err)
+	}
+	old := &Post{Section: "newsletter", Slug: "6", Title: "Earlier", Path: "/newsletter/6/", Date: day("2026-11-09")}
+	draft := &Post{Section: "newsletter", Slug: "8", Draft: true}
+	d := newsletterData([]*Post{old, p, draft, {Section: "croquis", Slug: "9"}}, 1)
+	issues := d["issues"].([]any)
+	if len(issues) != 1 || issues[0].(map[string]any)["No"] != "7" || d["issueCount"] != 2 || d["hasMore"] != true {
+		t.Errorf("newsletter data = %v", d)
+	}
+	if w := issues[0].(map[string]any)["Week"]; w != "week 47" {
+		t.Errorf("week = %v", w)
+	}
+}

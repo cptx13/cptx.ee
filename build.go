@@ -91,7 +91,10 @@ func buildStaticSite(
 	if err := writePage("about/index.html", "AboutPage", map[string]any{}); err != nil {
 		return err
 	}
-	if err := writePage("newsletter/index.html", "NewsletterPage", map[string]any{}); err != nil {
+	if err := writePage("newsletter/index.html", "NewsletterPage", newsletterData(published, 3)); err != nil {
+		return err
+	}
+	if err := writePage("newsletter/kiosk/index.html", "KioskPage", newsletterData(published, 0)); err != nil {
 		return err
 	}
 	if err := writePage("contact/index.html", "ContactPage", map[string]any{}); err != nil {
