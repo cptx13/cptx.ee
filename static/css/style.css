@@ -1230,7 +1230,7 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 }
 
 @media (max-width: 420px) {
-    .header-menu { gap: .2em .75em; font-size: .78em; }
+    .header-menu { gap: .2em .6em; font-size: .74em; }
 }
 
 /* D-03: home as an index */
