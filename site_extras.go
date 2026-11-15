@@ -415,17 +415,21 @@ func withGzip(next http.Handler) http.Handler {
 	})
 }
 
-// pathOnly hands a request to h with its RequestURI cut to the escaped path,
-// for routers that match the RequestURI (query strings would make them miss).
-// r.URL, and so r.URL.Query(), is unchanged.
+// pathOnly hands a request to h without its query string, for routers that
+// match the whole request URI (dispatch uses r.URL.RequestURI(), so
+// "/croquis/?x=1" or Buttondown's "/newsletter/thanks/?email=…" would 404).
+// Pages that read a query (search, addons, library) are on the plain mux.
 func pathOnly(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.RawQuery != "" || strings.Contains(r.RequestURI, "?") {
-			r2 := r.Clone(r.Context())
-			r2.RequestURI = r.URL.EscapedPath()
-			h.ServeHTTP(w, r2)
+		if r.URL.RawQuery == "" && !r.URL.ForceQuery {
+			h.ServeHTTP(w, r)
 			return
 		}
-		h.ServeHTTP(w, r)
+		r2 := r.Clone(r.Context())
+		u := *r.URL
+		u.RawQuery, u.ForceQuery = "", false
+		r2.URL = &u
+		r2.RequestURI = u.RequestURI()
+		h.ServeHTTP(w, r2)
 	})
 }

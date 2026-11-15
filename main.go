@@ -72,7 +72,7 @@ func main() {
 	routes := dispatch.New()
 	// dispatch matches against the whole RequestURI, so "/croquis/?x=1" or
 	// Buttondown's "/newsletter/thanks/?email=…" would 404. Match on the path
-	// alone; handlers still read the query from r.URL.
+	// alone; pages that need the query are on the plain mux.
 	router := pathOnly(routes)
 
 	// Group posts by section and category
