@@ -3,7 +3,7 @@
   <div class="list-container addons">
     <p class="addons-crumb"><a href="/newsletter/">newsletter</a> / kiosk</p>
     <h1 class="addons-title">kiosk</h1>
-    <p class="addons-intro"><span v-if="hasIssues">{{ issueCount }} issues, newest first. Pick one up.</span><span v-else>Every issue of the newsletter ends up here, newest first.</span></p>
+    <p class="addons-intro"><span v-if="hasIssues">{{ issueCountLabel }}, newest first. Pick one up.</span><span v-else>Every issue of the newsletter ends up here, newest first.</span></p>
     <div class="kiosk">
       <KioskCover v-for="issue in issues" :issue="issue"></KioskCover>
       <div v-if="!hasIssues" class="kiosk-issue kiosk-ghost">

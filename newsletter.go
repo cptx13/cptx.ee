@@ -42,5 +42,13 @@ func newsletterData(posts []*Post, latest int) map[string]any {
 	if latest > 0 && len(shown) > latest {
 		shown = shown[:latest]
 	}
-	return map[string]any{"issues": shown, "hasIssues": len(all) > 0, "issueCount": len(all), "hasMore": len(all) > len(shown)}
+	return map[string]any{"issues": shown, "hasIssues": len(all) > 0, "issueCount": len(all), "issueCountLabel": issueCountLabel(len(all)), "hasMore": len(all) > len(shown)}
+}
+
+// issueCountLabel: "1 issue", "2 issues".
+func issueCountLabel(n int) string {
+	if n == 1 {
+		return "1 issue"
+	}
+	return strconv.Itoa(n) + " issues"
 }
