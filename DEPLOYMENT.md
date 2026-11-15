@@ -160,7 +160,7 @@ Manual live check: `scripts/smoke.sh [https://cptx.ee] [commit]`.
 
 `data/library/books.json` is in git; covers and thumbnails live only on the VM in
 `~/cptx-data/library` (outside the repo, so deploys never touch them). Fetches run
-on the VM — Claude's workspace can't reach Open Library or Google Books.
+on the VM.
 
 1. **Export** the books library from Libib as CSV.
 2. **Trim** it to the public columns, same header as today:
