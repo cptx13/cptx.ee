@@ -3,8 +3,11 @@ package main
 // A-01…A-04: country lookup, counting rules, persistence, readers page data.
 
 import (
+	"compress/gzip"
 	"net/http/httptest"
 	"net/netip"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -62,5 +65,19 @@ func TestStats(t *testing.T) {
 	r.Header.Set("X-Forwarded-For", "1.2.3.4, 5.6.7.8")
 	if isBot(r) || clientIP(r) != "5.6.7.8" {
 		t.Error("ua/ip")
+	}
+}
+
+func TestLoadGeoGzip(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "x.part.gz")
+	f, _ := os.Create(path)
+	gz := gzip.NewWriter(f)
+	gz.Write([]byte("0.0.0.0,0.255.255.255,ZZ\n1.0.0.0,1.0.0.255,AU\n"))
+	gz.Close()
+	f.Close()
+	g, err := loadGeoFile(path)
+	if err != nil || g.lookup(netip.MustParseAddr("1.0.0.1")) != "AU" {
+		t.Fatalf("gzip load: %v", err)
 	}
 }

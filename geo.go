@@ -191,7 +191,7 @@ func (k *geoKeeper) download() error {
 			resp.Body.Close()
 			return err
 		}
-		tmp := k.path + ".tmp"
+		tmp := strings.TrimSuffix(k.path, ".gz") + ".part.gz" // keeps .gz so the check below unzips it
 		out, err := os.Create(tmp)
 		if err != nil {
 			resp.Body.Close()
