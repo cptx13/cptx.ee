@@ -245,9 +245,6 @@ func main() {
 	}
 	// F-06: site-wide search over posts' full text and the library
 	searchIdx := buildSearchIndex(addonIdx, postTexts, lib)
-	must(router.GET("search", "/search/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		renderPage(w, engine, "SearchPage", searchData(searchIdx, r.URL.Query().Get("q")))
-	})))
 
 	must(router.GET("home", "/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		otd, hasOTD := homeOnThisDay(addonIdx, time.Now())
@@ -467,6 +464,15 @@ func main() {
 	staticFS := http.FileServer(http.Dir("static"))
 	mux := http.NewServeMux()
 	mux.Handle("/css/", staticFS)
+	// F-06: on the mux, not the dispatch router, because dispatch matches the
+	// whole RequestURI and /search/?q=… would 404 (same as the addons).
+	mux.HandleFunc("/search/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/search/" {
+			renderNotFound(w, engine)
+			return
+		}
+		renderPage(w, engine, "SearchPage", searchData(searchIdx, r.URL.Query().Get("q")))
+	})
 	mux.Handle("/fonts/", staticFS)
 	mux.Handle("/js/", staticFS)
 	mux.Handle("/favicon.ico", staticFS)
