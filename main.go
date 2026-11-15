@@ -6,9 +6,11 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"sort"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/dhamidi/dispatch"
@@ -101,6 +103,8 @@ func main() {
 
 	allPostsForPool := allPosts
 
+	postWords := map[string]int{} // filled once below; used by the read beacon (A-02)
+
 	// Post data as maps for templates
 	toPostMap := func(p *Post) map[string]any {
 		tags := make([]any, len(p.Tags))
@@ -132,6 +136,9 @@ func main() {
 			"TOC":           p.TOC,
 			"Categories":    categories,
 			"ID":            p.ID,
+			"ReadsLabel":    readsLabel(siteStats.readsOf(p.Path)),
+			"Words":         postWords[p.Path],
+			"Readable":      p.Section == "croquis" || p.Section == "recuerdos",
 		}
 	}
 
@@ -204,7 +211,33 @@ func main() {
 	postTexts := map[string]string{}
 	for _, p := range published {
 		postTexts[p.Path] = plainText(string(p.Content))
+		postWords[p.Path] = len(strings.Fields(postTexts[p.Path]))
 	}
+	// A-01…A-04: readers' counters (visits, reads, countries)
+	readable := map[string]bool{}
+	for _, p := range addonIdx {
+		readable[p.Path] = true
+	}
+	statsDir, geoFile := statsDirs()
+	geo := &geoKeeper{path: geoFile}
+	if geoFile != "" {
+		geo.load()
+		if statsDir != "" {
+			go geo.refreshLoop()
+		}
+	}
+	siteStats = newStatsStore(statsDir, readable, geo)
+	if statsDir != "" {
+		go siteStats.saveLoop()
+	}
+	go func() { // save the day's totals when systemd stops or restarts the server
+		sig := make(chan os.Signal, 1)
+		signal.Notify(sig, syscall.SIGTERM, os.Interrupt)
+		<-sig
+		siteStats.save()
+		os.Exit(0)
+	}()
+
 	lib, err := loadLibrary(libraryDir(), addonIdx, postTexts) // L-01
 	if err != nil {
 		log.Printf("library: %v", err)
@@ -487,6 +520,7 @@ func main() {
 	rssXML := buildRSS(published, 20)
 	var sitemapXML []byte // filled after the static build below
 	mux.HandleFunc("/healthz", healthHandler(postCount, started))
+	mux.HandleFunc("/_read", readHandler) // A-02: read beacon
 	registerAddons(mux, func(w http.ResponseWriter, c string, d map[string]any) { renderPage(w, engine, c, d) }, addonIdx, addonTagList)
 	registerLibrary(mux, func(w http.ResponseWriter, c string, d map[string]any) { renderPage(w, engine, c, d) },
 		func(w http.ResponseWriter, r *http.Request) { renderNotFound(w, engine) }, lib)
@@ -527,7 +561,7 @@ func main() {
 		addr = ":" + p
 	}
 	log.Printf("Serving on http://localhost%s", addr)
-	log.Fatal(http.ListenAndServe(addr, withGzip(withHeaders(mux))))
+	log.Fatal(http.ListenAndServe(addr, withGzip(withHeaders(withStats(mux)))))
 }
 
 func renderPage(w http.ResponseWriter, engine *htmlc.Engine, component string, data map[string]any) {

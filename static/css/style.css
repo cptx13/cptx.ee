@@ -1160,3 +1160,10 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
     .ic-card { gap: .75em; }
     .line-icon { width: 1.5em; height: 1.5em; }
 }
+
+/* === readers addon (A-04) === */
+.rd-month { width: 4.5em; }
+.rd-n { width: 4em; }
+.rd-pages { grid-template-columns: 1fr; }
+.reads-label { color: var(--content-secondary); }
+#read-marker { height: 1px; }

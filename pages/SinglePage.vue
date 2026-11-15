@@ -10,6 +10,7 @@
           <p class="single-date">
             <span v-if="post.Author">{{ post.Author }} / </span>
             <time v-if="post.DateFormatted">{{ post.DateFormatted }}</time>
+            <span v-if="post.ReadsLabel" class="reads-label"> · {{ post.ReadsLabel }}</span>
             <span v-if="post.ShowTags && post.Tags && post.Tags.length > 0">
               &nbsp;/&nbsp;
               <span v-for="(tag, i) in post.Tags"><span v-if="i > 0">, </span>#{{ tag }}</span>
@@ -19,10 +20,12 @@
       </div>
     </header>
     <div :class="post.ContentClass" v-html="post.Content"></div>
+    <div v-if="post.Readable" id="read-marker" :data-path="post.Path" :data-words="post.Words" aria-hidden="true"></div>
   </article>
   <Pagination :prevPost="prevPost" :nextPost="nextPost"></Pagination>
   <div class="back-to-top">
     <a href="#top">back to top</a>
   </div>
+  <script src="/js/read.js" defer></script>
 </AppLayout>
 </template>

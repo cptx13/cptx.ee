@@ -405,6 +405,13 @@ func registerAddons(mux *http.ServeMux, render func(http.ResponseWriter, string,
 		}
 		render(w, "WordsPage", buildWordsData(idx, r.URL.Query()))
 	})
+	mux.HandleFunc("/addons/readers/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/addons/readers/" {
+			http.NotFound(w, r)
+			return
+		}
+		render(w, "ReadersPage", buildReadersData(siteStats, idx, time.Now()))
+	})
 	mux.HandleFunc("/addons/today/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/addons/today/" {
 			http.NotFound(w, r)
@@ -439,11 +446,12 @@ func writeAddonPages(engine *htmlc.Engine, distDir string, idx []addonPost, tags
 		comp string
 		data map[string]any
 	}{
-		"addons":        {"AddonsPage", map[string]any{"count": len(idx)}},
-		"addons/map":    {"MapPage", buildMapData(idx, tags, url.Values{})},
-		"addons/today":  {"TodayPage", buildTodayData(idx, url.Values{}, time.Now())},
-		"addons/places": {"PlacesPage", buildPlacesData(idx, url.Values{})},
-		"addons/words":  {"WordsPage", buildWordsData(idx, url.Values{})},
+		"addons":         {"AddonsPage", map[string]any{"count": len(idx)}},
+		"addons/map":     {"MapPage", buildMapData(idx, tags, url.Values{})},
+		"addons/today":   {"TodayPage", buildTodayData(idx, url.Values{}, time.Now())},
+		"addons/places":  {"PlacesPage", buildPlacesData(idx, url.Values{})},
+		"addons/words":   {"WordsPage", buildWordsData(idx, url.Values{})},
+		"addons/readers": {"ReadersPage", buildReadersData(siteStats, idx, time.Now())},
 	}
 	for dir, pg := range pages {
 		html, err := engine.RenderPageString(pg.comp, pg.data)

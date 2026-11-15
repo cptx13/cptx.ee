@@ -19,13 +19,14 @@ Everything starts as a note in [Obsidian](https://obsidian.md/), on my own compu
 
 ## What your browser loads
 
-Only files from cptx.ee: the page, one stylesheet, one font in two or four styles, a few small scripts and the images on that page. No analytics, no ads, no embedded videos or social buttons, no fonts or scripts from other companies.
+Only files from cptx.ee: the page, one stylesheet, one font in two or four styles, a few small scripts and the images on that page. No ads, no embedded videos or social buttons, no fonts or scripts from other companies, and no analytics service: the [readers](/addons/readers/) counts are made by the site itself, without cookies (see the [privacy policy](/legaldocs/privacy/#counting-readers)).
 
 ## Where some content comes from
 
 - **The library** uses book details and covers from [Open Library](https://openlibrary.org) and Google Books. They were fetched once by the server; your browser doesn't contact them.
 - **The cheatsheet's reading list** is collected by the server from the blogs' public RSS feeds a few times a day.
 - **City lights** finds place names in the posts themselves.
+- **Readers' countries** come from [DB-IP](https://db-ip.com)'s free country list (CC BY 4.0), a file the server downloads once a month and checks locally.
 
 ## Feeds and archives
 

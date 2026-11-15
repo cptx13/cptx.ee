@@ -2,6 +2,7 @@
 /addons/
 /addons/map/
 /addons/places/
+/addons/readers/
 /addons/today/
 /addons/words/
 /archives/

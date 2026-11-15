@@ -31,6 +31,13 @@
       <span class="addon-card-desc">The words used most, without articles or pronouns, as a heatmap. Tap a word to see it year by year.</span>
     </span>
     </a>
+    <a class="addon-card ic-card" href="/addons/readers/">
+      <LineIcon :name="'eye'"></LineIcon>
+      <span class="ic-text">
+      <span class="addon-card-title">readers →</span>
+      <span class="addon-card-desc">Who comes by, counted without cookies: visits month by month, the most read posts, and a map of where readers are.</span>
+    </span>
+    </a>
   </div>
 </AppLayout>
 </template>

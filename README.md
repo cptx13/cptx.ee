@@ -23,7 +23,7 @@ New croquis are also published as an [RSS feed](https://cptx.ee/index.xml).
 
 ## How it works
 
-A small Go server renders markdown into HTML pages. No JavaScript framework, no database and no trackers; the few scripts are small, plain JavaScript, and every page works without them.
+A small Go server renders markdown into HTML pages. No JavaScript framework, no database and no trackers; the few scripts are small, plain JavaScript, and every page works without them. The site counts its own readers (daily totals only, no cookies): see [readers](https://cptx.ee/addons/readers/).
 
 - **Stack:** Go, [htmlc](https://github.com/dhamidi/htmlc) (server-side `.vue` templates), [dispatch](https://github.com/dhamidi/dispatch) (routing), [goldmark](https://github.com/yuin/goldmark) (markdown) and [gofeed](https://github.com/mmcdole/gofeed) (the reading list's RSS reader).
 - **Writing** happens in an [Obsidian](https://obsidian.md/) vault; published pieces are copied here as markdown under `content/`.
@@ -49,6 +49,7 @@ content/*.md ──► GitHub (main) ──► check ──► VM pulls, builds,
 | `build.go` | Static build into `dist/` |
 | `addons.go`, `places.go`, `words.go` | The addons |
 | `library.go` | Archives and library pages |
+| `stats.go`, `geo.go` | Readers' counters: visits, reads, countries, without cookies (`/addons/readers/`) |
 | `legal.go` | `/legaldocs/` (privacy, cookies, how it works, newsletter) |
 | `feeds.go`, `photos.go`, `pockets_photos.go` | Reading-list feeds, photos, pockets |
 | `scripts/` | `check.sh`, URL snapshot, smoke test, link check, library import |

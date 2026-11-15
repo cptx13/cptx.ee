@@ -12,7 +12,7 @@ cptx.ee is a personal website run by me, Carlos (cptx). This page explains what 
 
 - No ads, no trackers, no analytics scripts, no social media widgets.
 - No cookies. See [cookies](/legaldocs/cookies/).
-- The site itself does not log your IP address or keep records of your visits.
+- The site itself does not log your IP address or keep records of your visits; it only keeps daily totals (see [counting readers](#counting-readers)).
 - Nothing on a page loads from another company's servers: fonts, images and scripts all come from cptx.ee.
 - If you subscribe to the newsletter, your email address is kept only for sending it. See [newsletter](/legaldocs/newsletter/).
 
@@ -31,9 +31,18 @@ Your browser asks for a page; the site sends it. To deliver it, two parties see 
 
 No name, no email (unless you subscribe), no account, no location, no device fingerprint, no reading history.
 
-## Visit counts
+<a id="counting-readers"></a>
 
-Not yet. Public counters (visits, reads, readers' countries) are planned. When they arrive, this page will explain exactly how they work before they start counting. The plan: only daily totals are kept, nothing that could point back to a person.
+## Counting readers
+
+The site keeps simple public counts, shown on the [readers](/addons/readers/) page and as "read N times" under each post. They are made on this server, without cookies, scripts from other companies or anything stored in your browser:
+
+- **Visits:** each time a page is opened, the total for that page and day goes up by one.
+- **Visitors:** to count how many different people came on a given day, the server mixes your IP address and browser name with a random value that exists only in memory and is replaced every midnight, and keeps the result in memory for that day only. It is never written down, and after midnight it can't be linked to anything.
+- **Reads:** a tiny script notices when you reach the end of a post after enough time to have read it, and sends the post's address (nothing else). Each post counts at most one read per visitor per day.
+- **Countries:** your IP address is looked up in a local country list ([DB-IP](https://db-ip.com), a file on the server, so no one else is asked) and only the country is added to the day's total.
+
+What is stored is only daily totals per page, per post and per country. No IP address, no identifier, no history of who read what. Bots and link previews are left out. If JavaScript is off, your visit still counts but reads don't.
 
 ## Links to other sites
 
@@ -45,4 +54,4 @@ If you live in the EU or the UK you have the right to ask what personal data I h
 
 ## Changes
 
-When something changes (for example when visit counts or the newsletter go live), this page is updated and its date changes. The history of every change is public in the site's [source code](https://github.com/cptx13/cptx.ee/commits/main/content/legaldocs).
+When something changes (for example when the newsletter goes live), this page is updated and its date changes. The history of every change is public in the site's [source code](https://github.com/cptx13/cptx.ee/commits/main/content/legaldocs).

@@ -18,6 +18,10 @@ To remove it, clear this site's data in your browser settings.
 
 No page loads anything from another company, so no other company can set cookies through cptx.ee.
 
+## Counting without cookies
+
+The visit and read counts on the [readers](/addons/readers/) page don't use cookies or browser storage either. How they work is explained in the [privacy policy](/legaldocs/privacy/#counting-readers).
+
 ## If this changes
 
-Planned visit counts will also work without cookies. Should cookies ever be needed, this page will say so first, and anything not strictly necessary would ask you before being set.
+Should cookies ever be needed, this page will say so first, and anything not strictly necessary would ask you before being set.
