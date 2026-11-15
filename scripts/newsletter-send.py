@@ -152,7 +152,7 @@ def main():
     a = ap.parse_args()
     today = dt.date.fromisoformat(a.today) if a.today else dt.date.today()
     mode = os.environ.get("NEWSLETTER_MODE", "draft")
-    key = os.environ.get("BUTTONDOWN_API_KEY", "")
+    key = os.environ.get("BUTTONDOWN_API_KEY", "").strip()  # a pasted key may carry a newline
     todo = [payload(*i, mode) for i in issues(today)]
     if a.dry_run:
         for k, p in todo:
@@ -164,7 +164,12 @@ def main():
     if not todo:
         print("newsletter: no recent published issues")
         return
-    seen = existing(key)
+    try:
+        seen = existing(key)
+    except urllib.error.HTTPError as err:
+        hint = " (Buttondown rejected the API key: check the BUTTONDOWN_API_KEY secret)" if err.code in (401, 403) else ""
+        print(f"newsletter: listing emails failed: {err.code}{hint}; key length {len(key)}", file=sys.stderr)
+        sys.exit(1)
     for k, p in todo:
         try:
             if k in seen:

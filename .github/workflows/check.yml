@@ -64,4 +64,5 @@ jobs:
         env:
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
           NEWSLETTER_MODE: ${{ vars.NEWSLETTER_MODE || 'draft' }}
-        run: python3 scripts/newsletter-send.py | tee -a "$GITHUB_STEP_SUMMARY"
+        shell: bash  # -eo pipefail: a failure isn't hidden by tee
+        run: python3 scripts/newsletter-send.py 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
