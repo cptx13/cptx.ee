@@ -28,7 +28,7 @@ y e ni o u pero sino aunque porque pues si mas que
 ser soy eres es somos sois son era eras éramos eran fui fue fuimos fueron sido siendo sea sean será serán sería serían
 estar estoy estás está estamos están estaba estaban estuve estuvo estado estando esté estén
 haber he has ha hemos han había habían hubo habrá habría haya hayan habido hay
-muy más menos tan tanto también ya no sí aún todavía así bien sólo solo casi
+muy más menos tan tanto también ya no sí aún todavía así bien sólo solo casi vez hoy uno tal
 todo toda todos todas otro otra otros otras mismo misma mismos mismas algo nada alguien nadie algún alguno alguna algunos algunas ningún ninguno ninguna cada
 the a an and or but nor so yet for of to in on at by with from into onto upon about over under after before than then as if because while
 i me my mine myself you your yours yourself he him his himself she her hers herself it its itself we us our ours ourselves they them their theirs themselves
