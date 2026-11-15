@@ -81,3 +81,11 @@ func TestLoadGeoGzip(t *testing.T) {
 		t.Fatalf("gzip load: %v", err)
 	}
 }
+
+func TestPageLabel(t *testing.T) {
+	for in, want := range map[string]string{"/": "home", "/addons/readers/": "addons / readers", "/categories/croquis/": "croquis", "/manifesto/": "manifesto"} {
+		if got := pageLabel(in); got != want {
+			t.Errorf("%s = %q, want %q", in, got, want)
+		}
+	}
+}

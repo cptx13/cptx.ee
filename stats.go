@@ -320,6 +320,16 @@ func readHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// pageLabel names a page that isn't a post: "/" → "home", "/addons/readers/" → "addons / readers".
+func pageLabel(path string) string {
+	p := strings.Trim(path, "/")
+	if p == "" {
+		return "home"
+	}
+	p = strings.TrimPrefix(p, "categories/")
+	return strings.ReplaceAll(p, "/", " / ")
+}
+
 // readsLabel is the line under a post ("read 12 times"); "" until it has reads.
 func readsLabel(n int) string {
 	switch {
@@ -449,7 +459,7 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 	}
 	var mostVisited []any
 	for _, e := range top(pageVisits, nil, 15) {
-		label := e.k
+		label := pageLabel(e.k)
 		if p, ok := titles[e.k]; ok {
 			label = p.Title
 		}
