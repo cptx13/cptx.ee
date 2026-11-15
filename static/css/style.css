@@ -1216,9 +1216,7 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .nl-note { font-size: .8em; color: var(--content-secondary); margin: .7em 0 0; }
 .nl-note a { color: inherit; }
 .nl-how { white-space: nowrap; }
-.nl-lang { border: 0; padding: 0; margin: .7em 0 0; display: flex; gap: 1.2em; align-items: baseline; font-size: .85em; }
-.nl-lang legend { float: left; padding: 0; margin-right: .4em; color: var(--content-secondary); }
-.nl-lang label { display: inline-flex; gap: .35em; align-items: center; margin: 0; color: var(--content-primary); font-size: 1em; }
+
 .kiosk { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5em, 1fr)); gap: 1em; margin: 1em 0 2em; }
 .kiosk-issue {
     aspect-ratio: 3 / 4; display: flex; flex-direction: column; padding: .8em; border-radius: 4px; text-decoration: none;

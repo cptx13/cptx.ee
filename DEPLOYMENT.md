@@ -146,6 +146,8 @@ After an *intended* URL change, run it with `--update-urls` and commit `urls.txt
 | Workflow | When | What |
 |---|---|---|
 | `check` | every push / PR | `scripts/check.sh` (build, vet, tests, lint, URL diff, smoke). On `main` it then waits until `https://cptx.ee/healthz` reports the new commit and runs `scripts/smoke.sh` against the live site — a red run means the deploy didn't land |
+| `check` → `lighthouse` | after deploy-verify on `main` | Lighthouse scores for four live pages in the run summary (informational, never fails the run) |
+| `check` → `newsletter` | after deploy-verify on `main` | `scripts/newsletter-send.py`: each issue published in the last 21 days becomes one bilingual Buttondown email, once (slug `cptx-issue-NN`). Drafts by default — send them from Buttondown; set the repository variable `NEWSLETTER_MODE=send` to send at once. Needs the `BUTTONDOWN_API_KEY` secret; without it the job does nothing |
 | `uptime` | every 15 min | `GET /healthz`, 3 tries; a failed run is emailed by GitHub |
 | `linkcheck` | 1st of each month | `scripts/linkcheck.py` — fails on external links that are gone (404/410/DNS) |
 
@@ -153,6 +155,16 @@ Failure emails: GitHub → Settings → Notifications → Actions → "Send noti
 GitHub pauses scheduled workflows after 60 days without repo activity; re-enable from the Actions tab.
 
 Manual live check: `scripts/smoke.sh [https://cptx.ee] [commit]`.
+
+## Newsletter (Buttondown)
+
+- **Account:** `cptx` on [Buttondown](https://buttondown.com) (free plan). Open and click tracking and UTM parameters are off — the privacy policy promises it. Tags need a paid plan, so each issue is one email with English, then Spanish.
+- **Sign-up form:** `/newsletter/` posts to `https://buttondown.com/api/emails/embed-subscribe/cptx` (`buttondownUser` in `newsletter.go`; empty = form closed). The CSP allows `form-action https://buttondown.com`. Buttondown sends the confirmation email.
+- **Weekly issue:**
+  1. `scripts/newsletter-draft.py` writes `content/newsletter/NNN.md` and `NNN.es.md` (`draft: true`): what changed (commit subjects, to rewrite), what was written, this week years ago, new weekendreads/bedsidetable entries, and empty sections (hidden while empty).
+  2. Edit, set `draft: false` in both, add `/newsletter/<n>/` and `/newsletter/<n>/es/` to `urls.txt`, push through the usual branch → check → main.
+  3. After the deploy is verified, CI creates the Buttondown email (draft); open Buttondown and send it.
+- **API key:** GitHub secret `BUTTONDOWN_API_KEY` (Actions). Never in chat, never on the VM.
 
 ## Library refresh (`/archives/library/`)
 

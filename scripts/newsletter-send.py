@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
-"""Hand published issues to Buttondown, once each, in each language.
+"""Hand published issues to Buttondown, once each.
 
     scripts/newsletter-send.py [--dry-run]
 
 Runs in CI after a verified deploy of main. For every published issue
-(content/newsletter/NNN.md, draft: false) dated in the last 21 days, and its
-Spanish version NNN.es.md when there is one, it creates one Buttondown email:
+(content/newsletter/NNN.md, draft: false) dated in the last 21 days it creates
+one Buttondown email for everyone:
 
-- subject  "cptx · issue 01: <title>"
-- body     the issue's markdown (comments removed, links made absolute), with a
-           line on top linking to the issue on the web
-- audience subscribers tagged "en" or "es" (the language picked at sign-up)
-- slug and metadata "cptx-issue-01-en" so the same issue is never created twice
+- subject  "cptx · issue 01: <title> / <título>"
+- body     the English issue, then the Spanish one (NNN.es.md, when published)
+           under a divider; comments removed, links made absolute, each half
+           opening with a link to its page on the web
+- slug and metadata "cptx-issue-01", so the same issue is never created twice
+
+(One bilingual email because Buttondown's tags, which could split readers by
+language, need a paid plan.)
 
 Environment:
   BUTTONDOWN_API_KEY   the API key (GitHub secret). Unset: nothing happens.
@@ -27,12 +30,8 @@ SITE = "https://cptx.ee"
 API = "https://api.buttondown.com/v1"
 RECENT_DAYS = 21
 
-TEXT = {
-    "en": {"web": "read it on the web", "kiosk": "Every issue is kept on the [kiosk]({site}/newsletter/kiosk/).",
-           "other": "[Leer en español]({url})"},
-    "es": {"web": "léelo en la web", "kiosk": "Todos los números se guardan en el [quiosco]({site}/newsletter/kiosk/).",
-           "other": "[Read in English]({url})"},
-}
+WEB = {"en": "read it on the web", "es": "léelo en la web"}
+KIOSK = "Every issue is kept on the [kiosk]({site}/newsletter/kiosk/) · Todos los números se guardan en el [quiosco]({site}/newsletter/kiosk/)."
 
 
 def frontmatter(text):
@@ -48,55 +47,61 @@ def frontmatter(text):
     return fm, t[end + 4:].lstrip("\n")
 
 
+def published(path):
+    if not os.path.exists(path):
+        return None
+    fm, body = frontmatter(open(path, encoding="utf-8").read())
+    if fm.get("draft", "").lower() in ("true", "yes"):
+        return None
+    return fm, body
+
+
 def issues(today):
-    """(number, lang, frontmatter, body, web path, other-language path or None)."""
+    """(number, english (fm, body), spanish (fm, body) or None) for recent published issues."""
     out = []
     for f in sorted(os.listdir(NEWS)):
-        m = re.fullmatch(r"(\d+)(\.es)?\.md", f)
+        m = re.fullmatch(r"(\d+)\.md", f)
         if not m:
             continue
-        fm, body = frontmatter(open(os.path.join(NEWS, f), encoding="utf-8").read())
-        if fm.get("draft", "").lower() in ("true", "yes"):
+        en = published(os.path.join(NEWS, f))
+        if not en:
             continue
-        n, lang = int(m.group(1)), "es" if m.group(2) else "en"
-        date = dt.date.fromisoformat(fm.get("date", "1970-01-01")[:10])
+        date = dt.date.fromisoformat(en[0].get("date", "1970-01-01")[:10])
         if (today - date).days > RECENT_DAYS or date > today:
             continue
-        path = f"/newsletter/{n}/" + ("es/" if lang == "es" else "")
-        other_file = os.path.join(NEWS, f"{n:03d}.md" if lang == "es" else f"{n:03d}.es.md")
-        other = None
-        if os.path.exists(other_file):
-            ofm, _ = frontmatter(open(other_file, encoding="utf-8").read())
-            if ofm.get("draft", "").lower() not in ("true", "yes"):
-                other = f"/newsletter/{n}/" + ("" if lang == "es" else "es/")
-        out.append((n, lang, fm, body, path, other))
+        n = int(m.group(1))
+        out.append((n, en, published(os.path.join(NEWS, f"{n:03d}.es.md"))))
     return out
 
 
-def email_body(n, lang, fm, body, path, other):
-    t = TEXT[lang]
+def clean(body):
     body = re.sub(r"<!--.*?-->", "", body, flags=re.S)
     body = re.sub(r"\]\(/", f"]({SITE}/", body)
-    body = re.sub(r"\n{3,}", "\n\n", body).strip()
-    date = dt.date.fromisoformat(fm["date"][:10])
-    top = f"*issue {n:02d} · {date:%-d %b %Y} · [{t['web']}]({SITE}{path})*"
-    foot = [t["kiosk"].format(site=SITE)]
-    if other:
-        foot.append(t["other"].format(url=SITE + other))
-    return f"{top}\n\n{body}\n\n---\n\n" + " · ".join(foot) + "\n"
+    return re.sub(r"\n{3,}", "\n\n", body).strip()
 
 
-def payload(n, lang, fm, body, path, other, mode):
-    key = f"cptx-issue-{n:02d}-{lang}"
+def email_body(n, en, es):
+    date = dt.date.fromisoformat(en[0]["date"][:10])
+    parts = [f"*issue {n:02d} · {date:%-d %b %Y} · [{WEB['en']}]({SITE}/newsletter/{n}/)*", clean(en[1])]
+    if es:
+        parts += ["---", f"# {es[0].get('title', '').strip()}",
+                  f"*issue {n:02d} · en español · [{WEB['es']}]({SITE}/newsletter/{n}/es/)*", clean(es[1])]
+    parts += ["---", KIOSK.format(site=SITE)]
+    return "\n\n".join(parts) + "\n"
+
+
+def payload(n, en, es, mode):
+    key = f"cptx-issue-{n:02d}"
+    subject = f"cptx · issue {n:02d}: {en[0].get('title', '').strip()}"
+    if es:
+        subject += f" / {es[0].get('title', '').strip()}"
     return key, {
-        "subject": f"cptx · issue {n:02d}: {fm.get('title', '').strip()}",
-        "body": email_body(n, lang, fm, body, path, other),
+        "subject": subject,
+        "body": email_body(n, en, es),
         "status": "about_to_send" if mode == "send" else "draft",
         "slug": key,
         "metadata": {"cptx_issue": key},
-        "canonical_url": SITE + path,
-        "filters": {"predicate": "and", "groups": [],
-                    "filters": [{"operator": "contains", "field": "subscriber.tags", "value": lang}]},
+        "canonical_url": f"{SITE}/newsletter/{n}/",
     }
 
 

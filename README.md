@@ -18,8 +18,9 @@ Read the rest in the **[manifesto](https://cptx.ee/manifesto/)**.
 | [addons](https://cptx.ee/addons/) | Playful views of the archive: a heatmap of every post, on this day, city lights, most used words |
 | [pockets](https://cptx.ee/pockets/) | Things I carry around: books I'm reading, links, projects, weekend reads |
 | [archives](https://cptx.ee/archives/) | The books I wrote, and a library of the books Merzeede and I own |
+| [newsletter](https://cptx.ee/newsletter/) | A weekly issue by email, in English and Spanish; every issue is kept on the [kiosk](https://cptx.ee/newsletter/kiosk/) |
 
-New croquis are also published as an [RSS feed](https://cptx.ee/index.xml).
+New croquis are also published as an [RSS feed](https://cptx.ee/index.xml), and the site can be searched at [/search](https://cptx.ee/search/).
 
 ## How it works
 
@@ -30,16 +31,18 @@ A small Go server renders markdown into HTML pages. No JavaScript framework, no 
 - **Hosting:** an [exe.dev](https://exe.dev) VM checks this repository every minute. When `main` moves, it builds the new version, swaps it in only if it starts and answers its health check, and keeps the previous one otherwise.
 - **Checks:** every push runs [`scripts/check.sh`](scripts/check.sh) (build, tests, content lint, a snapshot of all ~2,500 URLs so none silently disappear, and a request to every page). On `main`, CI then waits for the live site to report the new commit and smoke-tests it.
 - **Photos and book covers** live only on the server, not in git.
+- **Newsletter:** issues are markdown files too (`content/newsletter/NNN.md`, Spanish `NNN.es.md`), drafted by [`scripts/newsletter-draft.py`](scripts/newsletter-draft.py). Once an issue is live, CI hands it to [Buttondown](https://buttondown.com) as one bilingual email ([`scripts/newsletter-send.py`](scripts/newsletter-send.py)); Buttondown handles sign-ups, confirmation and unsubscribes. Open and click tracking are off.
 
 ```
 content/*.md ──► GitHub (main) ──► check ──► VM pulls, builds, swaps ──► https://cptx.ee
+                                                                  └──► new issue? ──► Buttondown ──► inboxes
 ```
 
 ## Repository map
 
 | Path | What lives there |
 |---|---|
-| `content/` | Posts (`posts/croquis`, `posts/recuerdos`), pockets, manifesto, legal docs |
+| `content/` | Posts (`posts/croquis`, `posts/recuerdos`), pockets, manifesto, legal docs, newsletter issues |
 | `pages/`, `components/` | Page templates (`.vue`, rendered on the server) |
 | `static/` | CSS, small JS files, fonts, icons |
 | `data/library/` | The library: Libib export, shelves, overrides, generated `books.json` |
@@ -50,11 +53,11 @@ content/*.md ──► GitHub (main) ──► check ──► VM pulls, builds,
 | `addons.go`, `places.go`, `words.go` | The addons |
 | `library.go` | Archives and library pages |
 | `stats.go`, `geo.go` | Readers' counters: visits, reads, countries, without cookies (`/addons/readers/`) |
-| `newsletter.go` | Newsletter issues and the kiosk (`/newsletter/`) |
+| `newsletter.go` | Newsletter page, issues (`/newsletter/<n>/`, Spanish `/newsletter/<n>/es/`), kiosk covers |
 | `search.go` | Site-wide search (`/search/`) |
-| `legal.go` | `/legaldocs/` (privacy, cookies, how it works, newsletter) |
+| `legal.go` | `/legaldocs/` (privacy — including the newsletter —, cookies, how the site works) |
 | `feeds.go`, `photos.go`, `pockets_photos.go` | Reading-list feeds, photos, pockets |
-| `scripts/` | `check.sh`, URL snapshot, smoke test, link check, library import |
+| `scripts/` | `check.sh`, URL snapshot, smoke test, link check, library import, newsletter draft/send, Lighthouse |
 | `*.service`, `*.timer`, `deploy.sh` | How the VM runs and deploys the site |
 
 ## Posts and URLs

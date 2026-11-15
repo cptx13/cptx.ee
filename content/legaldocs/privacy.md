@@ -50,8 +50,8 @@ What is stored is only daily totals per page, per post and per country. No IP ad
 
 The newsletter is everything sent to subscribers by email. Most weeks that is an **issue**: what changed on the site, what was written, what I wrote on the same days in earlier years, and what I have been reading, listening to and watching. Now and then it may be a short note about the site that is not an issue. Every issue is also kept on the site, on the [kiosk](/newsletter/kiosk/), so nothing is only in your inbox; notes that are not issues are not kept.
 
-- **What is collected:** your email address and the language you choose, nothing else. No name is needed.
-- **Signing up:** you enter your address in the form on [/newsletter](/newsletter/) and choose English or Spanish (stored with your address as a tag, so you get issues in that language). You then get one email asking you to confirm, and nothing is sent until you do (double opt-in).
+- **What is collected:** your email address, and nothing else. No name is needed.
+- **Signing up:** you enter your address in the form on [/newsletter](/newsletter/). Each issue comes in English and Spanish in the same email. You then get one email asking you to confirm, and nothing is sent until you do (double opt-in).
 - **Who sends it:** [Buttondown](https://buttondown.com), a small newsletter service. Your address is stored with Buttondown, in the United States, only to send this newsletter. Its own [privacy policy](https://buttondown.com/legal/privacy) applies to how it keeps that data.
 - **No tracking in the emails:** open and link tracking are switched off. Emails contain no tracking pixels, and links go straight to where they say.
 - **Leaving:** every email has a one-click unsubscribe link, which stops all emails at once. You can also write to [hello@cptx.ee](mailto:hello@cptx.ee) to have your address deleted completely.

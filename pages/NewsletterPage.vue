@@ -2,7 +2,7 @@
 <AppLayout :pageTitle="'newsletter | cptx'" :description="'The cptx.ee newsletter: a weekly issue (what changed, what was written, what is being written, other things worth passing on) and the occasional note about the site.'" :canonicalURL="'https://cptx.ee/newsletter/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons">
     <h1 class="addons-title">newsletter</h1>
-    <p class="addons-intro">The newsletter brings a weekly <strong>issue</strong> by email, and now and then a short note about the site. Every issue is also kept here, on the <a href="/newsletter/kiosk/">kiosk</a>.</p>
+    <p class="addons-intro">The newsletter brings a weekly <strong>issue</strong> by email, in English and Spanish, and now and then a short note about the site. Every issue is also kept here, on the <a href="/newsletter/kiosk/">kiosk</a>.</p>
 
     <p class="nl-lead">in an issue</p>
     <div class="nl-sections">
@@ -20,11 +20,6 @@
         <input id="nl-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email">
         <button type="submit">subscribe</button>
       </div>
-      <fieldset class="nl-lang">
-        <legend>language</legend>
-        <label><input type="radio" name="tag" value="en" checked> English</label>
-        <label lang="es"><input type="radio" name="tag" value="es"> Español</label>
-      </fieldset>
       <input type="hidden" name="embed" value="1">
       <p class="nl-note">Only your email address is kept; you confirm by email first, and every email has a one-click unsubscribe. <a class="nl-how" href="/legaldocs/privacy/#newsletter">How the newsletter works&nbsp;→</a></p>
     </form>

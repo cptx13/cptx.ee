@@ -30,7 +30,7 @@ Only files from cptx.ee: the page, one stylesheet, one font in two or four style
 
 ## Feeds and archives
 
-New croquis are published as an [RSS feed](/index.xml), and there is a [sitemap](/sitemap.xml) for search engines. The full source code, including every change to these pages, is public on [GitHub](https://github.com/cptx13/cptx.ee).
+New croquis are published as an [RSS feed](/index.xml), and there is a [sitemap](/sitemap.xml) for search engines. The weekly issues of the [newsletter](/newsletter/) are pages on this site too; [Buttondown](https://buttondown.com) only delivers them by email (see [the newsletter](/legaldocs/privacy/#newsletter) in the privacy policy). The full source code, including every change to these pages, is public on [GitHub](https://github.com/cptx13/cptx.ee).
 
 ## Security
 
