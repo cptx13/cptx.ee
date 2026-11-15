@@ -338,6 +338,7 @@
 /legaldocs/newsletter/
 /legaldocs/privacy/
 /manifesto/
+/newsletter/
 /pockets/
 /pockets/bedsidetable/
 /pockets/cheatsheet/

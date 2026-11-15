@@ -1,6 +1,7 @@
 <template>
 <AppLayout :pageTitle="'contact | cptx'" :description="'get in touch'" :canonicalURL="'https://cptx.ee/contact/'" :lang="'en'" :ogType="'website'">
-  <div style="margin-top: 2em;">
+  <AboutNav :current="'contact'"></AboutNav>
+  <div style="margin-top: 1.2em;">
     <p style="color: var(--content-secondary); margin-bottom: 2em;">Feel free to reach out.</p>
     <!-- Simple Icons brand marks are solid logos of differing optical weight
          (linkedin covers 74% of its box, x only 33%). Each viewBox is padded

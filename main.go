@@ -269,6 +269,11 @@ func main() {
 	})))
 
 	// Contact page
+	// Newsletter (batch K): what the digest is, the sign-up form and the kiosk of past issues
+	must(router.GET("newsletter", "/newsletter/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		renderPage(w, engine, "NewsletterPage", map[string]any{})
+	})))
+
 	must(router.GET("contact", "/contact/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		renderPage(w, engine, "ContactPage", map[string]any{})
 	})))

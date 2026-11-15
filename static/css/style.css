@@ -1226,3 +1226,34 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .site-footer { color: var(--content-secondary); font-size: .92em; text-align: center; margin: 3em 0 2em; line-height: 1.9; }
 .site-footer a { color: inherit; }
 .site-footer p { margin: 0; }
+
+/* manifesto · contact · legal docs share one corner */
+.about-nav { font-size: .85em; color: var(--content-secondary); margin: -.2em 0 1.2em; }
+.about-nav a { color: inherit; }
+.about-nav a.about-cur { color: var(--content-primary); text-decoration: none; font-weight: bold; }
+
+/* /newsletter/: digest sections, sign-up form, kiosk of issues */
+.nl-sections { margin: 1.2em 0 1.6em; font-size: .9em; }
+.nl-sections p { margin: .35em 0; }
+.nl-k { display: inline-block; min-width: 13em; font-weight: bold; }
+.nl-form { margin: 1.4em 0 2em; padding: 1em 1.1em; border: 1px solid color-mix(in srgb, var(--content-primary) 18%, transparent); border-radius: 6px; }
+.nl-form label { display: block; font-size: .85em; color: var(--content-secondary); margin-bottom: .4em; }
+.nl-row { display: flex; gap: .5em; flex-wrap: wrap; }
+.nl-row input { flex: 1; min-width: 12em; font: inherit; font-size: .9em; padding: .45em .6em; border-radius: 4px; border: 1px solid color-mix(in srgb, var(--content-primary) 30%, transparent); background: var(--background); color: var(--content-primary); }
+.nl-row button { font: inherit; font-size: .9em; padding: .45em .9em; border-radius: 4px; border: 1px solid var(--content-primary); background: var(--content-primary); color: var(--background); cursor: pointer; }
+.nl-row input:disabled, .nl-row button:disabled { opacity: .5; cursor: not-allowed; }
+.nl-note { font-size: .8em; color: var(--content-secondary); margin: .7em 0 0; }
+.nl-note a { color: inherit; }
+.kiosk { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5em, 1fr)); gap: 1em; margin: 1em 0 2em; }
+.kiosk-issue {
+    aspect-ratio: 3 / 4; display: flex; flex-direction: column; padding: .8em; border-radius: 4px; text-decoration: none;
+    background: linear-gradient(160deg, #ffd166, #ffb703 55%, #b07a12); color: #1a1406 !important;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, .3); transition: transform .2s ease;
+}
+.kiosk-issue:hover { transform: translateY(-3px) rotate(-.6deg); }
+.kiosk-mast { font-weight: bold; font-size: 1.5em; letter-spacing: -.02em; border-bottom: 2px solid currentColor; padding-bottom: .1em; }
+.kiosk-no { font-size: .75em; margin-top: .3em; }
+.kiosk-head { margin-top: auto; font-weight: bold; font-size: 1em; line-height: 1.2; }
+.kiosk-date { font-size: .7em; margin-top: .4em; }
+.kiosk-ghost { background: transparent; color: var(--content-secondary) !important; box-shadow: none; border: 1px dashed color-mix(in srgb, var(--content-primary) 35%, transparent); }
+.kiosk-ghost:hover { transform: none; }

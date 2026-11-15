@@ -6,7 +6,7 @@ draft: false
 lang: en
 summary: "Coming soon: a weekly digest by email. What it will collect (your email address), who sends it, and how to leave."
 ---
-A weekly digest by email is on its way: what changed on the site, what was written, what is being written, and a few other things worth passing on. Every issue will also be kept on the site, so nothing is only in your inbox.
+A weekly digest by email is on its way: what changed on the site, what was written, what is being written, and a few other things worth passing on. Every issue will also be kept on the site, at [/newsletter](/newsletter/), so nothing is only in your inbox.
 
 This page explains how it will work before the sign-up form appears.
 
