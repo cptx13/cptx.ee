@@ -67,12 +67,12 @@ func buildStaticSite(
 	}
 
 	// Home page
-	home := homeData(allPostsForPool, toPostList, postsBySection, len(photoFolders))
-	home["onThisDay"], home["hasOnThisDay"] = []any{}, false
-	if err := writePage("index.html", "HomePage", home); err != nil {
-		return err
-	}
-	if err := writePage("all/index.html", "AllPage", map[string]any{"posts": toPostList(allPostsForPool), "postCount": postCount}); err != nil {
+	if err := writePage("index.html", "HomePage", map[string]any{
+		"posts":        toPostList(allPostsForPool),
+		"postCount":    postCount,
+		"onThisDay":    []any{},
+		"hasOnThisDay": false,
+	}); err != nil {
 		return err
 	}
 

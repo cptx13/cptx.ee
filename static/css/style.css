@@ -1205,46 +1205,6 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .single-content code, .single-content pre { font-family: var(--font-mono); hyphens: manual; }
 .single-content h2 { font-size: 1.15em; }
 
-/* D-02: compact menu: four sections on one line, the rest behind /more (no JS) */
-.header-menu {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: .2em 1.1em;
-    font-family: var(--font-mono);
-    font-size: small;
-}
-.header-menu > a, .nav-more > summary { color: inherit; }
-.nav-more { position: relative; }
-.nav-more > summary { cursor: pointer; list-style: none; text-decoration: underline; text-underline-offset: .2em; }
-.nav-more > summary::-webkit-details-marker { display: none; }
-.nav-more > summary::after { content: " ▾"; font-size: .85em; }
-.nav-more[open] > summary::after { content: " ▴"; }
-.nav-more-list {
-    position: absolute; z-index: 5; top: 1.8em; left: -.8em;
-    display: grid; gap: .45em; padding: .7em .9em; min-width: 9em;
-    background: var(--background);
-    border: 1px solid color-mix(in srgb, var(--content-primary) 18%, transparent);
-    border-radius: 6px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
-}
-
-@media (max-width: 420px) {
-    .header-menu { gap: .2em .6em; font-size: .74em; }
-}
-
-/* D-03: home as an index */
-.home-sub { font-size: 1em; margin: 2em 0 .8em; display: flex; gap: .6em; align-items: baseline; }
-.home-sub a { font-weight: normal; font-size: .85em; color: var(--content-secondary); }
-.home-all { margin-top: 1em; font-size: .95em; }
-.home-sections { display: grid; grid-template-columns: repeat(auto-fill, minmax(10.5em, 1fr)); gap: .6em; margin-top: .4em; }
-.home-sections a {
-    display: block; padding: .7em .8em; border-radius: 6px; text-decoration: none; font-size: .9em;
-    border: 1px solid color-mix(in srgb, var(--content-primary) 16%, transparent);
-}
-.home-sections a:hover { border-color: var(--content-primary); }
-.home-sections span { display: block; color: var(--content-secondary); font-size: .85em; margin-top: .2em; }
-
 /* D-04: end of a post */
 .post-end {
     margin: -2.5rem 0 2.5rem; padding-top: 1.2em; font-size: .85em; color: var(--content-secondary);
