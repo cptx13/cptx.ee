@@ -4,7 +4,6 @@ author: cptx
 date: 2026-01-16
 draft: false
 categories: [croquis]
-tags: [retales]
 showTags: true
 ---
 Not sure how many times have I written the same thought. Constant redundant repetitions with no apparent purpouse. Brief excerpts of deeper problematics which are yet to be defined. Writting has become a chaotic scribbling exercise of endless disconnected thoughts with no sign of a wider thought process.

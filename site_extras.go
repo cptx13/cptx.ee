@@ -79,24 +79,34 @@ func contentClass(p *Post) string {
 	if p.Section == "pockets" {
 		return "single-content pk-body pk-" + p.Slug
 	}
-	for _, t := range p.Tags {
-		if t == "rimas" {
-			return "single-content poem"
-		}
+	if isRima(p) {
+		return "single-content poem"
 	}
 	return "single-content"
 }
 
-// rimasPosts lists the poems (tag "rimas") for /rimas/, newest first like the
-// category pages.
+// isRima: poems live in the "rimas" category (kept apart from croquis since
+// 2026-11-17); the old "rimas" tag still counts.
+func isRima(p *Post) bool {
+	for _, c := range p.Categories {
+		if c == "rimas" {
+			return true
+		}
+	}
+	for _, t := range p.Tags {
+		if t == "rimas" {
+			return true
+		}
+	}
+	return false
+}
+
+// rimasPosts lists the poems for /rimas/, newest first like the category pages.
 func rimasPosts(published []*Post) []*Post {
 	var out []*Post
 	for _, p := range published {
-		for _, t := range p.Tags {
-			if t == "rimas" {
-				out = append(out, p)
-				break
-			}
+		if isRima(p) {
+			out = append(out, p)
 		}
 	}
 	return out
@@ -246,6 +256,15 @@ func buildSitemap(distDir string, posts []*Post) ([]byte, error) {
 var retiredURLs = map[string]string{
 	"/categories/manuscripts/": "/archives/",
 	"/categories/archives/":    "/archives/", // L-01: the books moved into /archives/ (written by me)
+	// 2026-11-17: poems left croquis for their own category, /rimas/
+	"/categories/rimas/":  "/rimas/",
+	"/croquis/202408311/": "/rimas/202408311/", // Chasing the details
+	"/croquis/202412311/": "/rimas/202412311/", // Una tarde en Figueras
+	"/croquis/202504221/": "/rimas/202504221/", // Terraza marbelli
+	"/croquis/202504231/": "/rimas/202504231/", // Garabatos
+	"/croquis/202510181/": "/rimas/202510181/", // The river Alph
+	"/croquis/202603121/": "/rimas/202603121/", // March
+	"/croquis/202611171/": "/rimas/202611171/", // Park lights
 }
 
 func registerRetired(mux *http.ServeMux, distDir string) error {

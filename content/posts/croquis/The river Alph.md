@@ -3,7 +3,7 @@ title: "The river Alph"
 author: cptx
 date: 2025-10-18
 draft: false
-categories: ["croquis"]
+categories: ["rimas"]
 tags: [rimas]
 showTags: true
 ---

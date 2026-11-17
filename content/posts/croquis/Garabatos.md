@@ -3,7 +3,7 @@ title: "Garabatos"
 author: cptx
 date: 2025-04-23
 draft: false
-categories: ["croquis"]
+categories: ["rimas"]
 tags: [rimas]
 showTags: true
 ---

@@ -166,7 +166,11 @@ func buildStaticSite(
 
 		var prevPost, nextPost any = false, false
 		if post.Section == "recuerdos" || post.Section == "croquis" {
+			// prev/next stay inside the post's category (croquis, rimas, recuerdos)
 			sectionPosts := postsBySection[post.Section]
+			if len(post.Categories) > 0 {
+				sectionPosts = postsByCategory[post.Categories[0]]
+			}
 			for i, p := range sectionPosts {
 				if p.Path == post.Path {
 					if i > 0 {

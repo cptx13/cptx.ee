@@ -382,7 +382,11 @@ func main() {
 		}
 
 		// Find prev/next in same section
+		// prev/next stay inside the post's category (croquis, rimas, recuerdos)
 		sectionPosts := postsBySection[post.Section]
+		if len(post.Categories) > 0 {
+			sectionPosts = postsByCategory[post.Categories[0]]
+		}
 		var prevPost, nextPost any = false, false
 		for i, p := range sectionPosts {
 			if p.Path == post.Path {

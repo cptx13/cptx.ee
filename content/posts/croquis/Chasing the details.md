@@ -3,7 +3,7 @@ title: "Chasing the details."
 author: cptx
 date: 2024-08-31
 draft: false
-categories: ["croquis"]
+categories: ["rimas"]
 tags: [rimas]
 showTags: true
 ---

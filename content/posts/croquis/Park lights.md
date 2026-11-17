@@ -3,7 +3,7 @@ title: "Park lights"
 author: cptx
 date: 2026-11-17
 draft: false
-categories: ["croquis"]
+categories: ["rimas"]
 tags: [rimas]
 showTags: true
 ---

@@ -4,7 +4,6 @@ author: cptx
 date: 2025-02-09
 draft: false
 categories: ["croquis"]
-tags: [retales]
 showTags: true
 ---
 Unfinished notebooks have become a constant struggle in my creative journey. What starts of with a specific theme and motivation slowly transitions into a sea of doubts and discomfort.

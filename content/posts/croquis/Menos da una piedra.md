@@ -4,7 +4,6 @@ author: cptx
 date: 2021-08-22
 draft: false
 categories: ["croquis"]
-tags: [retales]
 showTags: true
 ---
 

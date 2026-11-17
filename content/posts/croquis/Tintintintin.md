@@ -4,7 +4,6 @@ author: cptx
 date: 2025-02-10
 draft: false
 categories: ["croquis"]
-tags: [retales]
 showTags: true
 ---
 Alarma, café, ducha y salgo de casa. Paseo al arbusto favorito de Paco, giro sobre mí mismo y pongo rumbo a la oficina.

@@ -4,7 +4,6 @@ author: cptx
 date: 2021-08-05
 draft: false
 categories: ["croquis"]
-tags: [retales]
 showTags: true
 ---
 Llevo una época obsesionado con Escohotado, lo leo tal vez demasiado, incluso me obsesiono con mis garabatos y subrayados en mi copia de *“Mi Ibiza privada”*. Le he dado muchas vueltas a lo que hace que uno considere como propio algo tan idílico y mágico como un fragmento de un archipiélago envidado en todo el mundo y tan solo después de estas doce horas lo he sabido entender.

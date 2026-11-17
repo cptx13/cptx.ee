@@ -4,7 +4,6 @@ author: cptx
 date: 2022-06-01
 draft: false
 categories: ["croquis"]
-tags: [retales]
 showTags: true
 ---
 Hace escasas horas que ha terminado mi vigésimo cuarto cumpleaños, y ahora en plena madrugada escribo esta carta de despedida que roza el epitafio. Soy joven, tal vez menos de lo que corresponde. Puede que hace años perdiese la insensatez que tanto me caracterizaba. Dicen mis amigos que he renunciado a la insensatez en busca de algo que ni yo sé lo que es, y yo solo creo que he aprendido a justificar mis decisiones más impulsivas.

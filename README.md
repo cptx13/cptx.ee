@@ -12,7 +12,8 @@ Read the rest in the **[manifesto](https://cptx.ee/manifesto/)**.
 
 | Section | What it is |
 |---|---|
-| [croquis](https://cptx.ee/categories/croquis/) | Short prose (*retales*) and poems (*rimas*) |
+| [croquis](https://cptx.ee/categories/croquis/) | Short prose |
+| [rimas](https://cptx.ee/rimas/) | Poems |
 | [recuerdos](https://cptx.ee/categories/recuerdos/) | Daily memories, 2021–2024 (a closed series of 1,000+ entries) |
 | [photos](https://cptx.ee/photos/) | Photographs by place and year |
 | [addons](https://cptx.ee/addons/) | Playful views of the archive: a heatmap of every post, on this day, city lights, most used words |
@@ -70,13 +71,12 @@ title: "Título"
 author: cptx
 date: 2026-11-15
 draft: false
-categories: ["croquis"]
-tags: [retales]
+categories: ["croquis"]   # or ["rimas"] for a poem
 showTags: true
 ---
 ```
 
-Croquis and recuerdos get URLs like `/croquis/202611151/`: the date plus the post's position among same-day posts, ordered by filename. Adding `id: 202611151` pins that number, so a post keeps its URL if its date or filename changes. Old `/posts/<section>/<slug>/` addresses redirect to the new ones.
+Croquis, rimas and recuerdos get URLs like `/croquis/202611151/`: the date plus the post's position among same-day posts, ordered by filename. Adding `id: 202611151` pins that number, so a post keeps its URL if its date or filename changes. Old `/posts/<section>/<slug>/` addresses redirect to the new ones.
 
 ## Run it locally
 

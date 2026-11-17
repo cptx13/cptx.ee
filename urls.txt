@@ -294,6 +294,7 @@
 /categories/manuscripts/
 /categories/pockets/
 /categories/recuerdos/
+/categories/rimas/
 /contact/
 /croquis/201905151/
 /croquis/201907101/
@@ -2515,4 +2516,11 @@
 /recuerdos/202409171/
 /recuerdos/202409241/
 /rimas/
+/rimas/202408311/
+/rimas/202412311/
+/rimas/202504221/
+/rimas/202504231/
+/rimas/202510181/
+/rimas/202603121/
+/rimas/202611171/
 /search/

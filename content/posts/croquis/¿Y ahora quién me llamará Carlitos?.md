@@ -4,7 +4,6 @@ author: cptx
 date: 2024-02-24
 draft: false
 categories: ["croquis"]
-tags: [retales]
 showTags: true
 ---
 Bartolomé Beltrán o Tolo, como lo conocíamos amigos y familiares, siempre estuvo en el sitio adecuado en el momento adecuado. Tolo, a quien podría dedicar cientos de páginas fue uno de esos hombres de una España que ya no queda. Un hombre familiar que vivía por y para los de su alrededor, y yo tuve la inmensa fortuna de vivir grandes momentos a su lado.

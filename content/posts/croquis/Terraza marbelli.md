@@ -3,7 +3,7 @@ title: "Terraza marbellí"
 author: cptx
 date: 2025-04-22
 draft: false
-categories: ["croquis"]
+categories: ["rimas"]
 tags: [rimas]
 showTags: true
 ---
