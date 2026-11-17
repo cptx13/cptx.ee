@@ -43,6 +43,7 @@
   (function () {
     var button = document.getElementById("random-post-button");
     if (!button) return;
+    button.hidden = false;
     var pool = null;
     button.addEventListener("click", function (event) {
       event.preventDefault();

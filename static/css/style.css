@@ -390,15 +390,6 @@ hr {
   text-decoration: none;
 }
 
-.shuffle-button {
-  animation: shuffle-pulse 2.5s ease-in-out infinite;
-}
-
-@keyframes shuffle-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
 /* Footer */
 footer {
   font-size: small;
@@ -656,49 +647,90 @@ blockquote p {
     font-weight: bold;
 }
 
-.toolbar-icon {
+/* Home: random button + search field */
+.home-random {
+    margin-left: auto;
+    align-self: center;
     display: inline-flex;
     align-items: center;
+    gap: .4em;
+    font: inherit;
+    font-size: .75em;
+    padding: .35em .75em;
     color: var(--content-secondary);
     background: none;
-    border: none;
-    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--content-primary) 25%, transparent);
+    border-radius: 999px;
     cursor: pointer;
-    text-decoration: none;
-    transition: color 0.15s;
+    transition: color .15s, border-color .15s, background-color .15s;
 }
-
-.toolbar-icon:hover {
+.home-random:hover {
     color: var(--content-primary);
+    border-color: var(--content-primary);
 }
+.home-random:hover svg { transform: rotate(-12deg); }
+.home-random svg { transition: transform .2s; }
+.home-random[hidden] { display: none; }
 
-/* === Contact === */
-/* === Search === */
-.search-bar {
-    margin-bottom: 1em;
-}
-
-.search-bar input {
-    width: 100%;
-    padding: 0.5em 0.7em;
+.home-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 0 1.2em;
     font-family: var(--font-mono);
-    font-size: 0.9em;
+}
+.home-search-icon {
+    position: absolute;
+    left: .75em;
+    color: var(--content-secondary);
+    pointer-events: none;
+}
+.home-search input {
+    width: 100%;
+    font: inherit;
+    font-size: .85em;
+    padding: .6em 2.6em .6em 2.4em;
     color: var(--content-primary);
     background: var(--code-background);
     border: 1px solid var(--code-border);
-    border-radius: 4px;
-    transition: border-color 0.2s;
+    border-radius: 6px;
+    transition: border-color .15s, background-color .15s;
+    -webkit-appearance: none;
+    appearance: none;
 }
-
-.search-bar input::placeholder {
-    color: var(--content-secondary);
-}
-
-.search-bar input:focus {
+.home-search input::placeholder { color: var(--content-secondary); }
+.home-search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+.home-search input:hover { border-color: color-mix(in srgb, var(--content-primary) 35%, transparent); }
+.home-search input:focus {
     border-color: var(--content-primary);
+    background: var(--background);
     outline: none;
 }
+.home-search:focus-within .home-search-icon { color: var(--content-primary); }
+.home-search-key {
+    position: absolute;
+    right: .7em;
+    font: inherit;
+    font-size: .7em;
+    line-height: 1;
+    padding: .25em .5em;
+    color: var(--content-secondary);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    pointer-events: none;
+}
+.home-search:focus-within .home-search-key { display: none; }
+@media (hover: none) { .home-search-key { display: none; } }
+.home-search-full {
+    font-family: var(--font-mono);
+    font-size: .8em;
+    margin: -.6em 0 1.2em;
+}
+.home-search-full a { color: var(--content-secondary); }
+.home-search-full a:hover { color: var(--content-primary); }
+.home-no-results { color: var(--content-secondary); font-size: .9em; }
 
+/* === Contact === */
 /* ==== Batch D (F-02, F-05, F-09, F-13) ==== */
 
 /* F-05: skip link + visible keyboard focus */
@@ -796,7 +828,7 @@ blockquote p {
 /* F-13: print — content only, black on white, show link targets */
 @media print {
     header, footer, .single-pagination, .back-to-top, .skip-link, .theme-toggle,
-    .header, .toolbar-icon, #random-post-button {
+    .header, .home-search, .home-search-full, #random-post-button {
         display: none !important;
     }
     html, html.dark, body {
@@ -1255,9 +1287,6 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .kiosk-ghost .kiosk-mast { font-size: 1.5em; }
 
 /* F-06: search */
-.toolbar-text { font-size: .8em; color: var(--content-secondary); margin-left: .4em; }
-.search-full { font-size: .8em; margin: .5em 0 0; }
-.search-full a { color: var(--content-secondary); }
 .sr-hit { margin: 0 0 1.4em; }
 .sr-meta { margin: 0; font-size: .75em; color: var(--content-secondary); }
 .sr-title { white-space: normal; margin: .1em 0 .2em; }
