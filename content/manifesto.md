@@ -45,7 +45,7 @@ My works are organized and distributed using the following system:
 
 - **[croquis](/categories/croquis/)** are quick, often rough notes made to capture the essence or form of a subject that may lead to more detailed work.
 
-- **[rimas](/rimas/)**: The Spanish term for "rhyme," often used in my earlier poems to distinguish the quality and immediacy of some works.
+- **[rimas](/rimas/)** are poems. The name is the Spanish word for "rhyme," which I first used for my earlier poems to mark the quality and immediacy of some works.
 
 - **[recuerdos](/categories/recuerdos/)** are daily memories written from 2021 to 2024, a project that began as a naive attempt to document lived experiences but evolved into something far more demanding. What started as voluntary writing gradually transformed into a disciplined obligation, eventually stirring feelings of guilt with each passing day. Over 1,000 entries reflect the tension between the desire to preserve memory and the burden of maintaining the practice.
 
