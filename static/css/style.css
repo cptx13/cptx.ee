@@ -872,10 +872,12 @@ blockquote p {
 .hm-opt:hover { text-decoration: underline; }
 .hm-active { background: var(--content-primary); color: var(--background) !important; }
 
-.hm-scroll { overflow-x: auto; margin: 1.2em 0 .4em; padding-bottom: .4em; }
-.hm { display: flex; gap: 3px; width: max-content; }
-.hm-week { display: flex; flex-direction: column; gap: 3px; }
-.hm-month { height: 1.2em; font-size: .65em; color: var(--content-secondary); white-space: nowrap; width: 10px; overflow: visible; }
+/* the year grid shrinks to fit narrow screens: 10px squares on desktop, smaller on phones, never scrolls */
+.hm-scroll { margin: 1.2em 0 .4em; padding-bottom: .4em; }
+.hm { display: flex; gap: clamp(1px, .5vw, 3px); }
+.hm-week { display: flex; flex-direction: column; gap: clamp(1px, .5vw, 3px); flex: 0 1 10px; min-width: 0; }
+.hm .hm-cell { display: block; width: 100%; height: auto; aspect-ratio: 1; border-radius: clamp(1px, .3vw, 2px); }
+.hm-month { height: 1.2em; font-size: min(.65em, 2.5vw); color: var(--content-secondary); white-space: nowrap; width: 10px; overflow: visible; }
 .hm-cell { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
 .hm-out { visibility: hidden; }
 /* same warm palette as city lights: dark = glowing yellows, light = oranges */
