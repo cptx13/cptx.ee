@@ -19,7 +19,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for the full deployment setup (systemd user u
 | File | What lives there |
 |---|---|
 | `main.go` | Startup and routes (dispatch matches the path only, via `pathOnly` in `site_extras.go`, so query strings never 404) |
-| `content.go` | Markdown loading, frontmatter, post IDs/URLs (`id:` in frontmatter pins a post's URL ID) |
+| `content.go` | Markdown loading, frontmatter, post IDs/URLs (`id:` in frontmatter pins a post's URL ID). Poems are `categories: ["rimas"]` inside `content/posts/croquis/`; `isRima` + `/rimas/` live in `site_extras.go` |
 | `site_extras.go` | Headers, gzip, RSS, sitemap, `/healthz`, retired URLs |
 | `build.go` | Static build into `dist/` |
 | `feeds.go` | Cheatsheet RSS reader |

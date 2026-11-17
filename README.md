@@ -21,7 +21,7 @@ Read the rest in the **[manifesto](https://cptx.ee/manifesto/)**.
 | [archives](https://cptx.ee/archives/) | The books I wrote, and a library of the books Merzeede and I own |
 | [newsletter](https://cptx.ee/newsletter/) | A weekly issue by email, in English and Spanish; every issue is kept on the [kiosk](https://cptx.ee/newsletter/kiosk/) |
 
-New croquis are also published as an [RSS feed](https://cptx.ee/index.xml), and the site can be searched at [/search](https://cptx.ee/search/).
+New croquis and rimas are also published as an [RSS feed](https://cptx.ee/index.xml), and the site can be searched at [/search](https://cptx.ee/search/).
 
 ## How it works
 
@@ -43,7 +43,7 @@ content/*.md ──► GitHub (main) ──► check ──► VM pulls, builds,
 
 | Path | What lives there |
 |---|---|
-| `content/` | Posts (`posts/croquis`, `posts/recuerdos`), pockets, manifesto, legal docs, newsletter issues |
+| `content/` | Posts (`posts/croquis` holds croquis and rimas, told apart by `categories`; `posts/recuerdos`), pockets, manifesto, legal docs, newsletter issues |
 | `pages/`, `components/` | Page templates (`.vue`, rendered on the server) |
 | `static/` | CSS, small JS files, fonts, icons |
 | `data/library/` | The library: Libib export, shelves, overrides, generated `books.json` |
@@ -76,7 +76,7 @@ showTags: true
 ---
 ```
 
-Croquis, rimas and recuerdos get URLs like `/croquis/202611151/`: the date plus the post's position among same-day posts, ordered by filename. Adding `id: 202611151` pins that number, so a post keeps its URL if its date or filename changes. Old `/posts/<section>/<slug>/` addresses redirect to the new ones.
+Croquis, rimas and recuerdos get URLs like `/croquis/202611151/`: the date plus the post's position among same-day posts, ordered by filename. Adding `id: 202611151` pins that number, so a post keeps its URL if its date or filename changes. Old `/posts/<section>/<slug>/` addresses redirect to the new ones, and the poems' former `/croquis/<id>/` addresses redirect to `/rimas/<id>/`.
 
 ## Run it locally
 
