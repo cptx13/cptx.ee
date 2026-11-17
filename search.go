@@ -1,5 +1,5 @@
 // Site-wide search (F-06): /search/?q= looks through the titles and full text of
-// every croquis and recuerdo, and the library's titles and authors. Server-side,
+// every croquis, rima and recuerdo, and the library's titles and authors. Server-side,
 // so it works without JavaScript. Accents and case are ignored ("cafe" finds "café").
 
 package main

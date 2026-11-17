@@ -8,7 +8,7 @@ draft: true (hidden until you publish them). Sections, in order:
 
 - what changed            the site's own changes (commit subjects, content commits
                           left out): raw material to rewrite for readers
-- what was written        croquis dated in the week, with their URLs
+- what was written        croquis and rimas dated in the week, with their URLs
 - this week, years ago    croquis and recuerdos written on the same days in
                           earlier years, newest year first, one post per line,
                           opening with a few lines of the longest one
@@ -36,11 +36,11 @@ HEAD = {
     "en": {"changed": "what changed", "written": "what was written", "past": "this week, years ago",
            "writing": "what is being written", "articles": "articles I enjoyed", "reading": "reading",
            "listening": "listening", "watching": "watching", "title": "This week on cptx.ee",
-           "none_written": "No new croquis this week.", "more": "and {n} more"},
+           "none_written": "Nothing new written this week.", "more": "and {n} more"},
     "es": {"changed": "qué ha cambiado", "written": "qué se ha escrito", "past": "esta semana, otros años",
            "writing": "qué se está escribiendo", "articles": "artículos que me gustaron", "reading": "leyendo",
            "listening": "escuchando", "watching": "viendo", "title": "Esta semana en cptx.ee",
-           "none_written": "Ningún croquis nuevo esta semana.", "more": "y {n} más"},
+           "none_written": "Nada nuevo escrito esta semana.", "more": "y {n} más"},
 }
 
 
@@ -178,7 +178,7 @@ def past_years(all_posts, since, until, lang):
 
 def build(lang, n, since, until, all_posts, changes, seen):
     h = HEAD[lang]
-    written = sorted((d, t, u) for d, t, u, _ in all_posts if since <= d <= until and "/croquis/" in u)
+    written = sorted((d, t, u) for d, t, u, _ in all_posts if since <= d <= until and u.startswith(("/croquis/", "/rimas/")))
     out = ["---", f'title: "{h["title"]}"', "author: cptx", f"date: {until.isoformat()}", "draft: true"]
     if lang == "es":
         out.append("lang: es")

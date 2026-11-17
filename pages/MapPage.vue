@@ -1,5 +1,5 @@
 <template>
-<AppLayout :pageTitle="'archive map · ' + title + ' | cptx'" :description="'Heatmap of every croquis and recuerdo, day by day.'" :canonicalURL="'https://cptx.ee/addons/map/'" :lang="'en'" :ogType="'website'">
+<AppLayout :pageTitle="'archive map · ' + title + ' | cptx'" :description="'Heatmap of every croquis, rima and recuerdo, day by day.'" :canonicalURL="'https://cptx.ee/addons/map/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons">
     <p class="addons-crumb"><a href="/addons/">addons</a> / archive map</p>
     <h1 class="addons-title">{{ title }}</h1>
@@ -8,7 +8,7 @@
     <div class="hm-filters">
       <p><span class="hm-filter-label">year</span><a v-for="o in years" :href="o.Href" :class="{ 'hm-opt': true, 'hm-active': o.Active }" rel="nofollow">{{ o.Label }}</a></p>
       <p><span class="hm-filter-label">section</span><a v-for="o in sections" :href="o.Href" :class="{ 'hm-opt': true, 'hm-active': o.Active }" rel="nofollow">{{ o.Label }}</a></p>
-      <p><span class="hm-filter-label">tag</span><a v-for="o in tags" :href="o.Href" :class="{ 'hm-opt': true, 'hm-active': o.Active }" rel="nofollow">{{ o.Label }}</a></p>
+      <p v-if="tags.length > 1"><span class="hm-filter-label">tag</span><a v-for="o in tags" :href="o.Href" :class="{ 'hm-opt': true, 'hm-active': o.Active }" rel="nofollow">{{ o.Label }}</a></p>
       <p><span class="hm-filter-label">colour</span><a v-for="o in metrics" :href="o.Href" :class="{ 'hm-opt': true, 'hm-active': o.Active }" rel="nofollow">{{ o.Label }}</a></p>
     </div>
 

@@ -134,7 +134,7 @@ var canonicalPlaces map[string]place
 func buildPlacesData(idx []addonPost, q url.Values) map[string]any {
 	section := "all"
 	switch s := q.Get("section"); s {
-	case "croquis", "recuerdos":
+	case "croquis", "rimas", "recuerdos":
 		section = s
 	}
 	posts := filterPosts(idx, section, "")
@@ -250,7 +250,7 @@ func buildPlacesData(idx []addonPost, q url.Values) map[string]any {
 	for _, r := range []string{"world", "europe"} {
 		regionOpts = append(regionOpts, opt(r, r == reg.Key, link(r, section, year, selected)))
 	}
-	for _, s := range []string{"all", "croquis", "recuerdos"} {
+	for _, s := range []string{"all", "croquis", "rimas", "recuerdos"} {
 		sectionOpts = append(sectionOpts, opt(s, s == section, link(reg.Key, s, 0, "")))
 	}
 	yearOpts = append(yearOpts, opt("all", year == 0, link(reg.Key, section, 0, selected)))

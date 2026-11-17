@@ -59,7 +59,7 @@ func wordCounts(text string) map[string]int {
 func buildWordsData(idx []addonPost, q url.Values) map[string]any {
 	section := "all"
 	switch s := q.Get("section"); s {
-	case "croquis", "recuerdos":
+	case "croquis", "rimas", "recuerdos":
 		section = s
 	}
 	posts := filterPosts(idx, section, "")
@@ -170,7 +170,7 @@ func buildWordsData(idx []addonPost, q url.Values) map[string]any {
 		return map[string]any{"Label": label, "Active": active, "Href": href}
 	}
 	var sectionOpts, yearOpts []any
-	for _, s := range []string{"all", "croquis", "recuerdos"} {
+	for _, s := range []string{"all", "croquis", "rimas", "recuerdos"} {
 		sectionOpts = append(sectionOpts, opt(s, s == section, link(s, 0, selected)))
 	}
 	yearOpts = append(yearOpts, opt("all", year == 0, link(section, 0, selected)))

@@ -41,7 +41,8 @@ var tagRe = regexp.MustCompile(`<[^>]+>`)
 
 func plainText(h string) string { return html.UnescapeString(tagRe.ReplaceAllString(h, " ")) }
 
-// buildAddonIndex keeps published croquis and recuerdos, newest first.
+// buildAddonIndex keeps published croquis, rimas and recuerdos, newest first.
+// Poems count as their own section, "rimas", never as croquis.
 func buildAddonIndex(posts []*Post) []addonPost {
 	var out []addonPost
 	for _, p := range posts {
@@ -49,8 +50,12 @@ func buildAddonIndex(posts []*Post) []addonPost {
 			continue
 		}
 		text := plainText(string(p.Content))
+		section := p.Section
+		if isRima(p) {
+			section = "rimas"
+		}
 		out = append(out, addonPost{
-			Title: p.Title, Path: p.Path, Section: p.Section, Tags: p.Tags,
+			Title: p.Title, Path: p.Path, Section: section, Tags: p.Tags,
 			Words: len(strings.Fields(text)), Date: p.Date, Day: p.Date.Format("2006-01-02"),
 			Places: placeMentions(text), WordCounts: wordCounts(text),
 		})
@@ -76,7 +81,7 @@ func postListMaps(ps []addonPost) []any {
 
 type mapParams struct {
 	Year         int    // 0 = all years
-	Section, Tag string // section: all|croquis|recuerdos; tag: "" or a tag
+	Section, Tag string // section: all|croquis|rimas|recuerdos; tag: "" or a tag
 	Metric, Day  string // metric: posts|words; day: YYYY-MM-DD or ""
 }
 
@@ -146,8 +151,11 @@ func yearsOf(ps []addonPost) []int {
 func parseMapParams(q url.Values, idx []addonPost, tags map[string]bool) (mapParams, []int) {
 	m := mapParams{Section: "all", Metric: "posts"}
 	switch s := q.Get("section"); s {
-	case "croquis", "recuerdos":
+	case "croquis", "rimas", "recuerdos":
 		m.Section = s
+	}
+	if q.Get("tag") == "rimas" { // old links from before rimas became a section
+		m.Section = "rimas"
 	}
 	if t := q.Get("tag"); tags[t] {
 		m.Tag = t
@@ -263,7 +271,7 @@ func buildMapData(idx []addonPost, tags []string, q url.Values) map[string]any {
 		yearOpts = append(yearOpts, opt(strconv.Itoa(y), y == m.Year, m.url(func(c *mapParams) { c.Year = yy; c.Day = "" })))
 	}
 	var sectionOpts, tagOpts, metricOpts []any
-	for _, s := range []string{"all", "croquis", "recuerdos"} {
+	for _, s := range []string{"all", "croquis", "rimas", "recuerdos"} {
 		ss := s
 		sectionOpts = append(sectionOpts, opt(s, s == m.Section, m.url(func(c *mapParams) { c.Section = ss; c.Day = "" })))
 	}
@@ -421,12 +429,13 @@ func registerAddons(mux *http.ServeMux, render func(http.ResponseWriter, string,
 	})
 }
 
-// addonTags lists tags used by croquis/recuerdos, sorted.
+// addonTags lists tags used by croquis/recuerdos, sorted. "rimas" is a section
+// now, so it is not offered as a tag.
 func addonTags(idx []addonPost) []string {
 	set := map[string]bool{}
 	for _, p := range idx {
 		for _, t := range p.Tags {
-			if t != "" {
+			if t != "" && t != "rimas" {
 				set[t] = true
 			}
 		}

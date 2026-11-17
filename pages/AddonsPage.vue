@@ -2,12 +2,12 @@
 <AppLayout :pageTitle="'addons | cptx'" :description="'Ways to wander the archive: a heatmap of every post and what was written on this day.'" :canonicalURL="'https://cptx.ee/addons/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons">
     <h1 class="addons-title">addons</h1>
-    <p class="addons-intro">My playground: where I try new features that make the blog more immersive. Other ways into the {{ count }} croquis and recuerdos.</p>
+    <p class="addons-intro">My playground: where I try new features that make the blog more immersive. Other ways into the {{ count }} croquis, rimas and recuerdos.</p>
     <a class="addon-card ic-card" href="/addons/map/">
       <LineIcon :name="'grid'"></LineIcon>
       <span class="ic-text">
       <span class="addon-card-title">archive map →</span>
-      <span class="addon-card-desc">Every day of writing as a heatmap. Filter by year, section, tag; colour by posts or words. Every view has its own shareable link.</span>
+      <span class="addon-card-desc">Every day of writing as a heatmap. Filter by year and section; colour by posts or words. Every view has its own shareable link.</span>
     </span>
     </a>
     <a class="addon-card ic-card" href="/addons/today/">

@@ -1,9 +1,9 @@
 <template>
-<AppLayout :pageTitle="'search | cptx'" :description="'Search every croquis and recuerdo, and the library.'" :canonicalURL="'https://cptx.ee/search/'" :lang="'en'" :ogType="'website'">
+<AppLayout :pageTitle="'search | cptx'" :description="'Search every croquis, rima and recuerdo, and the library.'" :canonicalURL="'https://cptx.ee/search/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons">
     <h1 class="addons-title">search</h1>
     <form class="nl-form sr-form" action="/search/" method="get" role="search">
-      <label for="sr-q">words to look for in every croquis and recuerdo, and the library</label>
+      <label for="sr-q">words to look for in every croquis, rima and recuerdo, and the library</label>
       <div class="nl-row">
         <input id="sr-q" type="search" name="q" :value="q" placeholder="café, Tallinn, lluvia…" autocomplete="off">
         <button type="submit">search</button>

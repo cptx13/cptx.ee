@@ -262,3 +262,25 @@ func TestBookTitleLayout(t *testing.T) {
 		t.Errorf("got %q / %q", m, s)
 	}
 }
+
+func TestRimasSection(t *testing.T) {
+	idx := testIdx()
+	n := 0
+	for _, p := range idx {
+		if p.Section == "rimas" {
+			n++
+		}
+	}
+	if n != 1 {
+		t.Errorf("rimas in index = %d, want 1", n)
+	}
+	for _, tg := range addonTags(idx) {
+		if tg == "rimas" {
+			t.Error("rimas offered as a tag")
+		}
+	}
+	data := buildMapData(idx, addonTags(idx), url.Values{"tag": {"rimas"}})
+	if data["total"] != 1 || !strings.Contains(data["shareURL"].(string), "section=rimas") {
+		t.Errorf("old ?tag=rimas link: total=%v share=%v", data["total"], data["shareURL"])
+	}
+}
