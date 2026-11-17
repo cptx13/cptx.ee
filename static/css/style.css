@@ -472,53 +472,35 @@ footer a {
 }
 
 /* Single pagination */
-.single-pagination {
-  margin-top: 3rem;
-  margin-bottom: 3rem;
+/* Post navigation: older / newer in the same section + back to its list */
+.post-nav {
+  margin: 3rem 0;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--content-secondary);
+  border-bottom: 1px solid var(--content-secondary);
+  font-family: var(--font-mono);
 }
-
-.single-pagination a {
-  margin-left: .4rem;
-  margin-right: .4rem;
+.post-nav-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
-
-.single-pagination hr {
-  margin: 0;
-}
-
-.single-pagination-text {
+.post-nav-link {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100%;
+  flex-direction: column;
+  gap: .3rem;
+  padding: .75rem .9rem;
+  border: 1px solid var(--content-secondary);
+  border-radius: 6px;
+  text-decoration: none;
+  min-width: 0;
 }
-
-.single-pagination-prev {
-  min-width: 50%;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  text-align: right;
-}
-
-.single-pagination-next {
-  min-width: 50%;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  text-align: left;
-}
-
-.single-pagination-container-next {
-  display: flex;
-  min-height: 100%;
-  padding: .5rem;
-}
-
-.single-pagination-container-prev {
-  display: flex;
-  min-height: 100%;
-  padding: .5rem;
-  float: right;
-}
+.post-nav-link:hover, .post-nav-link:focus-visible { border-color: var(--content-primary); }
+.post-nav-next { text-align: right; grid-column: 2; }
+.post-nav-label, .post-nav-date { color: var(--content-secondary); font-size: .8em; }
+.post-nav-title { font-weight: bold; overflow-wrap: anywhere; }
+.post-nav-all { margin: 1rem 0 0; text-align: center; font-size: .9em; }
+.post-nav-all a { color: var(--content-secondary); }
 
 /* Table of contents */
 .toc {
@@ -834,7 +816,7 @@ blockquote p {
 
 /* F-13: print — content only, black on white, show link targets */
 @media print {
-    header, footer, .single-pagination, .back-to-top, .skip-link, .theme-toggle,
+    header, footer, .post-nav, .back-to-top, .skip-link, .theme-toggle,
     .header, .home-search, .home-search-full, #random-post-button {
         display: none !important;
     }

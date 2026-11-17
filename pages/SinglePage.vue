@@ -35,7 +35,7 @@
       <p><a class="share-link" :href="'https://cptx.ee' + post.Path" :data-share-url="'https://cptx.ee' + post.Path">share this post</a> · <a href="/index.xml">rss</a> · <a href="/newsletter/">newsletter</a></p>
     </div>
   </article>
-  <Pagination :prevPost="prevPost" :nextPost="nextPost"></Pagination>
+  <Pagination :prevPost="prevPost" :nextPost="nextPost" :post="post"></Pagination>
   <div class="back-to-top">
     <a href="#top">back to top</a>
   </div>

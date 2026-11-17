@@ -8,6 +8,7 @@ import (
 	"compress/gzip"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io/fs"
 	"net/http"
 	"os"
@@ -121,6 +122,37 @@ func rimasPageData(published []*Post, toPostList func([]*Post) []any) map[string
 		"posts":        toPostList(rimasPosts(published)),
 		"contentHTML":  "",
 	}
+}
+
+// sectionListPath / sectionListLabel: the "all rimas (7)" link under a post,
+// back to the list it belongs to. Empty for anything but croquis, rimas and
+// recuerdos.
+func sectionListPath(p *Post) string {
+	switch postCategory(p) {
+	case "rimas":
+		return "/rimas/"
+	case "croquis", "recuerdos":
+		return "/categories/" + postCategory(p) + "/"
+	}
+	return ""
+}
+
+func sectionListLabel(p *Post, byCategory map[string][]*Post) string {
+	cat := postCategory(p)
+	if sectionListPath(p) == "" {
+		return ""
+	}
+	return fmt.Sprintf("all %s (%d)", cat, len(byCategory[cat]))
+}
+
+func postCategory(p *Post) string {
+	if p.Section != "croquis" && p.Section != "recuerdos" {
+		return ""
+	}
+	if len(p.Categories) > 0 {
+		return p.Categories[0]
+	}
+	return p.Section
 }
 
 // ---- excerpt for meta description / feed (F-03, B-05) ------------------------

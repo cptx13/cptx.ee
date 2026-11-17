@@ -148,6 +148,8 @@ func main() {
 			"IssueAltPath":  issueAltPath(p, postsByPath),
 			"IssueLabel":    issueLabel(p.Slug),
 			"PageTitle":     pageTitleFor(p),
+			"ListPath":      sectionListPath(p),
+			"ListLabel":     sectionListLabel(p, postsByCategory),
 		}
 	}
 
