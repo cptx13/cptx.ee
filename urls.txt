@@ -333,6 +333,7 @@
 /croquis/202601161/
 /croquis/202603121/
 /croquis/202610071/
+/croquis/202611171/
 /legaldocs/
 /legaldocs/cookies/
 /legaldocs/how-it-works/
@@ -374,6 +375,7 @@
 /posts/croquis/las-palabras-que-no-fueron/
 /posts/croquis/march/
 /posts/croquis/menos-da-una-piedra/
+/posts/croquis/park-lights/
 /posts/croquis/piratas-en-la-cena/
 /posts/croquis/reflexiones-etílicas-sobre-instagram/
 /posts/croquis/relaciones-y-otros-mitos/
