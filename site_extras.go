@@ -258,13 +258,13 @@ var retiredURLs = map[string]string{
 	"/categories/archives/":    "/archives/", // L-01: the books moved into /archives/ (written by me)
 	// 2026-11-17: poems left croquis for their own category, /rimas/
 	"/categories/rimas/":  "/rimas/",
-	"/croquis/202408311/": "/rimas/202408311/", // Chasing the details
-	"/croquis/202412311/": "/rimas/202412311/", // Una tarde en Figueras
-	"/croquis/202504221/": "/rimas/202504221/", // Terraza marbelli
-	"/croquis/202504231/": "/rimas/202504231/", // Garabatos
-	"/croquis/202510181/": "/rimas/202510181/", // The river Alph
-	"/croquis/202603121/": "/rimas/202603121/", // March
-	"/croquis/202611171/": "/rimas/202611171/", // Park lights
+	"/rimas/202408311/":   "/croquis/202408311/", // Chasing the details is a croquis after all
+	"/croquis/202412311/": "/rimas/202412311/",   // Una tarde en Figueras
+	"/croquis/202504221/": "/rimas/202504221/",   // Terraza marbelli
+	"/croquis/202504231/": "/rimas/202504231/",   // Garabatos
+	"/croquis/202510181/": "/rimas/202510181/",   // The river Alph
+	"/croquis/202603121/": "/rimas/202603121/",   // March
+	"/croquis/202611171/": "/rimas/202611171/",   // Park lights
 }
 
 func registerRetired(mux *http.ServeMux, distDir string) error {
