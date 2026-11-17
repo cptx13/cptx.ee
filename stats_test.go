@@ -53,6 +53,12 @@ func TestStats(t *testing.T) {
 	if d["visits"] != 3 || d["reads"] != 1 || !strings.Contains(d["svg"].(string), "Finland") {
 		t.Errorf("readers data: %v %v", d["visits"], d["reads"])
 	}
+	if ms := d["months"].([]any); len(ms) != 1 || d["monthsNote"] != "since November 2026" {
+		t.Errorf("months before the first data: %d %v", len(ms), d["monthsNote"])
+	}
+	if ms := buildReadersData(s2, nil, now.AddDate(1, 2, 0))["months"].([]any); len(ms) != 12 {
+		t.Errorf("months capped at 12: %d", len(ms))
+	}
 	if readsLabel(0) != "" || readsLabel(1) != "read once" || readsLabel(7) != "read 7 times" {
 		t.Error("labels")
 	}

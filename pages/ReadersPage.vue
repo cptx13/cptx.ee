@@ -10,7 +10,7 @@
     <div class="wd-bars rd-months">
       <p v-for="m in months" class="wd-bar"><span class="wd-bar-year rd-month">{{ m.Label }}</span><span class="wd-bar-track"><span class="wd-bar-fill" :style="m.Width"></span></span><span class="wd-bar-n rd-n">{{ m.Visits }}</span></p>
     </div>
-    <p class="hm-legend">page visits per month · last 12 months</p>
+    <p class="hm-legend">page visits per month · {{ monthsNote }}</p>
 
     <h2 class="addons-sub">where readers are</h2>
     <div class="pl-wrap" v-html="svg"></div>

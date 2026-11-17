@@ -425,21 +425,36 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 		s.mu.Unlock()
 	}
 
-	// last 12 months, oldest first
+	// months with data: from the first month counted (at most the last 12), oldest first
+	base := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
+	span := 11
+	if first != "" {
+		if ft, err := time.Parse("2006-01-02", first); err == nil {
+			if d := (base.Year()-ft.Year())*12 + int(base.Month()) - int(ft.Month()); d < span {
+				span = max(d, 0)
+			}
+		}
+	} else {
+		span = 0
+	}
 	var months []any
 	maxV := 1
-	for i := 11; i >= 0; i-- {
-		if v := byMonth[now.AddDate(0, -i, 0).Format("2006-01")][0]; v > maxV {
+	for i := span; i >= 0; i-- {
+		if v := byMonth[base.AddDate(0, -i, 0).Format("2006-01")][0]; v > maxV {
 			maxV = v
 		}
 	}
-	for i := 11; i >= 0; i-- {
-		t := now.AddDate(0, -i, 0)
+	for i := span; i >= 0; i-- {
+		t := base.AddDate(0, -i, 0)
 		m := byMonth[t.Format("2006-01")]
 		months = append(months, map[string]any{
 			"Label": t.Format("Jan 06"), "Visits": m[0], "Visitors": m[1], "Reads": m[2],
 			"Width": fmt.Sprintf("width:%.1f%%", 100*float64(m[0])/float64(maxV)),
 		})
+	}
+	monthsNote := "last 12 months"
+	if span < 11 {
+		monthsNote = "since " + base.AddDate(0, -span, 0).Format("January 2006")
 	}
 
 	type kv struct {
@@ -509,7 +524,7 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 	}
 	return map[string]any{
 		"visits": visits, "visitors": visitors, "reads": reads, "countryCount": len(cs),
-		"since": since, "hasSince": since != "", "months": months,
+		"since": since, "hasSince": since != "", "months": months, "monthsNote": monthsNote,
 		"mostRead": mostRead, "hasRead": len(mostRead) > 0,
 		"mostVisited": mostVisited, "hasVisited": len(mostVisited) > 0,
 		"svg": svg.String(), "countries": rows, "hasCountries": len(rows) > 0,
