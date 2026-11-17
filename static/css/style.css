@@ -499,8 +499,7 @@ footer a {
 .post-nav-next { text-align: right; grid-column: 2; }
 .post-nav-label, .post-nav-date { color: var(--content-secondary); font-size: .8em; }
 .post-nav-title { font-weight: bold; overflow-wrap: anywhere; }
-.post-nav-all { margin: 1rem 0 0; text-align: center; font-size: .9em; }
-.post-nav-all a { color: var(--content-secondary); }
+.post-nav-all { grid-column: 1 / -1; align-items: center; text-align: center; }
 
 /* Table of contents */
 .toc {

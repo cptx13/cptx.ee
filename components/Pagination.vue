@@ -11,7 +11,7 @@
       <span class="post-nav-title">{{ nextPost.Title }}</span>
       <span class="post-nav-date">{{ nextPost.DateFormatted }}</span>
     </a>
+    <a v-if="post.ListPath" class="post-nav-link post-nav-all" :href="post.ListPath">{{ post.ListLabel }}</a>
   </div>
-  <p v-if="post.ListPath" class="post-nav-all"><a :href="post.ListPath">{{ post.ListLabel }}</a></p>
 </nav>
 </template>
