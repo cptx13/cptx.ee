@@ -374,9 +374,16 @@ hr {
 
 .header-menu {
   display: grid;
-  grid-template-columns: repeat(3, max-content);
+  grid-template-columns: repeat(4, max-content);
   column-gap: var(--header-menu-side-gap);
   padding-top: var(--header-menu-top-gap);
+}
+
+/* menu rows: 3 · 4 · 3 — each row starts in the first column */
+.header-menu .menu-row { grid-column: 1; }
+
+@media (max-width: 380px) {
+  .header-menu p { margin-right: 0; }
 }
 
 .header-title {

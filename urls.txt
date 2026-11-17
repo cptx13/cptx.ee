@@ -2514,4 +2514,5 @@
 /recuerdos/202409081/
 /recuerdos/202409171/
 /recuerdos/202409241/
+/rimas/
 /search/

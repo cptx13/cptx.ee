@@ -366,6 +366,11 @@ func main() {
 		renderPage(w, engine, "ListPage", data)
 	})))
 
+	// Rimas: every poem (tag "rimas"), in the menu next to croquis/recuerdos
+	must(routes.GET("rimas", "/rimas/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		renderPage(w, engine, "ListPage", rimasPageData(published, toPostList))
+	})))
+
 	// Individual posts (new URL scheme: /{category}/{id}/)
 	must(routes.GET("post", "/{category}/{id}/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m, _ := dispatch.MatchFromContext(r.Context())

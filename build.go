@@ -153,6 +153,11 @@ func buildStaticSite(
 		}
 	}
 
+	// Rimas (poems)
+	if err := writePage(filepath.Join("rimas", "index.html"), "ListPage", rimasPageData(published, toPostList)); err != nil {
+		return err
+	}
+
 	// Individual posts
 	for _, post := range published {
 		if post.Path == "/manifesto/" {

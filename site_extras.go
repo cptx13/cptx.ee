@@ -87,6 +87,32 @@ func contentClass(p *Post) string {
 	return "single-content"
 }
 
+// rimasPosts lists the poems (tag "rimas") for /rimas/, newest first like the
+// category pages.
+func rimasPosts(published []*Post) []*Post {
+	var out []*Post
+	for _, p := range published {
+		for _, t := range p.Tags {
+			if t == "rimas" {
+				out = append(out, p)
+				break
+			}
+		}
+	}
+	return out
+}
+
+// rimasPageData is the ListPage data for /rimas/ (server and static build).
+func rimasPageData(published []*Post, toPostList func([]*Post) []any) map[string]any {
+	return map[string]any{
+		"title":        "rimas",
+		"description":  "rimas: the poems of cptx",
+		"canonicalURL": "https://cptx.ee/rimas/",
+		"posts":        toPostList(rimasPosts(published)),
+		"contentHTML":  "",
+	}
+}
+
 // ---- excerpt for meta description / feed (F-03, B-05) ------------------------
 
 var (
