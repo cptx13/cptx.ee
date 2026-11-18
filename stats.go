@@ -222,6 +222,7 @@ func (s *statsStore) countHello(path, ip, ua string, now time.Time) bool {
 		}
 		ds.Countries[cc]++
 	}
+	return true
 }
 
 // countRead records a read; false when it doesn't count (unknown post, repeat).
