@@ -31,9 +31,20 @@ func TestStats(t *testing.T) {
 	dir := t.TempDir()
 	s := newStatsStore(dir, map[string]bool{"/croquis/1/": true}, k)
 	now := time.Date(2026, 11, 15, 12, 0, 0, 0, time.UTC)
+	// raw loads: scrapers included, never shown
 	s.countView("/", "10.1.1.1", "Mozilla", now)
 	s.countView("/croquis/1/", "10.1.1.1", "Mozilla", now)
 	s.countView("/", "8.8.8.8", "Mozilla", now)
+	s.countView("/", "9.9.9.9", "Mozilla", now) // a scraper: loads the HTML, never says hello
+	// people: the hello beacon
+	if !s.countHello("/", "10.1.1.1", "Mozilla", now) || s.countHello("/", "10.1.1.1", "Mozilla", now) {
+		t.Error("a page counts once per person per day")
+	}
+	s.countHello("/croquis/1/", "10.1.1.1", "Mozilla", now)
+	s.countHello("/", "8.8.8.8", "Mozilla", now)
+	if s.countHello("/never-served/", "8.8.8.8", "Mozilla", now) {
+		t.Error("hello for a page the server never served")
+	}
 	if !s.countRead("/croquis/1/", "10.1.1.1", "Mozilla", now) || s.countRead("/croquis/1/", "10.1.1.1", "Mozilla", now) {
 		t.Error("read should count once per visitor per day")
 	}
@@ -41,8 +52,11 @@ func TestStats(t *testing.T) {
 		t.Error("unknown post")
 	}
 	ds := s.days["2026-11-15"]
-	if ds.Visitors != 2 || ds.Visits["/"] != 2 || ds.Countries["FI"] != 1 || ds.Countries["ZZ"] != 1 {
+	if ds.Visitors != 2 || ds.Visits["/"] != 2 || ds.Visits["/croquis/1/"] != 1 || ds.Countries["FI"] != 1 || ds.Countries["ZZ"] != 1 {
 		t.Errorf("day = %+v", ds)
+	}
+	if ds.Raw.Hits != 4 || ds.Raw.Visitors != 3 {
+		t.Errorf("raw = %+v", ds.Raw)
 	}
 	s.save()
 	s2 := newStatsStore(dir, nil, nil)
@@ -71,6 +85,42 @@ func TestStats(t *testing.T) {
 	r.Header.Set("X-Forwarded-For", "1.2.3.4, 5.6.7.8")
 	if isBot(r) || clientIP(r) != "5.6.7.8" {
 		t.Error("ua/ip")
+	}
+}
+
+// Days saved before AD-07 counted every HTML load as a visit: they move to Raw.
+func TestStatsOldDays(t *testing.T) {
+	dir := t.TempDir()
+	os.WriteFile(filepath.Join(dir, "2026-11.json"), []byte(`{"2026-11-15":{"visitors":5,"visits":{"/":7,"/a/":3},"reads":{"/croquis/1/":2},"countries":{"US":5}}}`), 0o644)
+	s := newStatsStore(dir, nil, nil)
+	ds := s.days["2026-11-15"]
+	if ds.Visitors != 0 || len(ds.Visits) != 0 || len(ds.Countries) != 0 || ds.Raw.Hits != 10 || ds.Raw.Visitors != 5 || ds.V != statsVersion {
+		t.Errorf("old day = %+v", ds)
+	}
+	if s.readsOf("/croquis/1/") != 2 {
+		t.Error("reads are kept")
+	}
+	s.save()
+	if s2 := newStatsStore(dir, nil, nil); s2.days["2026-11-15"].Raw.Hits != 10 {
+		t.Errorf("migrated once: %+v", s2.days["2026-11-15"].Raw)
+	}
+}
+
+// The list shows the top 10 countries; the map lights all of them.
+func TestReadersTop10(t *testing.T) {
+	s := newStatsStore("", nil, nil)
+	ds := newDay()
+	ds.Visitors = 1
+	for i, cc := range []string{"EE", "FI", "ES", "DE", "FR", "IT", "PT", "SE", "NO", "DK", "PL", "LV"} {
+		ds.Countries[cc] = 20 - i
+	}
+	s.days["2026-11-18"] = ds
+	d := buildReadersData(s, nil, time.Date(2026, 11, 18, 12, 0, 0, 0, time.UTC))
+	if n := len(d["countries"].([]any)); n != 10 || d["moreCountries"] != 2 || d["countryCount"] != 12 {
+		t.Errorf("list %d, more %v, count %v", n, d["moreCountries"], d["countryCount"])
+	}
+	if !strings.Contains(d["svg"].(string), "Latvia") {
+		t.Error("the 12th country still lights the map")
 	}
 }
 

@@ -606,7 +606,8 @@ func main() {
 	rssXML := buildRSS(published, 20)
 	var sitemapXML []byte // filled after the static build below
 	mux.HandleFunc("/healthz", healthHandler(postCount, started))
-	mux.HandleFunc("/_read", readHandler) // A-02: read beacon
+	mux.HandleFunc("/_read", readHandler)   // A-02: read beacon
+	mux.HandleFunc("/_hello", helloHandler) // AD-07: a person is on the page
 	registerAddons(mux, func(w http.ResponseWriter, c string, d map[string]any) { renderPage(w, engine, c, d) }, addonIdx, addonTagList)
 	registerLibrary(mux, func(w http.ResponseWriter, c string, d map[string]any) { renderPage(w, engine, c, d) },
 		func(w http.ResponseWriter, r *http.Request) { renderNotFound(w, engine) }, lib)

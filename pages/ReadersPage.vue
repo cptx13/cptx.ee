@@ -4,7 +4,7 @@
     <p class="addons-crumb"><a href="/addons/">addons</a> / readers</p>
     <h1 class="addons-title">readers</h1>
     <p class="hm-stats">{{ visits }} visits · {{ visitors }} visitors · {{ reads }} reads · {{ countryCount }} countries<span v-if="hasSince"> · since {{ since }}</span></p>
-    <p class="addons-intro">Counted on this server, without cookies or trackers. A visit is a page opened; a read is someone reaching the end of a post after enough time to have read it. Visitors are counted per day, so someone who comes back tomorrow counts again. <a href="/legaldocs/privacy/">How it works →</a></p>
+    <p class="addons-intro">Counted on this server, without cookies or trackers, and only for people: a page counts once someone scrolls, taps or stays on it, so scrapers that just copy pages are left out. A visit is a page opened by a person (once a day per page); a read is someone reaching the end of a post after enough time to have read it. Visitors are counted per day, so someone who comes back tomorrow counts again. <a href="/legaldocs/privacy/#counting-readers">How it works →</a></p>
 
     <h2 class="addons-sub">by month</h2>
     <div class="wd-bars rd-months">
@@ -17,6 +17,7 @@
     <div v-if="hasCountries" class="pl-list">
       <p v-for="c in countries" class="pl-row"><span>{{ c.Name }}</span><span class="pl-count">{{ c.N }}</span></p>
     </div>
+    <p v-if="hasMoreCountries" class="hm-legend">top 10 · {{ moreCountries }} more on the map</p>
     <p v-else class="addons-intro">No readers counted yet.</p>
 
     <h2 class="addons-sub">most read</h2>
@@ -34,7 +35,7 @@
     </div>
     <p v-else class="addons-intro">No visits counted yet.</p>
 
-    <p class="addon-credit">Countries: <a href="https://db-ip.com">IP Geolocation by DB-IP</a> (CC BY 4.0). Each country's light sits at the middle of its cities in GeoNames. Bots and link previews are not counted.</p>
+    <p class="addon-credit">Countries: <a href="https://db-ip.com">IP Geolocation by DB-IP</a> (CC BY 4.0). Each country's light sits at the middle of its cities in GeoNames. Bots, link previews and scrapers are not counted.</p>
   </div>
 </AppLayout>
 </template>

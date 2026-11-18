@@ -1,8 +1,14 @@
-// Readers' counters (A-01…A-04): visits, reads and countries, counted on this
-// server without cookies or third parties. Only daily totals are stored, in
+// Readers' counters (A-01…A-04, AD-07): visits, reads and countries, counted on
+// this server without cookies or third parties. Only daily totals are stored, in
 // <data>/stats/YYYY-MM.json. A visitor is recognised for one day only, by a
 // hash of IP + browser + a random salt that lives in memory and is replaced at
 // midnight; neither the IP nor the hash is ever written down.
+//
+// AD-07: visits, visitors and countries come from a "hello" beacon that
+// /js/hello.js sends once a person has interacted with the page (or kept it
+// on screen for a while). Scrapers that only fetch the HTML never send it.
+// Every HTML load is still tallied as "raw" (hits + raw visitors, not shown)
+// so the gap between people and machines stays measurable.
 
 package main
 
@@ -50,16 +56,28 @@ func statsDirs() (statsDir, geoFile string) {
 	return "", ""
 }
 
+// statsVersion 2 (AD-07): visits/visitors/countries come from the hello beacon.
+// Days saved before that hold every HTML load there; on load they move to Raw.
+const statsVersion = 2
+
 // dayStats is one day of totals, as stored on disk.
 type dayStats struct {
-	Visitors  int            `json:"visitors"`  // unique visitors that day
-	Visits    map[string]int `json:"visits"`    // page path → page views
-	Reads     map[string]int `json:"reads"`     // post path → reads (once per visitor per day)
-	Countries map[string]int `json:"countries"` // ISO code → unique visitors ("ZZ" = unknown)
+	V         int            `json:"v,omitempty"` // statsVersion the day was counted with
+	Visitors  int            `json:"visitors"`    // unique people that day (hello beacon)
+	Visits    map[string]int `json:"visits"`      // page path → pages opened by people (once per person per page per day)
+	Reads     map[string]int `json:"reads"`       // post path → reads (once per visitor per day)
+	Countries map[string]int `json:"countries"`   // ISO code → unique people ("ZZ" = unknown)
+	Raw       rawStats       `json:"raw"`         // every HTML load not caught as a bot, incl. scrapers (not shown)
+}
+
+// rawStats counts every HTML page load the bot filter lets through.
+type rawStats struct {
+	Hits     int `json:"hits"`     // page loads
+	Visitors int `json:"visitors"` // unique IP + browser that day
 }
 
 func newDay() *dayStats {
-	return &dayStats{Visits: map[string]int{}, Reads: map[string]int{}, Countries: map[string]int{}}
+	return &dayStats{V: statsVersion, Visits: map[string]int{}, Reads: map[string]int{}, Countries: map[string]int{}}
 }
 
 type statsStore struct {
@@ -70,8 +88,11 @@ type statsStore struct {
 	dirty    map[string]bool      // months to save ("2006-01")
 	today    string
 	salt     [16]byte
-	seen     map[[16]byte]bool // today's visitors
+	seen     map[[16]byte]bool // today's people (hello beacon)
+	seenRaw  map[[16]byte]bool // today's raw visitors (any HTML load)
+	seenView map[[16]byte]bool // today's person+page views
 	seenRead map[[16]byte]bool // today's visitor+post reads
+	served   map[string]bool   // paths served as HTML 200 since startup (hello must name one)
 	reads    map[string]int    // post path → reads, all time
 	readable map[string]bool   // posts that can be "read"
 	geo      *geoKeeper
@@ -86,7 +107,8 @@ func newStatsStore(dir string, readable map[string]bool, geo *geoKeeper) *statsS
 		loc = time.UTC
 	}
 	s := &statsStore{dir: dir, loc: loc, days: map[string]*dayStats{}, dirty: map[string]bool{},
-		seen: map[[16]byte]bool{}, seenRead: map[[16]byte]bool{}, reads: map[string]int{}, readable: readable, geo: geo}
+		seen: map[[16]byte]bool{}, seenRaw: map[[16]byte]bool{}, seenView: map[[16]byte]bool{}, seenRead: map[[16]byte]bool{},
+		served: map[string]bool{}, reads: map[string]int{}, readable: readable, geo: geo}
 	if dir != "" {
 		files, _ := filepath.Glob(filepath.Join(dir, "*.json"))
 		for _, f := range files {
@@ -109,6 +131,15 @@ func newStatsStore(dir string, readable map[string]bool, geo *geoKeeper) *statsS
 				if ds.Countries == nil {
 					ds.Countries = map[string]int{}
 				}
+				if ds.V < statsVersion { // counted before AD-07: those were raw loads
+					for _, n := range ds.Visits {
+						ds.Raw.Hits += n
+					}
+					ds.Raw.Visitors += ds.Visitors
+					ds.Visits, ds.Countries, ds.Visitors = map[string]int{}, map[string]int{}, 0
+					ds.V = statsVersion
+					s.dirty[d[:7]] = true
+				}
 				s.days[d] = ds
 				for p, n := range ds.Reads {
 					s.reads[p] += n
@@ -126,6 +157,8 @@ func (s *statsStore) rollDay(now time.Time) *dayStats {
 		s.today = day
 		rand.Read(s.salt[:])
 		s.seen = map[[16]byte]bool{}
+		s.seenRaw = map[[16]byte]bool{}
+		s.seenView = map[[16]byte]bool{}
 		s.seenRead = map[[16]byte]bool{}
 	}
 	ds := s.days[day]
@@ -146,11 +179,33 @@ func (s *statsStore) visitor(ip, ua string, extra string) [16]byte {
 	return out
 }
 
-// countView records one page view.
+// countView records one HTML page load (raw: scrapers included).
 func (s *statsStore) countView(path, ip, ua string, now time.Time) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	ds := s.rollDay(now)
+	ds.Raw.Hits++
+	s.served[path] = true
+	if v := s.visitor(ip, ua, ""); !s.seenRaw[v] {
+		s.seenRaw[v] = true
+		ds.Raw.Visitors++
+	}
+}
+
+// countHello records a person on a page (hello beacon); false when it doesn't
+// count (a page this server hasn't served, or the same person and page today).
+func (s *statsStore) countHello(path, ip, ua string, now time.Time) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if !s.served[path] {
+		return false
+	}
+	ds := s.rollDay(now)
+	k := s.visitor(ip, ua, "view\x00"+path)
+	if s.seenView[k] {
+		return false
+	}
+	s.seenView[k] = true
 	ds.Visits[path]++
 	v := s.visitor(ip, ua, "")
 	if !s.seen[v] {
@@ -306,6 +361,20 @@ func withStats(next http.Handler) http.Handler {
 	})
 }
 
+// helloHandler takes the beacon from /js/hello.js: the body is the page's path.
+func helloHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.Header().Set("Allow", "POST")
+		http.Error(w, "POST only", http.StatusMethodNotAllowed)
+		return
+	}
+	if siteStats != nil && !isBot(r) {
+		b, _ := io.ReadAll(io.LimitReader(r.Body, 300))
+		siteStats.countHello(strings.TrimSpace(string(b)), clientIP(r), r.UserAgent(), time.Now())
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
 // readHandler takes the beacon from /js/read.js: the body is the post's path.
 func readHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -401,7 +470,7 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 	if s != nil {
 		s.mu.Lock()
 		for d, ds := range s.days {
-			if first == "" || d < first {
+			if ds.Visitors > 0 && (first == "" || d < first) {
 				first = d
 			}
 			m := byMonth[d[:7]]
@@ -503,7 +572,9 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 	for _, e := range cs {
 		ci := countryTable[e.k]
 		name := countryName(e.k)
-		rows = append(rows, map[string]any{"Name": name, "N": e.n})
+		if len(rows) < 10 { // the list shows the top 10; the map lights every country
+			rows = append(rows, map[string]any{"Name": name, "N": e.n})
+		}
 		if !ci.HasPos {
 			continue
 		}
@@ -528,5 +599,6 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 		"mostRead": mostRead, "hasRead": len(mostRead) > 0,
 		"mostVisited": mostVisited, "hasVisited": len(mostVisited) > 0,
 		"svg": svg.String(), "countries": rows, "hasCountries": len(rows) > 0,
+		"moreCountries": max(len(cs)-len(rows), 0), "hasMoreCountries": len(cs) > len(rows),
 	}
 }

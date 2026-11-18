@@ -73,6 +73,7 @@ var assetVersioner = strings.NewReplacer(
 	`src="/js/share.js"`, `src="/js/share.js?v=`+assetVersion+`"`,
 	`src="/js/photos.js"`, `src="/js/photos.js?v=`+assetVersion+`"`,
 	`src="/js/read.js"`, `src="/js/read.js?v=`+assetVersion+`"`,
+	`src="/js/hello.js"`, `src="/js/hello.js?v=`+assetVersion+`"`,
 )
 
 // contentClass marks verse (tag "rimas") so it gets poem typography (F-09).
