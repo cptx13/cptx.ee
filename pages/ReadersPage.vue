@@ -1,10 +1,10 @@
 <template>
-<AppLayout :pageTitle="'readers | cptx'" :description="'Who comes by, counted without cookies: visits by month, the most read posts and a map of where readers are.'" :canonicalURL="'https://cptx.ee/addons/readers/'" :lang="'en'" :ogType="'website'">
+<AppLayout :pageTitle="'readers | cptx'" :description="'Who comes by, counted without cookies: visits by month, the most read posts, readers vs machines and a map of where readers are.'" :canonicalURL="'https://cptx.ee/addons/readers/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons">
     <p class="addons-crumb"><a href="/addons/">addons</a> / readers</p>
     <h1 class="addons-title">readers</h1>
-    <p class="hm-stats">{{ visits }} visits · {{ visitors }} visitors · {{ reads }} reads · {{ countryCount }} countries<span v-if="hasSince"> · since {{ since }}</span></p>
-    <p class="addons-intro">Counted on this server, without cookies or trackers, and only for people: a page counts once someone scrolls, taps or stays on it, so scrapers that just copy pages are left out. A visit is a page opened by a person (once a day per page); a read is someone reaching the end of a post after enough time to have read it. Visitors are counted per day, so someone who comes back tomorrow counts again. <a href="/legaldocs/privacy/#counting-readers">How it works →</a></p>
+    <p class="hm-stats">{{ visits }} visits · {{ visitors }} visitors · {{ countryCount }} countries<span v-if="hasSince"> · since {{ since }}</span></p>
+    <p class="addons-intro">Counted on this server, without cookies or trackers, and only for people: a page counts once someone scrolls, taps, clicks or types on it, so scrapers that just copy pages are left out. Nothing measures how long anyone stays. A visit is a page opened by a person (once a day per page), and a visit to a post is a read: that's the "read N times" under each post. Visitors are counted per day, so someone who comes back tomorrow counts again. <a href="/legaldocs/privacy/#counting-readers">How it works →</a></p>
 
     <div v-if="hasMachines">
       <h2 class="addons-sub">readers vs machines</h2>
@@ -26,8 +26,8 @@
     <div class="pl-wrap" v-html="svg"></div>
     <div v-if="hasCountries" class="pl-list">
       <p v-for="c in countries" class="pl-row"><span>{{ c.Name }}</span><span class="pl-count">{{ c.N }}</span></p>
+      <p v-if="hasMoreCountries" class="hm-legend">top 10 · {{ moreCountries }} more on the map</p>
     </div>
-    <p v-if="hasMoreCountries" class="hm-legend">top 10 · {{ moreCountries }} more on the map</p>
     <p v-else class="addons-intro">No readers counted yet.</p>
 
     <h2 class="addons-sub">most read</h2>
@@ -37,9 +37,9 @@
         <h2 class="post-entry-title"><a :href="p.Path">{{ p.Title }}</a><span class="pl-count rd-reads">{{ p.Reads }}</span></h2>
       </article>
     </div>
-    <p v-else class="addons-intro">Nothing read to the end yet.</p>
+    <p v-else class="addons-intro">Nothing read yet.</p>
 
-    <h2 class="addons-sub">most visited pages</h2>
+    <h2 class="addons-sub">other pages</h2>
     <div v-if="hasVisited" class="pl-list rd-pages">
       <a v-for="p in mostVisited" class="pl-row" :href="p.Path"><span>{{ p.Label }}</span><span class="pl-count">{{ p.N }}</span></a>
     </div>

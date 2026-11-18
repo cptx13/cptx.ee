@@ -107,7 +107,7 @@ func newsletterIssues(posts []*Post) []any {
 		out[i] = map[string]any{
 			"No": p.Slug, "NoPadded": fmt.Sprintf("%02d", n), "Label": issueLabel(p.Slug), "Title": p.Title, "Path": p.Path,
 			"Date": p.Date.Format("2 Jan 2006"), "Week": "week " + strconv.Itoa(week),
-			"Summary": p.Summary, "Reads": readsLabel(siteStats.readsOf(p.Path)),
+			"Summary": p.Summary, "Reads": readsLabel(siteStats.visitsOf(p.Path)),
 			"Palette": "kiosk-p" + strconv.Itoa((n-1+len(coverPalettes))%len(coverPalettes)),
 			"Art":     coverArt(p, n, words),
 		}

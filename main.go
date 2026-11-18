@@ -107,8 +107,6 @@ func main() {
 
 	allPostsForPool := allPosts
 
-	postWords := map[string]int{} // filled once below; used by the read beacon (A-02)
-
 	// Post data as maps for templates
 	toPostMap := func(p *Post) map[string]any {
 		tags := make([]any, len(p.Tags))
@@ -140,8 +138,7 @@ func main() {
 			"TOC":           p.TOC,
 			"Categories":    categories,
 			"ID":            p.ID,
-			"ReadsLabel":    readsLabel(siteStats.readsOf(p.Path)),
-			"Words":         postWords[p.Path],
+			"ReadsLabel":    readsLabel(siteStats.visitsOf(p.Path)),
 			"Readable":      p.Section == "croquis" || p.Section == "recuerdos" || isIssue(p) || isIssueES(p),
 			"IsIssue":       isIssue(p) || isIssueES(p),
 			"IssueES":       isIssueES(p),
@@ -222,19 +219,13 @@ func main() {
 	postTexts := map[string]string{}
 	for _, p := range published {
 		postTexts[p.Path] = plainText(string(p.Content))
-		postWords[p.Path] = len(strings.Fields(postTexts[p.Path]))
 	}
-	// A-01…A-04: readers' counters (visits, reads, countries)
-	readable := map[string]bool{}
-	for _, p := range addonIdx {
-		readable[p.Path] = true
-	}
-	// newsletter issues are read and counted like posts
+	// A-01…A-04, AD-07, AD-09: readers' counters (visits by people, countries)
+	// newsletter issues are counted and titled like posts
 	coverIdx = addonIdx
 	readerExtras = nil
 	for _, p := range published {
 		if isIssue(p) || isIssueES(p) {
-			readable[p.Path] = true
 			title := issueLabel(p.Slug) + ": " + p.Title
 			if isIssueES(p) {
 				title += " (es)"
@@ -250,7 +241,7 @@ func main() {
 			go geo.refreshLoop()
 		}
 	}
-	siteStats = newStatsStore(statsDir, readable, geo)
+	siteStats = newStatsStore(statsDir, geo)
 	if statsDir != "" {
 		go siteStats.saveLoop()
 	}
@@ -606,7 +597,6 @@ func main() {
 	rssXML := buildRSS(published, 20)
 	var sitemapXML []byte // filled after the static build below
 	mux.HandleFunc("/healthz", healthHandler(postCount, started))
-	mux.HandleFunc("/_read", readHandler)   // A-02: read beacon
 	mux.HandleFunc("/_hello", helloHandler) // AD-07: a person is on the page
 	registerAddons(mux, func(w http.ResponseWriter, c string, d map[string]any) { renderPage(w, engine, c, d) }, addonIdx, addonTagList)
 	registerLibrary(mux, func(w http.ResponseWriter, c string, d map[string]any) { renderPage(w, engine, c, d) },

@@ -37,10 +37,9 @@ No name, no email (unless you subscribe), no account, no location, no device fin
 
 The site keeps simple public counts, shown on the [readers](/addons/readers/) page and as "read N times" under each post and newsletter issue. They are made on this server, without cookies, scripts from other companies or anything stored in your browser:
 
-- **Only people count.** A tiny script tells the server "someone is here" (sending only the page's address) once you scroll, tap, click or type, or after about ten seconds on the page. Programs that just copy pages never send it, so they don't show up in the counts.
-- **Visits:** when that happens, the total for that page and day goes up by one (once per page per visitor per day).
+- **Only people count.** A tiny script tells the server "someone is here" (sending only the page's address) the first time you scroll, tap, click or type on a page. It has no timer: nothing measures how long you stay or how far you read. Programs that just copy pages never send it, so they don't show up in the counts.
+- **Visits and reads:** when that happens, the total for that page and day goes up by one (once per page per visitor per day). A visit to a post is what "read N times" counts.
 - **Visitors:** to count how many different people came on a given day, the server mixes your IP address and browser name with a random value that exists only in memory and is replaced every midnight, and keeps the result in memory for that day only. It is never written down, and after midnight it can't be linked to anything.
-- **Reads:** a tiny script notices when you reach the end of a post after enough time to have read it, and sends the post's address (nothing else). Each post counts at most one read per visitor per day.
 - **Countries:** your IP address is looked up in a local country list ([DB-IP](https://db-ip.com), a file on the server, so no one else is asked) and only the country is added to the day's total.
 
 What is stored is only daily totals per page, per post and per country, plus two plain numbers per day: how many times pages were loaded and by how many IP-and-browser pairs, automated programs included. The [readers](/addons/readers/) page shows them next to the people count, so you can see how much of the traffic is machines. No IP address, no identifier, no history of who read what. Bots and link previews are left out. If JavaScript is off, you only add to those two plain numbers.

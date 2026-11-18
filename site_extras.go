@@ -72,7 +72,6 @@ var assetVersioner = strings.NewReplacer(
 	`src="/js/post-search.js"`, `src="/js/post-search.js?v=`+assetVersion+`"`,
 	`src="/js/share.js"`, `src="/js/share.js?v=`+assetVersion+`"`,
 	`src="/js/photos.js"`, `src="/js/photos.js?v=`+assetVersion+`"`,
-	`src="/js/read.js"`, `src="/js/read.js?v=`+assetVersion+`"`,
 	`src="/js/hello.js"`, `src="/js/hello.js?v=`+assetVersion+`"`,
 )
 

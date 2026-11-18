@@ -1167,7 +1167,6 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .rd-who { width: 5.5em; }
 .rd-machines .wd-bar-fill, html:not(.dark) .rd-machines .wd-bar-fill { background: color-mix(in srgb, var(--content-secondary) 55%, transparent); }
 .reads-label { color: var(--content-secondary); }
-#read-marker { height: 1px; }
 
 /* ==== Batch L: design refresh (D-01…D-06) ==== */
 /* D-01: a reading face for post text; the mono stays for menus, titles, dates and lists */

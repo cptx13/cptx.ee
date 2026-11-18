@@ -24,7 +24,6 @@
       </div>
     </header>
     <div :class="post.ContentClass" v-html="post.Content"></div>
-    <div v-if="post.Readable" id="read-marker" :data-path="post.Path" :data-words="post.Words" aria-hidden="true"></div>
     <div v-if="post.IsIssue && !post.IssueES" class="post-end">
       <p><a class="share-link" :href="'https://cptx.ee' + post.Path" :data-share-url="'https://cptx.ee' + post.Path">share this issue</a> · <a href="/newsletter/kiosk/">all issues in the kiosk</a> · <a href="/newsletter/">subscribe</a></p>
     </div>
@@ -39,6 +38,5 @@
   <div class="back-to-top">
     <a href="#top">back to top</a>
   </div>
-  <script src="/js/read.js" defer></script>
 </AppLayout>
 </template>

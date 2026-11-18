@@ -13,7 +13,7 @@ Everything starts as a note in [Obsidian](https://obsidian.md/), on my own compu
 ## What runs it
 
 - A small program written in [Go](https://go.dev/) turns markdown into pages. It runs on a virtual server rented from [exe.dev](https://exe.dev).
-- Pages are plain HTML and CSS. The few scripts are tiny and only add conveniences (switching the theme, sharing a view, browsing photos, telling the [readers](/addons/readers/) counter that a person is on the page, counting a read when you reach the end of a post); every page works without them.
+- Pages are plain HTML and CSS. The few scripts are tiny and only add conveniences (switching the theme, sharing a view, browsing photos, telling the [readers](/addons/readers/) counter that a person is on the page); every page works without them.
 - The font is [JetBrains Mono](https://www.jetbrains.com/lp/mono/), served from this site.
 - Photos and book covers are stored on the server, not in the repository.
 

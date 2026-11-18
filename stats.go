@@ -7,8 +7,11 @@
 // AD-07: visits, visitors and countries come from a "hello" beacon that
 // /js/hello.js sends once a person has interacted with the page (or kept it
 // on screen for a while). Scrapers that only fetch the HTML never send it.
-// Every HTML load is still tallied as "raw" (hits + raw visitors, not shown)
-// so the gap between people and machines stays measurable.
+// Every HTML load is still tallied as "raw" (hits + raw visitors) so the gap
+// between people and machines stays measurable (shown since AD-08).
+//
+// AD-09: no timers anywhere and no separate reads. A visit is a read: the
+// "read N times" line under a post is people's visits to it, all time.
 
 package main
 
@@ -65,7 +68,7 @@ type dayStats struct {
 	V         int            `json:"v,omitempty"` // statsVersion the day was counted with
 	Visitors  int            `json:"visitors"`    // unique people that day (hello beacon)
 	Visits    map[string]int `json:"visits"`      // page path → pages opened by people (once per person per page per day)
-	Reads     map[string]int `json:"reads"`       // post path → reads (once per visitor per day)
+	Reads     map[string]int `json:"reads"`       // timed reads, only until AD-09 (kept, not shown)
 	Countries map[string]int `json:"countries"`   // ISO code → unique people ("ZZ" = unknown)
 	Raw       rawStats       `json:"raw"`         // every HTML load not caught as a bot, incl. scrapers (not shown)
 }
@@ -81,34 +84,32 @@ func newDay() *dayStats {
 }
 
 type statsStore struct {
-	mu       sync.Mutex
-	dir      string // "" = keep in memory only (CI, previews)
-	loc      *time.Location
-	days     map[string]*dayStats // "2006-01-02" → totals
-	dirty    map[string]bool      // months to save ("2006-01")
-	today    string
-	salt     [16]byte
-	seen     map[[16]byte]bool // today's people (hello beacon)
-	seenRaw  map[[16]byte]bool // today's raw visitors (any HTML load)
-	seenView map[[16]byte]bool // today's person+page views
-	seenRead map[[16]byte]bool // today's visitor+post reads
-	served   map[string]bool   // paths served as HTML 200 since startup (hello must name one)
-	reads    map[string]int    // post path → reads, all time
-	readable map[string]bool   // posts that can be "read"
-	geo      *geoKeeper
+	mu        sync.Mutex
+	dir       string // "" = keep in memory only (CI, previews)
+	loc       *time.Location
+	days      map[string]*dayStats // "2006-01-02" → totals
+	dirty     map[string]bool      // months to save ("2006-01")
+	today     string
+	salt      [16]byte
+	seen      map[[16]byte]bool // today's people (hello beacon)
+	seenRaw   map[[16]byte]bool // today's raw visitors (any HTML load)
+	seenView  map[[16]byte]bool // today's person+page views
+	served    map[string]bool   // paths served as HTML 200 since startup (hello must name one)
+	visitsAll map[string]int    // page path → people's visits, all time ("read N times")
+	geo       *geoKeeper
 }
 
 var siteStats *statsStore
 
 // newStatsStore loads saved months from dir (if any).
-func newStatsStore(dir string, readable map[string]bool, geo *geoKeeper) *statsStore {
+func newStatsStore(dir string, geo *geoKeeper) *statsStore {
 	loc, err := time.LoadLocation("Europe/Helsinki")
 	if err != nil {
 		loc = time.UTC
 	}
 	s := &statsStore{dir: dir, loc: loc, days: map[string]*dayStats{}, dirty: map[string]bool{},
-		seen: map[[16]byte]bool{}, seenRaw: map[[16]byte]bool{}, seenView: map[[16]byte]bool{}, seenRead: map[[16]byte]bool{},
-		served: map[string]bool{}, reads: map[string]int{}, readable: readable, geo: geo}
+		seen: map[[16]byte]bool{}, seenRaw: map[[16]byte]bool{}, seenView: map[[16]byte]bool{},
+		served: map[string]bool{}, visitsAll: map[string]int{}, geo: geo}
 	if dir != "" {
 		files, _ := filepath.Glob(filepath.Join(dir, "*.json"))
 		for _, f := range files {
@@ -141,8 +142,8 @@ func newStatsStore(dir string, readable map[string]bool, geo *geoKeeper) *statsS
 					s.dirty[d[:7]] = true
 				}
 				s.days[d] = ds
-				for p, n := range ds.Reads {
-					s.reads[p] += n
+				for p, n := range ds.Visits {
+					s.visitsAll[p] += n
 				}
 			}
 		}
@@ -159,7 +160,6 @@ func (s *statsStore) rollDay(now time.Time) *dayStats {
 		s.seen = map[[16]byte]bool{}
 		s.seenRaw = map[[16]byte]bool{}
 		s.seenView = map[[16]byte]bool{}
-		s.seenRead = map[[16]byte]bool{}
 	}
 	ds := s.days[day]
 	if ds == nil {
@@ -207,6 +207,7 @@ func (s *statsStore) countHello(path, ip, ua string, now time.Time) bool {
 	}
 	s.seenView[k] = true
 	ds.Visits[path]++
+	s.visitsAll[path]++
 	v := s.visitor(ip, ua, "")
 	if !s.seen[v] {
 		s.seen[v] = true
@@ -225,32 +226,14 @@ func (s *statsStore) countHello(path, ip, ua string, now time.Time) bool {
 	return true
 }
 
-// countRead records a read; false when it doesn't count (unknown post, repeat).
-func (s *statsStore) countRead(path, ip, ua string, now time.Time) bool {
-	if !s.readable[path] {
-		return false
-	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	ds := s.rollDay(now)
-	k := s.visitor(ip, ua, path)
-	if s.seenRead[k] {
-		return false
-	}
-	s.seenRead[k] = true
-	ds.Reads[path]++
-	s.reads[path]++
-	return true
-}
-
-// readsOf is the all-time read count of a post.
-func (s *statsStore) readsOf(path string) int {
+// visitsOf is a page's all-time visits by people (the "read N times" line).
+func (s *statsStore) visitsOf(path string) int {
 	if s == nil {
 		return 0
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	return s.reads[path]
+	return s.visitsAll[path]
 }
 
 // save writes the months that changed. Safe to call any time.
@@ -376,20 +359,6 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// readHandler takes the beacon from /js/read.js: the body is the post's path.
-func readHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.Header().Set("Allow", "POST")
-		http.Error(w, "POST only", http.StatusMethodNotAllowed)
-		return
-	}
-	if siteStats != nil && !isBot(r) {
-		b, _ := io.ReadAll(io.LimitReader(r.Body, 300))
-		siteStats.countRead(strings.TrimSpace(string(b)), clientIP(r), r.UserAgent(), time.Now())
-	}
-	w.WriteHeader(http.StatusNoContent)
-}
-
 // pageLabel names a page that isn't a post: "/" → "home", "/addons/readers/" → "addons / readers".
 func pageLabel(path string) string {
 	p := strings.Trim(path, "/")
@@ -400,7 +369,7 @@ func pageLabel(path string) string {
 	return strings.ReplaceAll(p, "/", " / ")
 }
 
-// readsLabel is the line under a post ("read 12 times"); "" until it has reads.
+// readsLabel is the line under a post ("read 12 times"); "" until someone visits.
 func readsLabel(n int) string {
 	switch {
 	case n <= 0:
@@ -462,10 +431,9 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 	for _, p := range readerExtras {
 		titles[p.Path] = p
 	}
-	visits, visitors, reads := 0, 0, 0
-	byMonth := map[string][3]int{}
+	visits, visitors := 0, 0
+	byMonth := map[string][2]int{}
 	pageVisits := map[string]int{}
-	postReads := map[string]int{}
 	countries := map[string]int{}
 	first := ""
 	if s != nil {
@@ -482,11 +450,6 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 			}
 			visitors += ds.Visitors
 			m[1] += ds.Visitors
-			for p, n := range ds.Reads {
-				reads += n
-				m[2] += n
-				postReads[p] += n
-			}
 			for cc, n := range ds.Countries {
 				countries[cc] += n
 			}
@@ -545,7 +508,7 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 		t := base.AddDate(0, -i, 0)
 		m := byMonth[t.Format("2006-01")]
 		months = append(months, map[string]any{
-			"Label": t.Format("Jan 06"), "Visits": m[0], "Visitors": m[1], "Reads": m[2],
+			"Label": t.Format("Jan 06"), "Visits": m[0], "Visitors": m[1],
 			"Width": fmt.Sprintf("width:%.1f%%", 100*float64(m[0])/float64(maxV)),
 		})
 	}
@@ -572,17 +535,13 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 		return out
 	}
 	var mostRead []any
-	for _, e := range top(postReads, func(p string) bool { _, ok := titles[p]; return ok }, 20) {
+	for _, e := range top(pageVisits, func(p string) bool { _, ok := titles[p]; return ok }, 20) {
 		p := titles[e.k]
 		mostRead = append(mostRead, map[string]any{"Title": p.Title, "Path": p.Path, "Day": p.Day, "Reads": readsLabel(e.n), "N": e.n})
 	}
 	var mostVisited []any
-	for _, e := range top(pageVisits, nil, 15) {
-		label := pageLabel(e.k)
-		if p, ok := titles[e.k]; ok {
-			label = p.Title
-		}
-		mostVisited = append(mostVisited, map[string]any{"Label": label, "Path": e.k, "N": e.n})
+	for _, e := range top(pageVisits, func(p string) bool { _, ok := titles[p]; return !ok }, 15) { // pages that aren't posts
+		mostVisited = append(mostVisited, map[string]any{"Label": pageLabel(e.k), "Path": e.k, "N": e.n})
 	}
 
 	// world map: one light per country, at the mean position of its cities
@@ -622,7 +581,7 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 		}
 	}
 	return map[string]any{
-		"visits": visits, "visitors": visitors, "reads": reads, "countryCount": len(cs),
+		"visits": visits, "visitors": visitors, "countryCount": len(cs),
 		"since": since, "hasSince": since != "", "months": months, "monthsNote": monthsNote,
 		"mostRead": mostRead, "hasRead": len(mostRead) > 0,
 		"mostVisited": mostVisited, "hasVisited": len(mostVisited) > 0,
