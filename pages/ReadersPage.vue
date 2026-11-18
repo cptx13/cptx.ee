@@ -6,6 +6,16 @@
     <p class="hm-stats">{{ visits }} visits · {{ visitors }} visitors · {{ reads }} reads · {{ countryCount }} countries<span v-if="hasSince"> · since {{ since }}</span></p>
     <p class="addons-intro">Counted on this server, without cookies or trackers, and only for people: a page counts once someone scrolls, taps or stays on it, so scrapers that just copy pages are left out. A visit is a page opened by a person (once a day per page); a read is someone reaching the end of a post after enough time to have read it. Visitors are counted per day, so someone who comes back tomorrow counts again. <a href="/legaldocs/privacy/#counting-readers">How it works →</a></p>
 
+    <div v-if="hasMachines">
+      <h2 class="addons-sub">readers vs machines</h2>
+      <div class="wd-bars rd-vs">
+        <p class="wd-bar"><span class="wd-bar-year rd-who">people</span><span class="wd-bar-track"><span class="wd-bar-fill" :style="peopleWidth"></span></span><span class="wd-bar-n rd-n">{{ peopleVisits }}</span></p>
+        <p class="wd-bar rd-machines"><span class="wd-bar-year rd-who">machines</span><span class="wd-bar-track"><span class="wd-bar-fill" :style="machineWidth"></span></span><span class="wd-bar-n rd-n">{{ machineHits }}</span></p>
+      </div>
+      <p class="hm-legend">page loads since {{ since }} · {{ machinePct }}% by scrapers and bots dressed as browsers ({{ machineVisitors }} of them)</p>
+      <p class="addons-intro">Every page load reaches the server, but only people are counted above. The rest are programs copying pages, mostly from data centres and rented home connections around the world. They never scroll, tap or wait, so they never say hello. A few real readers land here too: anyone without JavaScript, or who left within seconds.</p>
+    </div>
+
     <h2 class="addons-sub">by month</h2>
     <div class="wd-bars rd-months">
       <p v-for="m in months" class="wd-bar"><span class="wd-bar-year rd-month">{{ m.Label }}</span><span class="wd-bar-track"><span class="wd-bar-fill" :style="m.Width"></span></span><span class="wd-bar-n rd-n">{{ m.Visits }}</span></p>

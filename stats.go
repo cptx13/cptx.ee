@@ -495,6 +495,33 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 		s.mu.Unlock()
 	}
 
+	// people vs machines (AD-08), over the same days: from the first day with people data
+	rawHits, rawVisitors, peopleVisits, peopleVisitors := 0, 0, 0, 0
+	if s != nil && first != "" {
+		s.mu.Lock()
+		for d, ds := range s.days {
+			if d < first {
+				continue
+			}
+			rawHits += ds.Raw.Hits
+			rawVisitors += ds.Raw.Visitors
+			peopleVisitors += ds.Visitors
+			for _, n := range ds.Visits {
+				peopleVisits += n
+			}
+		}
+		s.mu.Unlock()
+	}
+	machineHits := max(rawHits-peopleVisits, 0)
+	machineVisitors := max(rawVisitors-peopleVisitors, 0)
+	machinePct := 0
+	if rawHits > 0 {
+		machinePct = int(math.Round(100 * float64(machineHits) / float64(rawHits)))
+	}
+	barWidth := func(n int) string {
+		return fmt.Sprintf("width:%.1f%%", 100*float64(n)/float64(max(rawHits, 1)))
+	}
+
 	// months with data: from the first month counted (at most the last 12), oldest first
 	base := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
 	span := 11
@@ -600,6 +627,9 @@ func buildReadersData(s *statsStore, idx []addonPost, now time.Time) map[string]
 		"mostRead": mostRead, "hasRead": len(mostRead) > 0,
 		"mostVisited": mostVisited, "hasVisited": len(mostVisited) > 0,
 		"svg": svg.String(), "countries": rows, "hasCountries": len(rows) > 0,
+		"hasMachines": rawHits > 0, "peopleVisits": peopleVisits, "machineHits": machineHits,
+		"machineVisitors": machineVisitors, "machinePct": machinePct,
+		"peopleWidth": barWidth(peopleVisits), "machineWidth": barWidth(machineHits),
 		"moreCountries": max(len(cs)-len(rows), 0), "hasMoreCountries": len(cs) > len(rows),
 	}
 }

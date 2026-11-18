@@ -43,7 +43,7 @@ The site keeps simple public counts, shown on the [readers](/addons/readers/) pa
 - **Reads:** a tiny script notices when you reach the end of a post after enough time to have read it, and sends the post's address (nothing else). Each post counts at most one read per visitor per day.
 - **Countries:** your IP address is looked up in a local country list ([DB-IP](https://db-ip.com), a file on the server, so no one else is asked) and only the country is added to the day's total.
 
-What is stored is only daily totals per page, per post and per country, plus two plain numbers per day that aren't shown anywhere: how many times pages were loaded and by how many IP-and-browser pairs, automated programs included, so I can see how much of the traffic is machines. No IP address, no identifier, no history of who read what. Bots and link previews are left out. If JavaScript is off, you only add to those two plain numbers.
+What is stored is only daily totals per page, per post and per country, plus two plain numbers per day: how many times pages were loaded and by how many IP-and-browser pairs, automated programs included. The [readers](/addons/readers/) page shows them next to the people count, so you can see how much of the traffic is machines. No IP address, no identifier, no history of who read what. Bots and link previews are left out. If JavaScript is off, you only add to those two plain numbers.
 
 <a id="newsletter"></a>
 

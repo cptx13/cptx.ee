@@ -67,6 +67,10 @@ func TestStats(t *testing.T) {
 	if d["visits"] != 3 || d["reads"] != 1 || !strings.Contains(d["svg"].(string), "Finland") {
 		t.Errorf("readers data: %v %v", d["visits"], d["reads"])
 	}
+	// raw: 4 loads, 3 raw visitors; people: 3 visits, 2 visitors → 1 machine load, 1 machine visitor
+	if d["machineHits"] != 1 || d["machineVisitors"] != 1 || d["machinePct"] != 25 || d["hasMachines"] != true {
+		t.Errorf("machines: %v %v %v", d["machineHits"], d["machineVisitors"], d["machinePct"])
+	}
 	if ms := d["months"].([]any); len(ms) != 1 || d["monthsNote"] != "since November 2026" {
 		t.Errorf("months before the first data: %d %v", len(ms), d["monthsNote"])
 	}
