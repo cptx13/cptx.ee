@@ -13,5 +13,4 @@ los arbustos y sus sombras
 piedra al otro, ría a un lado  
 protegido por la torre  
 dueño del jardín entero  
-bajo el sol que lo nombra.  
-```¨
+bajo el sol que lo nombra.
