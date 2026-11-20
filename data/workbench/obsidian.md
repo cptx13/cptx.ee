@@ -4,7 +4,7 @@ icon: notebook
 status: running
 order: 7
 summary: Mathom, the vault where all the writing lives, on the computer and the phone.
-hardware: my computer, my phone
+hardware: a ThinkPad, my phone
 software: Obsidian, Obsidian Sync, Obsidian Web Clipper
 ---
 ## guide

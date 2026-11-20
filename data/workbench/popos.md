@@ -3,8 +3,8 @@ title: Pop!_OS
 icon: laptop
 status: running
 order: 4
-summary: The computer where everything else is made: Linux, from System76.
-hardware: my computer, a USB stick
+summary: The ThinkPad where everything else is made: Linux, from System76.
+hardware: a ThinkPad, a USB stick
 software: Pop!_OS, COSMIC
 ---
 ## guide
@@ -14,7 +14,7 @@ Based on System76's [installing Pop!_OS](https://system76.com/support/install-po
 1. **Download the right image**: the generic one for Intel/AMD graphics, or the NVIDIA one. Check it against the published checksum.
 2. **Flash it to a USB stick** ([live disk creation](https://system76.com/support/pop-live-disk/)).
 3. **Turn off Secure Boot** in the firmware settings.
-4. **Boot from the stick** with the computer's boot-menu key.
+4. **Boot from the stick**: on a ThinkPad, F12 at power-on opens the boot menu.
 5. **Install**: language and keyboard, then **Clean Install** (wipes the disk) or **Custom** to keep other partitions. Encrypting the disk is offered; say yes on a laptop.
 6. **Create the user**, let it finish, take the stick out and reboot.
 
