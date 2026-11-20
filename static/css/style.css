@@ -972,6 +972,7 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .wb-body h2 { font-size: 1.05em; margin: 2em 0 .6em; }
 .wb-body { font-size: .92em; line-height: 1.6; }
 .wb-back { margin-top: 2.5em; }
+.wb-loose + .wb-loose::before { content: " · "; }
 
 @media print { .hm-filters, .addon-share { display: none !important; } }
 

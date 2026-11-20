@@ -12,7 +12,7 @@
       </a>
     </div>
     <h2 class="addons-sub">also on the bench</h2>
-    <p class="addons-intro">My books live in <a href="/archives/written-by-me/">archives / written by me</a>. Loose parts: <span v-for="l in loose"><a :href="l.URL">{{ l.Title }}</a> · </span></p>
+    <p class="addons-intro">My books live in <a href="/archives/written-by-me/">archives / written by me</a>. Loose parts: <span v-for="l in loose" class="wb-loose"><a :href="l.URL">{{ l.Title }}</a></span>.</p>
   </div>
 </AppLayout>
 </template>
