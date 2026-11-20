@@ -26,8 +26,15 @@ func TestLoadWorkbench(t *testing.T) {
 		}
 	}
 	dir := t.TempDir()
-	os.WriteFile(filepath.Join(dir, "x.md"), []byte("---\ntitle: X\nstatus: broken\n---\nhi"), 0o644)
-	if _, err := loadWorkbench(dir); err == nil {
-		t.Error("bad status accepted")
+	for name, src := range map[string]string{
+		"bad status":  "---\ntitle: X\nstatus: broken\nhardware: a\nsoftware: b\n---\n\n## guide\n\n## notes\n",
+		"no hardware": "---\ntitle: X\nstatus: running\nsoftware: b\n---\n\n## guide\n\n## notes\n",
+		"no notes":    "---\ntitle: X\nstatus: running\nhardware: a\nsoftware: b\n---\n\n## guide\n",
+		"wrong order": "---\ntitle: X\nstatus: running\nhardware: a\nsoftware: b\n---\n\n## notes\n\n## guide\n",
+	} {
+		os.WriteFile(filepath.Join(dir, "x.md"), []byte(src), 0o644)
+		if _, err := loadWorkbench(dir); err == nil {
+			t.Errorf("%s accepted", name)
+		}
 	}
 }

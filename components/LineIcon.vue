@@ -23,5 +23,7 @@
   <g v-if="name == 'notebook'"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18"/><path d="M3.5 7h3"/><path d="M3.5 12h3"/><path d="M3.5 17h3"/><path d="M12 8h4"/></g>
   <g v-if="name == 'server'"><rect x="4" y="4" width="16" height="7" rx="1.2"/><rect x="4" y="13" width="16" height="7" rx="1.2"/><circle cx="7.5" cy="7.5" r=".8"/><circle cx="7.5" cy="16.5" r=".8"/><path d="M11 7.5h6"/><path d="M11 16.5h6"/></g>
   <g v-if="name == 'phone'"><rect x="6.5" y="2.5" width="11" height="19" rx="2"/><path d="M10.5 5h3"/><circle cx="12" cy="18.3" r=".8"/></g>
+  <g v-if="name == 'gamepad'"><rect x="6" y="2.5" width="12" height="19" rx="2"/><rect x="8" y="4.5" width="8" height="6" rx=".6"/><path d="M8.5 15h3"/><path d="M10 13.5v3"/><circle cx="15" cy="14" r=".8"/><circle cx="14" cy="16.5" r=".8"/></g>
+  <g v-if="name == 'laptop'"><rect x="5" y="5" width="14" height="10" rx="1"/><path d="M3 18.5h18l-1.5-3.5h-15z"/></g>
 </svg>
 </template>

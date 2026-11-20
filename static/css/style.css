@@ -970,9 +970,9 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .wb-kit { display: flex; flex-wrap: wrap; gap: .4em; font-size: .8em; }
 .wb-part { border: 1px solid var(--code-border); border-radius: 4px; padding: .1em .5em; }
 .wb-body h2 { font-size: 1.05em; margin: 2em 0 .6em; }
+.wb-body h2 { text-transform: lowercase; }
 .wb-body { font-size: .92em; line-height: 1.6; }
 .wb-back { margin-top: 2.5em; }
-.wb-loose + .wb-loose::before { content: " · "; }
 
 @media print { .hm-filters, .addon-share { display: none !important; } }
 

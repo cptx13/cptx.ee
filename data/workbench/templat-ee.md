@@ -2,11 +2,16 @@
 title: templat.ee
 icon: globe
 status: revamp
-order: 8
+order: 10
 summary: Templates and tools for everyday contracts.
 link: https://templat.ee
-kit: GitHub, an exe.dev VM
+hardware: an exe.dev VM
+software: GitHub
 ---
-## the plan
+## guide
 
-A slow revamp, set up like cptx.ee.
+To be written with the revamp, set up like cptx.ee.
+
+## notes
+
+- Slow revamp, next in line.

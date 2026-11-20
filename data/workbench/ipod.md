@@ -4,17 +4,15 @@ icon: ipod
 status: running
 order: 1
 summary: A classic iPod on Apple's own firmware, filled from Linux.
-kit: iPod (stock firmware), Pop!_OS, Rhythmbox, beets, an external drive
+hardware: iPod, an external drive
+software: stock iPod firmware, Pop!_OS, Rhythmbox, beets
 ---
-## how it's set up
+## guide
 
-1. The music lives on an external drive, not on the computer: a library tagged with beets, plus an iPod-ready copy.
-2. Rhythmbox on Pop!_OS syncs the iPod-ready copy to the iPod.
+1. **Keep the music off the computer**, on an external drive: one library tagged with [beets](https://beets.io/), plus an iPod-ready copy.
+2. **Sync with Rhythmbox** on Pop!_OS: plug in the iPod and copy the iPod-ready folder to it.
 
-## what didn't work
+## notes
 
-- Rockbox, dual-booted next to the stock firmware: laggy and buggy, so the iPod went back to Apple's firmware only.
-
-## resources
-
-- [Rockbox for iPod](https://download.rockbox.org/daily/manual/rockbox-ipod3g/rockbox-build.html)
+- Rockbox, dual-booted next to the stock firmware, was laggy and buggy, so the iPod went back to Apple's firmware only.
+- [Rockbox manual for iPod](https://download.rockbox.org/daily/manual/rockbox-ipod3g/rockbox-build.html)

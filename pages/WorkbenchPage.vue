@@ -1,5 +1,5 @@
 <template>
-<AppLayout :pageTitle="'workbench | cptx'" :description="'My projects: an iPod, a de-kindled Kindle, this site, Obsidian, a home server, and how each one is put together.'" :canonicalURL="'https://cptx.ee/pockets/workbench/'" :lang="'en'" :ogType="'website'">
+<AppLayout :pageTitle="'workbench | cptx'" :description="'My projects: an iPod, a de-kindled Kindle, a retro handheld, Pop!_OS, a home server, this site, and how each one is put together.'" :canonicalURL="'https://cptx.ee/pockets/workbench/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons">
     <p class="addons-crumb"><a href="/pockets/">pockets</a> / workbench</p>
     <h1 class="addons-title">workbench</h1>
@@ -12,7 +12,7 @@
       </a>
     </div>
     <h2 class="addons-sub">also on the bench</h2>
-    <p class="addons-intro">My books live in <a href="/archives/written-by-me/">archives / written by me</a>. Loose parts: <span v-for="l in loose" class="wb-loose"><a :href="l.URL">{{ l.Title }}</a></span>.</p>
+    <p class="addons-intro">Every project has the same page: the hardware, the software, a step-by-step guide and notes. My books live in <a href="/archives/written-by-me/">archives / written by me</a>.</p>
   </div>
 </AppLayout>
 </template>

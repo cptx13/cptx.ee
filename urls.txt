@@ -353,11 +353,13 @@
 /pockets/weekendreads/
 /pockets/workbench/
 /pockets/workbench/cptx-ee/
+/pockets/workbench/darkos/
 /pockets/workbench/grapheneos/
 /pockets/workbench/ipod/
 /pockets/workbench/kindle/
 /pockets/workbench/notai-ee/
 /pockets/workbench/obsidian/
+/pockets/workbench/popos/
 /pockets/workbench/templat-ee/
 /pockets/workbench/umbrel/
 /posts/croquis/a-escasos-días/

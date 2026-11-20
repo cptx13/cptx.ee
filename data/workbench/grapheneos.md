@@ -2,16 +2,16 @@
 title: GrapheneOS
 icon: phone
 status: planned
-order: 6
+order: 8
 summary: A phone without Google.
-kit: GrapheneOS
+hardware: a Google Pixel
+software: GrapheneOS
 ---
-## the plan
+## guide
 
 To be written when the work starts.
 
-## resources
+## notes
 
-- [Awesome GrapheneOS guide](https://github.com/iAnonymous3000/awesome-grapheneos-guide)
-- [Alternative front ends](https://github.com/mendel5/alternative-front-ends)
-- [iOS hardening guide](https://github.com/iAnonymous3000/iOS-Hardening-Guide)
+- GrapheneOS runs on Google Pixel phones only.
+- [Awesome GrapheneOS guide](https://github.com/iAnonymous3000/awesome-grapheneos-guide) · [alternative front ends](https://github.com/mendel5/alternative-front-ends) · [iOS hardening guide](https://github.com/iAnonymous3000/iOS-Hardening-Guide)

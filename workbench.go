@@ -20,7 +20,7 @@ const workbenchDir = "data/workbench"
 // Project is one workbench card + guide.
 type Project struct {
 	Slug, Title, Icon, Status, Summary, Link string
-	Kit                                      []string
+	Hardware, Software                       []string
 	Order                                    int
 	Body                                     string // rendered HTML
 }
@@ -30,12 +30,6 @@ var workbenchStatus = map[string]string{
 	"tinkering": "tinkering",
 	"planned":   "planned",
 	"revamp":    "to revamp",
-}
-
-// workbenchLoose are links that belong to no project yet.
-var workbenchLoose = []struct{ Title, URL string }{
-	{"Pop!_OS docs", "https://pop-os.github.io/docs/"},
-	{"dArkOS", "https://github.com/christianhaitian/dArkOS/wiki"},
 }
 
 var siteProjects []Project
@@ -63,15 +57,37 @@ func loadWorkbench(dir string) ([]Project, error) {
 			return nil, fmt.Errorf("%s: status %q (want running, tinkering, planned or revamp)", f, p.Status)
 		}
 		p.Order, _ = strconv.Atoi(fm["order"])
-		for _, k := range strings.Split(fm["kit"], ",") {
-			if k = strings.TrimSpace(k); k != "" {
-				p.Kit = append(p.Kit, k)
-			}
+		p.Hardware, p.Software = splitList(fm["hardware"]), splitList(fm["software"])
+		if len(p.Hardware) == 0 || len(p.Software) == 0 {
+			return nil, fmt.Errorf("%s: needs hardware: and software: lists", f)
+		}
+		// Every guide has the same two sections, in this order.
+		gi, ni := strings.Index(body, "\n## guide\n"), strings.Index(body, "\n## notes\n")
+		if gi < 0 || ni < 0 || ni < gi {
+			return nil, fmt.Errorf("%s: body needs a '## guide' section, then '## notes'", f)
 		}
 		out = append(out, p)
 	}
 	sort.SliceStable(out, func(i, j int) bool { return out[i].Order < out[j].Order })
 	return out, nil
+}
+
+func splitList(s string) []string {
+	var out []string
+	for _, k := range strings.Split(s, ",") {
+		if k = strings.TrimSpace(k); k != "" {
+			out = append(out, k)
+		}
+	}
+	return out
+}
+
+func toAny(xs []string) []any {
+	out := make([]any, 0, len(xs))
+	for _, x := range xs {
+		out = append(out, x)
+	}
+	return out
 }
 
 func projectCard(p Project) map[string]any {
@@ -82,25 +98,18 @@ func projectCard(p Project) map[string]any {
 }
 
 func buildWorkbenchData(ps []Project) map[string]any {
-	var cards, loose []any
+	var cards []any
 	for _, p := range ps {
 		cards = append(cards, projectCard(p))
 	}
-	for _, l := range workbenchLoose {
-		loose = append(loose, map[string]any{"Title": l.Title, "URL": l.URL})
-	}
-	return map[string]any{"projects": cards, "count": len(ps), "loose": loose}
+	return map[string]any{"projects": cards, "count": len(ps)}
 }
 
 func buildProjectData(ps []Project, i int) map[string]any {
 	p := ps[i]
 	d := projectCard(p)
-	kit := make([]any, 0, len(p.Kit))
-	for _, k := range p.Kit {
-		kit = append(kit, k)
-	}
-	d["kit"] = kit
-	d["hasKit"] = len(kit) > 0
+	d["hardware"] = toAny(p.Hardware)
+	d["software"] = toAny(p.Software)
 	d["body"] = p.Body
 	d["link"] = p.Link
 	d["hasLink"] = p.Link != ""
