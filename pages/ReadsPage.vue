@@ -11,12 +11,12 @@
 
     <div v-if="isKept">
       <div v-if="hasKept">
-        <section v-for="m in months" class="rd-month">
-          <h2 class="rd-month-label">{{ m.Label }}</h2>
-          <div v-for="r in m.Items" class="rd-item">
-            <a :href="r.URL" class="rd-title" target="_blank" rel="noopener">{{ r.Title }}</a>
-            <span class="rd-meta"><span v-if="r.HasAuthor">{{ r.Author }} · </span>{{ r.Host }}</span>
-            <span v-if="r.HasNote" class="rd-note">{{ r.Note }}</span>
+        <section v-for="m in months" class="kp-month">
+          <h2 class="kp-month-label">{{ m.Label }}</h2>
+          <div v-for="r in m.Items" class="kp-item">
+            <a :href="r.URL" class="kp-title" target="_blank" rel="noopener">{{ r.Title }}</a>
+            <span class="kp-meta"><span v-if="r.HasAuthor">{{ r.Author }} · </span>{{ r.Host }}</span>
+            <span v-if="r.HasNote" class="kp-note">{{ r.Note }}</span>
           </div>
         </section>
       </div>
@@ -26,13 +26,13 @@
     <div v-if="isLatest">
       <p class="hm-stats">★ = also kept<span v-if="hasRefreshed"> · refreshed {{ lastRefreshed }}</span> · <a href="/addons/reads/refresh" rel="nofollow">↻ refresh</a></p>
       <div v-if="hasLatest">
-        <div v-for="it in latest" class="rd-item">
-          <a :href="it.Link" class="rd-title" target="_blank" rel="noopener"><span v-if="it.Kept">★ </span>{{ it.Title }}</a>
-          <span class="rd-meta">{{ it.Source }} · {{ it.Date }}</span>
+        <div v-for="it in latest" class="kp-item">
+          <a :href="it.Link" class="kp-title" target="_blank" rel="noopener"><span v-if="it.Kept">★ </span>{{ it.Title }}</a>
+          <span class="kp-meta">{{ it.Source }} · {{ it.Date }}</span>
         </div>
       </div>
       <p v-else class="addons-intro">No articles fetched yet. Try <a href="/addons/reads/refresh" rel="nofollow">↻ refresh</a>.</p>
-      <details v-if="hasErrors" class="rd-errors">
+      <details v-if="hasErrors" class="kp-errors">
         <summary>{{ errorCount }} blog(s) could not be fetched</summary>
         <ul><li v-for="e in errors">{{ e }}</li></ul>
       </details>
