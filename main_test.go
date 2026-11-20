@@ -250,6 +250,23 @@ func TestLibrary(t *testing.T) {
 	if b := lib.ByKey["9780000000002"]; b.Color == "" || b.Ink == "" {
 		t.Errorf("generated cover colour missing")
 	}
+
+	// book-posts.tsv: a book's posts by section and date range replace mentions
+	os.WriteFile(filepath.Join(dir, "book-posts.tsv"), []byte("# isbn\tsection\tfrom\tto\n9780000000002\trecuerdos\t\t2022-08-13\n9799999999999\trimas\n"), 0o644)
+	day := func(s string) time.Time { d, _ := time.Parse("2006-01-02", s); return d }
+	posts = []addonPost{
+		{Title: "r1", Path: "/recuerdos/202108151/", Section: "recuerdos", Day: "2021-08-15", Date: day("2021-08-15")},
+		{Title: "r2", Path: "/recuerdos/202208131/", Section: "recuerdos", Day: "2022-08-13", Date: day("2022-08-13")},
+		{Title: "r3", Path: "/recuerdos/202208141/", Section: "recuerdos", Day: "2022-08-14", Date: day("2022-08-14")},
+		{Title: "p", Path: "/rimas/202108151/", Section: "rimas", Day: "2021-08-15", Date: day("2021-08-15")},
+	}
+	lib, err = loadLibrary(dir, posts, map[string]string{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if m := lib.ByKey["9780000000002"].Mentions; len(m) != 2 || m[0].Title != "r2" || m[1].Title != "r1" {
+		t.Errorf("book posts: %+v", m)
+	}
 }
 
 func TestBookTitleLayout(t *testing.T) {

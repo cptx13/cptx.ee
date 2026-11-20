@@ -13,6 +13,7 @@ import (
 	_ "image/gif"
 	"image/jpeg"
 	_ "image/png"
+	"log"
 	"math"
 	"net/http"
 	"net/url"
@@ -154,6 +155,7 @@ func loadLibrary(dir string, posts []addonPost, texts map[string]string) (*libra
 		}
 	}
 	lib.findMentions(posts, texts)
+	lib.addBookPosts(dir, posts)
 	return lib, nil
 }
 
@@ -337,6 +339,50 @@ func (lib *library) findMentions(posts []addonPost, texts map[string]string) {
 			}
 		}
 		sort.Slice(b.Mentions, func(i, j int) bool { return b.Mentions[i].Date.After(b.Mentions[j].Date) })
+	}
+}
+
+// addBookPosts lists the posts that belong to some of Carlos's own books
+// (data/library/book-posts.tsv: ISBN, section, from, to — dates YYYY-MM-DD,
+// empty = open). For a book named there, these replace the name-matching
+// mentions on its page, so "Recuerdos: Vol.1" lists recuerdos 001–365.
+// A bad line is logged and skipped; it never stops the server.
+func (lib *library) addBookPosts(dir string, posts []addonPost) {
+	raw, err := os.ReadFile(filepath.Join(dir, "book-posts.tsv"))
+	if err != nil {
+		if !os.IsNotExist(err) {
+			log.Printf("book-posts.tsv: %v", err)
+		}
+		return
+	}
+	reset := map[string]bool{}
+	for i, line := range strings.Split(string(raw), "\n") {
+		line = strings.TrimRight(line, "\r")
+		if strings.TrimSpace(line) == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		f := strings.Split(line, "\t")
+		for len(f) < 4 {
+			f = append(f, "")
+		}
+		b := lib.ByKey[strings.TrimSpace(f[0])]
+		section, from, to := strings.TrimSpace(f[1]), strings.TrimSpace(f[2]), strings.TrimSpace(f[3])
+		if b == nil || section == "" {
+			log.Printf("book-posts.tsv line %d: unknown book or no section, skipped", i+1)
+			continue
+		}
+		if !reset[b.Key] {
+			b.Mentions, reset[b.Key] = nil, true
+		}
+		for _, p := range posts {
+			if p.Section == section && (from == "" || p.Day >= from) && (to == "" || p.Day <= to) {
+				b.Mentions = append(b.Mentions, p)
+			}
+		}
+	}
+	for key := range reset {
+		m := lib.ByKey[key].Mentions
+		sort.Slice(m, func(i, j int) bool { return m[i].Date.After(m[j].Date) })
 	}
 }
 

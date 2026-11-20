@@ -1,0 +1,8 @@
+# Posts listed under "in the blog" on one of Carlos's own books, by section and date (YYYY-MM-DD; empty = open).
+# A book listed here shows exactly these posts instead of name matches. Read at startup by addBookPosts (library.go).
+# ISBN-13	section	from	to	(note)
+9798843754884	recuerdos		2022-08-13	Recuerdos: Vol.1 = recuerdos 001–365
+9798254550891	recuerdos			Recuerdos: Edición completa = all recuerdos
+9798541561784	rimas	2019-02-10	2020-10-31	Poemas de un joven no leído: Primera parte = poems 001–100
+9798541452679	rimas	2020-11-05	2021-08-30	Poemas de un joven no leído: Segunda parte = poems 101–200
+9798541463491	rimas	2019-02-10	2021-08-30	Poemas de un joven no leído: Edición completa = poems 001–200
