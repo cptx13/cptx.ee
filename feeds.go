@@ -1,4 +1,4 @@
-// Feeds: the cheatsheet RSS reader — sources, fetching, cache and refresh limits (B-11).
+// Feeds: the cheatsheet RSS reader (shown on /addons/reads/?view=latest) — sources, fetching, cache and refresh limits (B-11).
 
 package main
 
@@ -108,6 +108,7 @@ var feedSources = []struct {
 	{"Adam Thiede", "https://adamthiede.com/rss.xml"},
 	{"Bunnie Studios", "https://www.bunniestudios.com/blog/?feed=rss2"},
 	{"Privacy Guides", "https://www.privacyguides.org/articles/feed_rss_created.xml"},
+	{"Import AI", "https://jack-clark.net/feed/"},
 }
 
 func loadFeedCache() (*FeedCache, error) {

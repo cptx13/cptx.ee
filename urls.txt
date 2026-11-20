@@ -4,6 +4,7 @@
 /addons/map/
 /addons/places/
 /addons/readers/
+/addons/reads/
 /addons/today/
 /addons/words/
 /archives/

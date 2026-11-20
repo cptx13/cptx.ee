@@ -49,13 +49,17 @@ func buildPocketsData(pocketPosts []*Post) []any {
 			}
 			meta += updated
 		}
+		href := "/pockets/" + pm.Slug + "/"
+		if pm.Slug == "weekendreads" { // AD-11: lives in /addons/reads/ now
+			href, meta = "/addons/reads/", readsSummary(siteReads)
+		}
 		out = append(out, map[string]any{
 			"Slug":        pm.Slug,
 			"Title":       pm.Slug,
 			"Icon":        pm.Icon,
 			"Desc":        pm.Desc,
 			"Meta":        meta,
-			"Href":        "/pockets/" + pm.Slug + "/",
+			"Href":        href,
 			"ContentHTML": contentHTML,
 		})
 	}

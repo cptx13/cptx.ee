@@ -1,7 +1,7 @@
 ---
 title: "How this site works"
 author: cptx
-date: 2026-11-18
+date: 2026-11-20
 draft: false
 lang: en
 summary: "Where the writing comes from, what runs the site, and what is (and isn't) loaded in your browser."
@@ -24,7 +24,7 @@ Only files from cptx.ee: the page, one stylesheet, one font in two or four style
 ## Where some content comes from
 
 - **The library** uses book details and covers from [Open Library](https://openlibrary.org) and Google Books. They were fetched once by the server; your browser doesn't contact them.
-- **The cheatsheet's reading list** is collected by the server from the blogs' public RSS feeds a few times a day.
+- **The latest posts on [reads](/addons/reads/?view=latest)** are collected by the server from the cheatsheet blogs' public RSS feeds a few times a day; your browser never contacts those blogs until you click a link.
 - **City lights** finds place names in the posts themselves.
 - **Readers' countries** come from [DB-IP](https://db-ip.com)'s free country list (CC BY 4.0), a file the server downloads once a month and checks locally.
 

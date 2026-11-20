@@ -13,8 +13,9 @@ draft: true (hidden until you publish them). Sections, in order:
                           earlier years, newest year first, one post per line,
                           opening with a few lines of the longest one
 - what is being written   yours
-- articles I enjoyed      new entries in the weekendreads pocket (not in an
-                          earlier issue), else yours
+- articles I enjoyed      articles kept in data/reads.tsv during the week (not
+                          in an earlier issue); if none, up to 5 posts of the week from the
+                          blogs I follow (feed-cache.json, on the VM), else yours
 - reading                 new entries in the bedsidetable pocket, else yours
 - listening, watching     yours
 
@@ -30,17 +31,21 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 NEWS = os.path.join(ROOT, "content", "newsletter")
 POSTS = os.path.join(ROOT, "content", "posts")
 POCKETS = os.path.join(ROOT, "content", "pockets")
+READS = os.path.join(ROOT, "data", "reads.tsv")
+FEED_CACHE = os.environ.get("FEED_CACHE", os.path.join(ROOT, "feed-cache.json"))
 SITE = "https://cptx.ee"
 
 HEAD = {
     "en": {"changed": "what changed", "written": "what was written", "past": "this week, years ago",
            "writing": "what is being written", "articles": "articles I enjoyed", "reading": "reading",
            "listening": "listening", "watching": "watching", "title": "This week on cptx.ee",
-           "none_written": "Nothing new written this week.", "more": "and {n} more"},
+           "none_written": "Nothing new written this week.", "more": "and {n} more",
+           "fresh": "Fresh from the blogs I follow:"},
     "es": {"changed": "qué ha cambiado", "written": "qué se ha escrito", "past": "esta semana, otros años",
            "writing": "qué se está escribiendo", "articles": "artículos que me gustaron", "reading": "leyendo",
            "listening": "escuchando", "watching": "viendo", "title": "Esta semana en cptx.ee",
-           "none_written": "Nada nuevo escrito esta semana.", "more": "y {n} más"},
+           "none_written": "Nada nuevo escrito esta semana.", "more": "y {n} más",
+           "fresh": "Lo último de los blogs que sigo:"},
 }
 
 
@@ -137,6 +142,39 @@ def new_pocket_entries(slug, seen):
     return out
 
 
+def kept_reads(seen, since, until):
+    """Articles kept in data/reads.tsv during the week whose link is in no earlier issue."""
+    out = []
+    if not os.path.exists(READS):
+        return out
+    for line in read(READS).splitlines():
+        if not line.strip() or line.startswith("#"):
+            continue
+        f = (line.split("\t") + [""] * 6)[:6]
+        kept, title, author, url = f[0].strip(), f[1].strip(), f[2].strip(), f[3].strip()
+        kept = kept if len(kept) == 10 else kept + "-01"
+        if url and url not in seen and since.isoformat() <= kept <= until.isoformat():
+            out.append(f"[{title}]({url})" + (f" by {author}" if author else ""))
+    return out
+
+
+def fresh_from_blogs(since, until, limit=5):
+    """Fallback: posts of the week from the blogs I follow (AD-11)."""
+    import json
+    try:
+        cache = json.loads(read(FEED_CACHE))
+    except (OSError, ValueError):
+        return []
+    out = []
+    for it in cache.get("items", []):
+        d = (it.get("date") or "")[:10]
+        if d and since.isoformat() <= d <= until.isoformat():
+            out.append(f"[{it['title']}]({it['link']}) by {it['source']}")
+        if len(out) == limit:
+            break
+    return out
+
+
 def section(title, lines, placeholder=""):
     """A section; empty ones are kept as a comment so they show nowhere."""
     if lines:
@@ -190,7 +228,12 @@ def build(lang, n, since, until, all_posts, changes, seen):
     out += section(h["written"], [f"- [{t}]({SITE}{u}) · {d:%-d %b}" for d, t, u in written] or [h["none_written"]])
     out += section(h["past"], past_years(all_posts, since, until, lang))
     out += section(h["writing"], [])
-    out += section(h["articles"], [f"- {e}" for e in new_pocket_entries("weekendreads", seen)])
+    articles = kept_reads(seen, since, until)
+    if not articles:
+        fresh = fresh_from_blogs(since, until)
+        if fresh:
+            articles = [h["fresh"], ""] + fresh
+    out += section(h["articles"], [e if e in ("", h["fresh"]) else f"- {e}" for e in articles])
     out += section(h["reading"], [f"- {e}" for e in new_pocket_entries("bedsidetable", seen)])
     out += section(h["listening"], [])
     out += section(h["watching"], [])

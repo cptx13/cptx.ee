@@ -31,6 +31,13 @@
       <span class="addon-card-desc">The words used most, without articles or pronouns, as a heatmap. Tap a word to see it year by year.</span>
     </span>
     </a>
+    <a class="addon-card ic-card" href="/addons/reads/">
+      <LineIcon :name="'paper'"></LineIcon>
+      <span class="ic-text">
+      <span class="addon-card-title">reads →</span>
+      <span class="addon-card-desc">Articles from other people I kept, month by month, next to the latest posts from the blogs I follow.</span>
+    </span>
+    </a>
     <a class="addon-card ic-card" href="/addons/readers/">
       <LineIcon :name="'eye'"></LineIcon>
       <span class="ic-text">

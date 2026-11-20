@@ -11,7 +11,7 @@ toc: false
 Some links I like to have at hand,
 
 #### Blogs
-<p class="feed-link"><span class="feed-emoji">📡</span> <a href="/pockets/cheatsheet/feed/">feed</a> — latest articles from these blogs</p>
+<p class="feed-link"><a href="/addons/reads/?view=latest">latest articles from these blogs →</a></p>
 
 * [No One's Happy](https://nooneshappy.com/)
 * [Invokation Games](https://www.invokation.games/blog)
@@ -30,6 +30,7 @@ Some links I like to have at hand,
 * [Bunnies Studio](https://www.bunniestudios.com/blog/)
 * [Privacy Guides Blog](https://www.privacyguides.org/articles/)
 * [Brutalist Report](https://brutalist.report/)
+* [Import AI by Jack Clark](https://jack-clark.net/)
 
 #### Databases/Archives
 * [The New York Public Library](https://digitalcollections.nypl.org/)

@@ -943,6 +943,18 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .home-today-title a { color: inherit; text-decoration: none; }
 .home-today .post-entry { margin-bottom: .3em; font-size: .9em; }
 
+/* reads (AD-11) */
+.rd-month { margin-top: 1.6em; }
+.rd-month-label { font-size: .85em; color: var(--content-secondary); margin: 0 0 .3em; font-weight: 700; }
+.rd-item { display: flex; flex-direction: column; gap: .15em; padding: .65em 0; border-bottom: 1px solid var(--code-border); }
+.rd-month .rd-item:first-of-type, .hm-stats + div .rd-item:first-child { border-top: 1px solid var(--code-border); }
+.rd-title { color: var(--content-primary); text-decoration: none; font-size: .95em; }
+.rd-title:hover { text-decoration: underline; }
+.rd-meta { color: var(--content-secondary); font-size: .75em; }
+.rd-note { font-size: .85em; font-style: italic; }
+.rd-errors { margin-top: 2em; color: var(--content-secondary); font-size: .75em; }
+.rd-errors ul { margin: .5em 0 0 1.5em; list-style: disc; }
+
 @media print { .hm-filters, .addon-share { display: none !important; } }
 
 /* === L-01 archives + library (covers and spines on shelves) === */

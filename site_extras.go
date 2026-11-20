@@ -297,6 +297,8 @@ var retiredURLs = map[string]string{
 	"/croquis/202510181/": "/rimas/202510181/",   // The river Alph
 	"/croquis/202603121/": "/rimas/202603121/",   // March
 	"/croquis/202611171/": "/rimas/202611171/",   // Park lights
+	// 2026-11-20 (AD-11): weekendreads became the kept view of /addons/reads/
+	"/pockets/weekendreads/": "/addons/reads/",
 }
 
 func registerRetired(mux *http.ServeMux, distDir string) error {
@@ -319,7 +321,9 @@ func registerRetired(mux *http.ServeMux, distDir string) error {
 }
 
 const robotsTxt = `User-agent: *
-Disallow: /pockets/cheatsheet/feed/refresh
+Disallow: /pockets/cheatsheet/feed/
+Disallow: /addons/reads/refresh
+Disallow: /addons/reads/?
 Disallow: /addons/map/?
 Disallow: /newsletter/thanks/
 Disallow: /newsletter/welcome/

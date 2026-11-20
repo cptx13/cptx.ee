@@ -51,13 +51,12 @@ My works are organized and distributed using the following system:
 
 - **[photos](/photos/)** are collections of photographs from various places and years, served directly from the server.
 
-- **[addons](/addons/)** are my playground, where I try new features that make the blog more immersive: an [archive map](/addons/map/) of every day I wrote, [what I wrote on this day](/addons/today/) in other years, the [cities that light up](/addons/places/) across my posts, the [words](/addons/words/) I keep coming back to and the [readers](/addons/readers/) who come by.
+- **[addons](/addons/)** are my playground, where I try new features that make the blog more immersive: an [archive map](/addons/map/) of every day I wrote, [what I wrote on this day](/addons/today/) in other years, the [cities that light up](/addons/places/) across my posts, the [words](/addons/words/) I keep coming back to, the [articles I kept](/addons/reads/) from other people next to the latest from the blogs I follow, and the [readers](/addons/readers/) who come by.
 
 - **[pockets](/pockets/)** comprise my daily resources, everything I would carry around if I could.
   - **[bedsidetable](/pockets/bedsidetable/)**: Some books I have enjoyed recently.
   - **[cheatsheet](/pockets/cheatsheet/)**: Some links I like to have at hand.
   - **[workbench](/pockets/workbench/)**: Some of my projects.
-  - **[weekendreads](/pockets/weekendreads/)**: Articles from other people I have recently enjoyed.
 
 - **[archives](/archives/)** are the things we keep: mathoms of a more physical kind.
   - **[written by me](/archives/written-by-me/)**: published books—manuscripts that have been formatted, reviewed, and are considered complete.

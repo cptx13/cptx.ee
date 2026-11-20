@@ -215,6 +215,11 @@ func main() {
 
 	// Home page
 	addonIdx := buildAddonIndex(published) // F-15
+	reads, err := loadReads()              // AD-11
+	if err != nil {
+		log.Fatalf("reads: %v", err)
+	}
+	siteReads = reads
 	addonTagList := addonTags(addonIdx)
 	postTexts := map[string]string{}
 	for _, p := range published {
@@ -497,10 +502,6 @@ func main() {
 		renderPage(w, engine, "SinglePage", data)
 	})))
 
-	// Feed page (server-side only, not static)
-	// Note: registered on mux below since it's under /pockets/feed/ which would
-	// otherwise match the pocket slug route.
-
 	// Static files
 	staticFS := http.FileServer(http.Dir("static"))
 	mux := http.NewServeMux()
@@ -538,59 +539,12 @@ func main() {
 	})
 	// Feed page handlers (server-side only)
 	startFeedAutoRefresh()
-	mux.HandleFunc("/pockets/cheatsheet/feed/refresh", func(w http.ResponseWriter, r *http.Request) {
-		if !refreshFeeds(feedManualGap, "manual") {
-			log.Println("Feed refresh skipped: running or refreshed recently")
-		}
-		http.Redirect(w, r, "/pockets/cheatsheet/feed/", http.StatusSeeOther)
-	})
-	// Redirect old /pockets/feed/ to new location
-	mux.HandleFunc("/pockets/feed/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/pockets/cheatsheet/feed/", http.StatusMovedPermanently)
-	})
-	mux.HandleFunc("/pockets/cheatsheet/feed/", func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/pockets/cheatsheet/feed/" {
-			router.ServeHTTP(w, r)
-			return
-		}
-		cache, err := loadFeedCache()
-		noCache := err != nil
-
-		var items []any
-		var feedErrors []any
-		var lastRefreshed string
-		var hasItems, hasErrors bool
-		var errorCount int
-
-		if !noCache {
-			lastRefreshed = cache.LastRefreshed.Format("2006.01.02 15:04 MST")
-			for _, item := range cache.Items {
-				items = append(items, map[string]any{
-					"Title":         item.Title,
-					"Link":          item.Link,
-					"Source":        item.Source,
-					"DateFormatted": item.DateFormatted,
-				})
-			}
-			for _, e := range cache.Errors {
-				feedErrors = append(feedErrors, e)
-			}
-			hasItems = len(items) > 0
-			hasErrors = len(feedErrors) > 0
-			errorCount = len(feedErrors)
-		}
-
-		data := map[string]any{
-			"noCache":       noCache,
-			"hasItems":      hasItems,
-			"hasErrors":     hasErrors,
-			"errorCount":    errorCount,
-			"lastRefreshed": lastRefreshed,
-			"items":         items,
-			"errors":        feedErrors,
-		}
-		renderPage(w, engine, "FeedPage", data)
-	})
+	// AD-11: the cheatsheet feed moved to /addons/reads/?view=latest.
+	toLatest := func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/addons/reads/?view=latest", http.StatusMovedPermanently)
+	}
+	mux.HandleFunc("/pockets/feed/", toLatest)
+	mux.HandleFunc("/pockets/cheatsheet/feed/", toLatest)
 
 	// Batch A: health, feed, sitemap, robots (B-05, B-06)
 	started := time.Now()

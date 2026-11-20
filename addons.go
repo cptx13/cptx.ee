@@ -427,6 +427,7 @@ func registerAddons(mux *http.ServeMux, render func(http.ResponseWriter, string,
 		}
 		render(w, "TodayPage", buildTodayData(idx, r.URL.Query(), time.Now()))
 	})
+	readsHandlers(mux, render) // AD-11
 }
 
 // addonTags lists tags used by croquis/recuerdos, sorted. "rimas" is a section
@@ -461,6 +462,7 @@ func writeAddonPages(engine *htmlc.Engine, distDir string, idx []addonPost, tags
 		"addons/places":  {"PlacesPage", buildPlacesData(idx, url.Values{})},
 		"addons/words":   {"WordsPage", buildWordsData(idx, url.Values{})},
 		"addons/readers": {"ReadersPage", buildReadersData(siteStats, idx, time.Now())},
+		"addons/reads":   {"ReadsPage", buildReadsData(siteReads, nil, url.Values{})},
 	}
 	for dir, pg := range pages {
 		html, err := engine.RenderPageString(pg.comp, pg.data)
