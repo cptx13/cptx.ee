@@ -8,7 +8,10 @@ kit: an old ThinkPad, UmbrelOS, Immich
 ---
 ## how it's set up
 
-The full guide is being written: the ThinkPad, UmbrelOS, and Immich for photos.
+- An old ThinkPad runs UmbrelOS as a home server.
+- Immich runs on it for photos.
+
+The full guide is being written.
 
 ## resources
 
