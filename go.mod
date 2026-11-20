@@ -7,7 +7,7 @@ require (
 	github.com/dhamidi/htmlc v1.0.0
 	github.com/mmcdole/gofeed v1.3.0
 	github.com/yuin/goldmark v1.8.2
-	golang.org/x/image v0.39.0
+	golang.org/x/image v0.41.0
 	golang.org/x/text v0.43.0
 )
 
