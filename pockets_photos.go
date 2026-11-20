@@ -18,7 +18,7 @@ var pocketMeta = []struct {
 }{
 	{"bedsidetable", "bedside", "books I've enjoyed", "books"},
 	{"cheatsheet", "link", "links at hand", "links"},
-	{"workbench", "wrench", "projects & resources", ""},
+	{"workbench", "wrench", "my projects and how they are put together", ""},
 	{"weekendreads", "paper", "articles I enjoyed", "articles"},
 }
 
@@ -52,6 +52,9 @@ func buildPocketsData(pocketPosts []*Post) []any {
 		href := "/pockets/" + pm.Slug + "/"
 		if pm.Slug == "weekendreads" { // AD-11: lives in /addons/reads/ now
 			href, meta = "/addons/reads/", readsSummary(siteReads)
+		}
+		if pm.Slug == "workbench" { // projects + guides, data/workbench/
+			meta = workbenchSummary(siteProjects)
 		}
 		out = append(out, map[string]any{
 			"Slug":        pm.Slug,

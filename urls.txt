@@ -352,6 +352,14 @@
 /pockets/cheatsheet/
 /pockets/weekendreads/
 /pockets/workbench/
+/pockets/workbench/cptx-ee/
+/pockets/workbench/grapheneos/
+/pockets/workbench/ipod/
+/pockets/workbench/kindle/
+/pockets/workbench/notai-ee/
+/pockets/workbench/obsidian/
+/pockets/workbench/templat-ee/
+/pockets/workbench/umbrel/
 /posts/croquis/a-escasos-días/
 /posts/croquis/a-gil-de-biedma/
 /posts/croquis/a-la-francesa/

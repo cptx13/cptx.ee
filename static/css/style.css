@@ -955,6 +955,24 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .kp-errors { margin-top: 2em; color: var(--content-secondary); font-size: .75em; }
 .kp-errors ul { margin: .5em 0 0 1.5em; list-style: disc; }
 
+/* workbench projects */
+.wb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(14em, 1fr)); gap: .8em; margin-top: 1.2em; }
+.wb-card { display: flex; flex-direction: column; gap: .35em; padding: .9em 1em; border: 1px solid var(--code-border); border-radius: 8px; text-decoration: none; color: var(--content-primary); }
+.wb-card:hover { border-color: var(--content-secondary); }
+.wb-top { display: flex; justify-content: space-between; align-items: center; color: var(--content-secondary); }
+.wb-title { font-weight: 700; }
+.wb-summary { color: var(--content-secondary); font-size: .8em; line-height: 1.45; }
+.wb-status { font-size: .72em; padding: .05em .55em; border-radius: 99px; border: 1px solid currentColor; white-space: nowrap; }
+.wb-running { color: #4f9a6a; }
+.wb-tinkering { color: #c08a2e; }
+.wb-planned { color: var(--content-secondary); }
+.wb-revamp { color: #b8664a; }
+.wb-kit { display: flex; flex-wrap: wrap; gap: .4em; font-size: .8em; }
+.wb-part { border: 1px solid var(--code-border); border-radius: 4px; padding: .1em .5em; }
+.wb-body h2 { font-size: 1.05em; margin: 2em 0 .6em; }
+.wb-body { font-size: .92em; line-height: 1.6; }
+.wb-back { margin-top: 2.5em; }
+
 @media print { .hm-filters, .addon-share { display: none !important; } }
 
 /* === L-01 archives + library (covers and spines on shelves) === */

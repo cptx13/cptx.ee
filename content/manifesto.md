@@ -56,7 +56,7 @@ My works are organized and distributed using the following system:
 - **[pockets](/pockets/)** comprise my daily resources, everything I would carry around if I could.
   - **[bedsidetable](/pockets/bedsidetable/)**: Some books I have enjoyed recently.
   - **[cheatsheet](/pockets/cheatsheet/)**: Some links I like to have at hand.
-  - **[workbench](/pockets/workbench/)**: Some of my projects.
+  - **[workbench](/pockets/workbench/)**: My projects, each with a guide to how it is put together.
 
 - **[archives](/archives/)** are the things we keep: mathoms of a more physical kind.
   - **[written by me](/archives/written-by-me/)**: published books—manuscripts that have been formatted, reviewed, and are considered complete.

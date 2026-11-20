@@ -220,6 +220,11 @@ func main() {
 		log.Fatalf("reads: %v", err)
 	}
 	siteReads = reads
+	projects, err := loadWorkbench(workbenchDir) // workbench projects
+	if err != nil {
+		log.Fatalf("workbench: %v", err)
+	}
+	siteProjects = projects
 	addonTagList := addonTags(addonIdx)
 	postTexts := map[string]string{}
 	for _, p := range published {
@@ -545,6 +550,8 @@ func main() {
 	}
 	mux.HandleFunc("/pockets/feed/", toLatest)
 	mux.HandleFunc("/pockets/cheatsheet/feed/", toLatest)
+	registerWorkbench(mux, func(w http.ResponseWriter, c string, d map[string]any) { renderPage(w, engine, c, d) },
+		func(w http.ResponseWriter, r *http.Request) { renderNotFound(w, engine) })
 
 	// Batch A: health, feed, sitemap, robots (B-05, B-06)
 	started := time.Now()
@@ -573,6 +580,9 @@ func main() {
 	// Build static site
 	if err := buildStaticSite(engine, published, allPostsForPool, postsByCategory, postsBySection, pocketPosts, manifestoPost, toPostMap, toPostList, shufflePoolJSON, postCount, photoFolders, toFolderMap, toFolderList, toPhotoList); err != nil {
 		log.Fatalf("building static site: %v", err)
+	}
+	if err := writeWorkbenchPages(engine, "dist", siteProjects); err != nil {
+		log.Printf("workbench pages: %v", err)
 	}
 	if err := writeAddonPages(engine, "dist", addonIdx, addonTagList); err != nil {
 		log.Printf("addons dist: %v", err)

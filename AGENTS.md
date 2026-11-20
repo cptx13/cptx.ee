@@ -24,6 +24,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for the full deployment setup (systemd user u
 | `build.go` | Static build into `dist/` |
 | `feeds.go` | Cheatsheet RSS reader (feed cache, refresh limits) |
 | `reads.go` | `/addons/reads/`: kept articles (`data/reads.tsv`) + latest from the feed |
+| `workbench.go` + `data/workbench/*.md` | `/pockets/workbench/`: project cards (status: running · tinkering · planned · revamp) and one guide page per project |
 | `photos.go`, `pockets_photos.go` | Photo folders, thumbnails, pockets/photos page data |
 | `addons.go`, `places.go`, `words.go` | `/addons/` pages |
 | `library.go` | `/archives/` and the library |

@@ -18,5 +18,10 @@
   <g v-if="name == 'mail'"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5 12 13l8.5-6.5"/></g>
   <g v-if="name == 'rss'"><circle cx="5.5" cy="18.5" r="1.5"/><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/></g>
   <g v-if="name == 'eye'"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g>
+  <g v-if="name == 'ipod'"><rect x="6" y="2.5" width="12" height="19" rx="2"/><rect x="8.5" y="5" width="7" height="5.5" rx=".6"/><circle cx="12" cy="16" r="3"/><circle cx="12" cy="16" r=".9"/></g>
+  <g v-if="name == 'ereader'"><rect x="5" y="2.5" width="14" height="19" rx="1.8"/><path d="M8 6.5h8"/><path d="M8 9.5h8"/><path d="M8 12.5h8"/><path d="M8 15.5h5"/><path d="M10.5 19h3"/></g>
+  <g v-if="name == 'notebook'"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18"/><path d="M3.5 7h3"/><path d="M3.5 12h3"/><path d="M3.5 17h3"/><path d="M12 8h4"/></g>
+  <g v-if="name == 'server'"><rect x="4" y="4" width="16" height="7" rx="1.2"/><rect x="4" y="13" width="16" height="7" rx="1.2"/><circle cx="7.5" cy="7.5" r=".8"/><circle cx="7.5" cy="16.5" r=".8"/><path d="M11 7.5h6"/><path d="M11 16.5h6"/></g>
+  <g v-if="name == 'phone'"><rect x="6.5" y="2.5" width="11" height="19" rx="2"/><path d="M10.5 5h3"/><circle cx="12" cy="18.3" r=".8"/></g>
 </svg>
 </template>
