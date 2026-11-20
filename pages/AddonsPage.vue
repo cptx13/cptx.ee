@@ -1,5 +1,5 @@
 <template>
-<AppLayout :pageTitle="'addons | cptx'" :description="'Ways to wander the archive: a heatmap of every post and what was written on this day.'" :canonicalURL="'https://cptx.ee/addons/'" :lang="'en'" :ogType="'website'">
+<AppLayout :pageTitle="'addons | cptx'" :description="'Ways to wander the archive: a heatmap of every post, what was written on this day, the cities and words in the writing, the articles I kept, and who reads.'" :canonicalURL="'https://cptx.ee/addons/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons">
     <h1 class="addons-title">addons</h1>
     <p class="addons-intro">My playground: where I try new features that make the blog more immersive. Other ways into the {{ count }} croquis, rimas and recuerdos.</p>

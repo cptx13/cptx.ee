@@ -16,8 +16,8 @@ Read the rest in the **[manifesto](https://cptx.ee/manifesto/)**.
 | [rimas](https://cptx.ee/rimas/) | Poems |
 | [recuerdos](https://cptx.ee/categories/recuerdos/) | Daily memories, 2021–2024 (a closed series of 1,000+ entries) |
 | [photos](https://cptx.ee/photos/) | Photographs by place and year |
-| [addons](https://cptx.ee/addons/) | Playful views of the archive: a heatmap of every post, on this day, city lights, most used words |
-| [pockets](https://cptx.ee/pockets/) | Things I carry around: books I'm reading, links, projects, weekend reads |
+| [addons](https://cptx.ee/addons/) | Playful views of the archive: a heatmap of every post, on this day, city lights, most used words, the articles I kept next to the latest from the blogs I follow, and readers |
+| [pockets](https://cptx.ee/pockets/) | Things I carry around: books I'm reading, links, and the workbench, my projects with a guide each |
 | [archives](https://cptx.ee/archives/) | The books I wrote, and a library of the books Merzeede and I own |
 | [newsletter](https://cptx.ee/newsletter/) | A weekly issue by email, in English and Spanish; every issue is kept on the [kiosk](https://cptx.ee/newsletter/kiosk/) |
 
@@ -27,10 +27,10 @@ New croquis and rimas are also published as an [RSS feed](https://cptx.ee/index.
 
 A small Go server renders markdown into HTML pages. No JavaScript framework, no database and no trackers; the few scripts are small, plain JavaScript, and every page works without them. The site counts its own readers (daily totals only, no cookies): see [readers](https://cptx.ee/addons/readers/).
 
-- **Stack:** Go, [htmlc](https://github.com/dhamidi/htmlc) (server-side `.vue` templates), [dispatch](https://github.com/dhamidi/dispatch) (routing), [goldmark](https://github.com/yuin/goldmark) (markdown) and [gofeed](https://github.com/mmcdole/gofeed) (the reading list's RSS reader).
+- **Stack:** Go, [htmlc](https://github.com/dhamidi/htmlc) (server-side `.vue` templates), [dispatch](https://github.com/dhamidi/dispatch) (routing), [goldmark](https://github.com/yuin/goldmark) (markdown) and [gofeed](https://github.com/mmcdole/gofeed) (reads the blogs I follow for [reads](https://cptx.ee/addons/reads/)).
 - **Writing** happens in an [Obsidian](https://obsidian.md/) vault; published pieces are copied here as markdown under `content/`.
 - **Hosting:** an [exe.dev](https://exe.dev) VM checks this repository every minute. When `main` moves, it builds the new version, swaps it in only if it starts and answers its health check, and keeps the previous one otherwise.
-- **Checks:** every push runs [`scripts/check.sh`](scripts/check.sh) (build, tests, content lint, a snapshot of all ~2,500 URLs so none silently disappear, and a request to every page). On `main`, CI then waits for the live site to report the new commit and smoke-tests it.
+- **Checks:** every push runs [`scripts/check.sh`](scripts/check.sh) (build, tests, content lint, a snapshot of all ~3,000 URLs so none silently disappear, and a request to every page). On `main`, CI then waits for the live site to report the new commit and smoke-tests it.
 - **Photos and book covers** live only on the server, not in git.
 - **Newsletter:** issues are markdown files too (`content/newsletter/NNN.md`, Spanish `NNN.es.md`), drafted by [`scripts/newsletter-draft.py`](scripts/newsletter-draft.py). Once an issue is live, CI sends it through [Buttondown](https://buttondown.com) as one bilingual email ([`scripts/newsletter-send.py`](scripts/newsletter-send.py)); Buttondown handles sign-ups, confirmation and unsubscribes. Open and click tracking are off.
 
@@ -43,21 +43,25 @@ content/*.md ──► GitHub (main) ──► check ──► VM pulls, builds,
 
 | Path | What lives there |
 |---|---|
-| `content/` | Posts (`posts/croquis` holds croquis and rimas, told apart by `categories`; `posts/recuerdos`), pockets, manifesto, legal docs, newsletter issues |
+| `content/` | Posts (`posts/croquis` holds croquis and rimas, told apart by `categories`; `posts/recuerdos`), pockets (bedsidetable, cheatsheet), manifesto, legal docs, newsletter issues |
 | `pages/`, `components/` | Page templates (`.vue`, rendered on the server) |
 | `static/` | CSS, small JS files, fonts, icons |
 | `data/library/` | The library: Libib export, shelves, overrides, generated `books.json` |
+| `data/reads.tsv` | Articles I kept (title, author, link), shown on `/addons/reads/` |
+| `data/workbench/` | One markdown file per project: hardware, software, guide, notes |
 | `main.go` | Startup and routes |
 | `content.go` | Markdown loading, frontmatter, post IDs and URLs |
 | `site_extras.go` | Headers, compression, RSS, sitemap, `/healthz`, redirects |
 | `build.go` | Static build into `dist/` |
 | `addons.go`, `places.go`, `words.go` | The addons |
 | `library.go` | Archives and library pages |
-| `stats.go`, `geo.go` | Readers' counters: visits, reads, countries, without cookies (`/addons/readers/`) |
+| `stats.go`, `geo.go` | Readers' counters: people's visits, countries and readers vs machines, without cookies or timers (`/addons/readers/`) |
 | `newsletter.go` | Newsletter page, issues (`/newsletter/<n>/`, Spanish `/newsletter/<n>/es/`), kiosk covers |
 | `search.go` | Site-wide search (`/search/`) |
 | `legal.go` | `/legaldocs/` (privacy — including the newsletter —, cookies, how the site works) |
-| `feeds.go`, `photos.go`, `pockets_photos.go` | Reading-list feeds, photos, pockets |
+| `feeds.go`, `reads.go` | The blogs' feeds and `/addons/reads/` (kept + latest) |
+| `workbench.go` | `/pockets/workbench/` and one guide page per project |
+| `photos.go`, `pockets_photos.go` | Photos, pockets |
 | `scripts/` | `check.sh`, URL snapshot, smoke test, link check, library import, newsletter draft/send, Lighthouse |
 | `*.service`, `*.timer`, `deploy.sh` | How the VM runs and deploys the site |
 

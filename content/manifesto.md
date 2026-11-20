@@ -35,7 +35,7 @@ Since creating this site, I have developed various ways to organize my existing 
 
 **Publishing.** The site runs on a small [exe.dev](https://exe.dev) virtual machine that checks GitHub every minute. When something new arrives, it builds the site, starts it, checks that it answers, and only then replaces the running version; if anything fails, the previous version stays up. Every change is also tested on GitHub before and after it goes live: the build, that no existing URL breaks, and the live pages.
 
-**Extras.** On every start the server reads all the posts and builds the [addons](/addons/) (the archive map, the cities, the words) and the [library](/archives/library/): book data comes from my Libib scans, with covers and details from [Open Library](https://openlibrary.org/) and other public catalogues. Photos and book covers live only on the server. There is an [RSS feed](/index.xml) for the croquis and a sitemap for everything else.
+**Extras.** On every start the server reads all the posts and builds the [addons](/addons/) (the archive map, the cities, the words, the reading list) and the [library](/archives/library/): book data comes from my Libib scans, with covers and details from [Open Library](https://openlibrary.org/) and other public catalogues. Photos and book covers live only on the server. A few times a day it also collects the newest posts from the blogs I follow, so your browser never has to. There is an [RSS feed](/index.xml) for the croquis and rimas, and a sitemap for everything else.
 
 ---
 

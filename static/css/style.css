@@ -1108,7 +1108,6 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
     font-size: .85em; color: var(--content-primary);
 }
 .pk-body p.feed-link a { text-decoration: none; }
-.pk-body p.feed-link .feed-emoji { font-size: 1.1em; line-height: 1; }
 
 /* === photos: cover cards, masonry, viewer === */
 .ph-views { display: flex; gap: .4em; margin: 1.2em 0 1em; font-size: .85em; }
