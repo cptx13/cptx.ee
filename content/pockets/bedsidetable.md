@@ -10,6 +10,9 @@ toc: false
 ---
 Some books I have enjoyed recently.
 
+#### 2026.11
+* _The Man Who Planted Trees_ (1953) by Jean Giono (translated by Barbara Bray)
+
 #### 2026.09
 * _Kitchen Confidential_ (2000) by Anthony Bourdain
 
