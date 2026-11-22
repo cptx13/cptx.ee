@@ -1,7 +1,7 @@
 ---
 title: "bedsidetable"
 author: cptx
-date: 2026-09-17
+date: 2026-11-22
 draft: false
 categories: [pockets]
 tags: [bedsidetable]

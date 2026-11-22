@@ -1,7 +1,7 @@
 ---
 title: "cheatsheet"
 author: cptx
-date: 2026-10-19
+date: 2026-11-22
 draft: false
 categories: [pockets]
 tags: [cheatsheet]

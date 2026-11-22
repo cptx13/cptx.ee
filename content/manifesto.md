@@ -1,7 +1,7 @@
 ---
 title: "manifesto"
 author: cptx
-date: 2026-11-14
+date: 2026-11-22
 draft: false
 categories: ["manifesto"]
 tags: [manifesto]
@@ -35,7 +35,7 @@ Since creating this site, I have developed various ways to organize my existing 
 
 **Publishing.** The site runs on a small [exe.dev](https://exe.dev) virtual machine that checks GitHub every minute. When something new arrives, it builds the site, starts it, checks that it answers, and only then replaces the running version; if anything fails, the previous version stays up. Every change is also tested on GitHub before and after it goes live: the build, that no existing URL breaks, and the live pages.
 
-**Extras.** On every start the server reads all the posts and builds the [addons](/addons/) (the archive map, the cities, the words, the reading list) and the [library](/archives/library/): book data comes from my Libib scans, with covers and details from [Open Library](https://openlibrary.org/) and other public catalogues. Photos and book covers live only on the server. A few times a day it also collects the newest posts from the blogs I follow, so your browser never has to. There is an [RSS feed](/index.xml) for the croquis and rimas, and a sitemap for everything else.
+**Extras.** On every start the server reads all the posts and builds the [addons](/addons/) (the archive map, the cities, the words, the reading list) the [library](/archives/library/) and the [vinyl](/archives/vinyl/) crate: book data comes from my Libib scans, with covers and details from [Open Library](https://openlibrary.org/) and other public catalogues; record covers come from [MusicBrainz](https://musicbrainz.org/) and the [Cover Art Archive](https://coverartarchive.org/), or are photos of our own copies. Photos and covers live only on the server. A few times a day it also collects the newest posts from the blogs I follow, so your browser never has to. There is an [RSS feed](/index.xml) for the croquis and rimas, and a sitemap for everything else.
 
 ---
 
@@ -60,6 +60,7 @@ My works are organized and distributed using the following system:
 
 - **[archives](/archives/)** are the things we keep: mathoms of a more physical kind.
   - **[written by me](/archives/written-by-me/)**: published books—manuscripts that have been formatted, reviewed, and are considered complete.
-  - **[library](/archives/library/)**: some of the books Merzeede and I own, shown as covers or spines and shelved by genre, colour, author, decade, language or size. Not all of them have been scanned yet. Records, films and other collections will follow.
+  - **[library](/archives/library/)**: some of the books Merzeede and I own, shown as covers or spines and shelved by genre, colour, author, decade, language or size. Not all of them have been scanned yet.
+  - **[vinyl](/archives/vinyl/)**: some of our records, by cover, sorted by genre, language, artist, decade or colour, with links to listen to each one. Films and other collections will follow.
 
 - **[newsletter](/newsletter/)** is a weekly issue by email, in English and Spanish: what changed here, what I wrote, what I wrote on the same days in earlier years, and what I have been reading, listening to and watching. Every issue is kept on the [kiosk](/newsletter/kiosk/).

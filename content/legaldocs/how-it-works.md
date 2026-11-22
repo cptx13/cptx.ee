@@ -1,7 +1,7 @@
 ---
 title: "How this site works"
 author: cptx
-date: 2026-11-20
+date: 2026-11-22
 draft: false
 lang: en
 summary: "Where the writing comes from, what runs the site, and what is (and isn't) loaded in your browser."
@@ -15,7 +15,7 @@ Everything starts as a note in [Obsidian](https://obsidian.md/), on my own compu
 - A small program written in [Go](https://go.dev/) turns markdown into pages. It runs on a virtual server rented from [exe.dev](https://exe.dev).
 - Pages are plain HTML and CSS. The few scripts are tiny and only add conveniences (switching the theme, sharing a view, browsing photos, telling the [readers](/addons/readers/) counter that a person is on the page); every page works without them.
 - The font is [JetBrains Mono](https://www.jetbrains.com/lp/mono/), served from this site.
-- Photos and book covers are stored on the server, not in the repository.
+- Photos, book covers and record covers are stored on the server, not in the repository.
 
 ## What your browser loads
 
@@ -24,6 +24,7 @@ Only files from cptx.ee: the page, one stylesheet, one font in two or four style
 ## Where some content comes from
 
 - **The library** uses book details and covers from [Open Library](https://openlibrary.org) and Google Books. They were fetched once by the server; your browser doesn't contact them.
+- **The vinyl crate** uses record details from [MusicBrainz](https://musicbrainz.org) and [Wikidata](https://www.wikidata.org), and covers from the [Cover Art Archive](https://coverartarchive.org) or photos of our own copies, all fetched once by the server. The Spotify, YouTube Music and Wikipedia links are plain links: nothing loads from those sites until you click one.
 - **The latest posts on [reads](/addons/reads/?view=latest)** are collected by the server from the cheatsheet blogs' public RSS feeds a few times a day; your browser never contacts those blogs until you click a link.
 - **City lights** finds place names in the posts themselves.
 - **Readers' countries** come from [DB-IP](https://db-ip.com)'s free country list (CC BY 4.0), a file the server downloads once a month and checks locally.

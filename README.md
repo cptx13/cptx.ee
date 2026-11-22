@@ -18,7 +18,7 @@ Read the rest in the **[manifesto](https://cptx.ee/manifesto/)**.
 | [photos](https://cptx.ee/photos/) | Photographs by place and year |
 | [addons](https://cptx.ee/addons/) | Playful views of the archive: a heatmap of every post, on this day, city lights, most used words, the articles I kept next to the latest from the blogs I follow, and readers |
 | [pockets](https://cptx.ee/pockets/) | Things I carry around: books I'm reading, links, and the workbench, my projects with a guide each |
-| [archives](https://cptx.ee/archives/) | The books I wrote, and a library of the books Merzeede and I own |
+| [archives](https://cptx.ee/archives/) | The books I wrote, a library of the books Merzeede and I own, and our vinyl records |
 | [newsletter](https://cptx.ee/newsletter/) | A weekly issue by email, in English and Spanish; every issue is kept on the [kiosk](https://cptx.ee/newsletter/kiosk/) |
 
 New croquis and rimas are also published as an [RSS feed](https://cptx.ee/index.xml), and the site can be searched at [/search](https://cptx.ee/search/).
@@ -46,7 +46,7 @@ content/*.md ──► GitHub (main) ──► check ──► VM pulls, builds,
 | `content/` | Posts (`posts/croquis` holds croquis and rimas, told apart by `categories`; `posts/recuerdos`), pockets (bedsidetable, cheatsheet), manifesto, legal docs, newsletter issues |
 | `pages/`, `components/` | Page templates (`.vue`, rendered on the server) |
 | `static/` | CSS, small JS files, fonts, icons |
-| `data/library/` | The library: Libib export, shelves, overrides, generated `books.json` |
+| `data/library/` | The library: Libib export, shelves, overrides, generated `books.json`; the vinyl list `vinyl.csv` and generated `vinyl.json` |
 | `data/reads.tsv` | Articles I kept (title, author, link), shown on `/addons/reads/` |
 | `data/workbench/` | One markdown file per project: hardware, software, guide, notes |
 | `main.go` | Startup and routes |
@@ -55,6 +55,7 @@ content/*.md ──► GitHub (main) ──► check ──► VM pulls, builds,
 | `build.go` | Static build into `dist/` |
 | `addons.go`, `places.go`, `words.go` | The addons |
 | `library.go` | Archives and library pages |
+| `vinyl.go` | The vinyl crate (`/archives/vinyl/`): records, square covers, listen links |
 | `stats.go`, `geo.go` | Readers' counters: people's visits, countries and readers vs machines, without cookies or timers (`/addons/readers/`) |
 | `newsletter.go` | Newsletter page, issues (`/newsletter/<n>/`, Spanish `/newsletter/<n>/es/`), kiosk covers |
 | `search.go` | Site-wide search (`/search/`) |
@@ -102,6 +103,6 @@ Please report security problems privately; see [SECURITY.md](SECURITY.md).
 
 ## Credits
 
-The move from Hugo to Go and htmlc was started by [Dario Hamidi](https://github.com/dhamidi), who also wrote htmlc and dispatch. Book data comes from [Open Library](https://openlibrary.org) and Google Books.
+The move from Hugo to Go and htmlc was started by [Dario Hamidi](https://github.com/dhamidi), who also wrote htmlc and dispatch. Book data comes from [Open Library](https://openlibrary.org) and Google Books; record data from [MusicBrainz](https://musicbrainz.org), [Wikidata](https://www.wikidata.org) and the [Cover Art Archive](https://coverartarchive.org).
 
 All writing and photographs © cptx. Please ask before reusing them.
