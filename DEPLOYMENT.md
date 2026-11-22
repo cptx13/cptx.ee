@@ -163,7 +163,7 @@ Manual live check: `scripts/smoke.sh [https://cptx.ee] [commit]`.
 - **Weekly issue:**
   1. `scripts/newsletter-draft.py` writes `content/newsletter/NNN.md` and `NNN.es.md` (`draft: true`): what changed (commit subjects, to rewrite), what was written, this week years ago, articles kept that week in `data/reads.tsv` (else up to 5 fresh posts from the feed cache), new bedsidetable entries, and empty sections (hidden while empty).
   2. Edit, set `draft: false` in both, add `/newsletter/<n>/` and `/newsletter/<n>/es/` to `urls.txt`, push through the usual branch → check → main.
-  3. After the deploy is verified, CI hands the issue to Buttondown and, with `NEWSLETTER_MODE=send`, it goes out to every confirmed subscriber. Approving the issue for the site is approving the email.
+  3. After the deploy is verified, CI hands the issue to Buttondown (`scripts/newsletter-send.py`: one email, English then Spanish, each half laid out like the issue's page — breadcrumb, week and date, the issue, "read it on the web · kiosk · cptx.ee"; Buttondown sends the same Markdown as the plain-text part, and the free plan allows no custom email CSS, so the look lives in that script; `--dry-run --today YYYY-MM-DD` prints it) and, with `NEWSLETTER_MODE=send`, it goes out to every confirmed subscriber. Approving the issue for the site is approving the email.
 - **API key:** GitHub secret `BUTTONDOWN_API_KEY` (Actions). Never in chat, never on the VM.
 
 ## Library refresh (`/archives/library/`)

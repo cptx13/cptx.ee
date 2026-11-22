@@ -32,8 +32,15 @@ SITE = "https://cptx.ee"
 API = "https://api.buttondown.com/v1"
 RECENT_DAYS = 21
 
+# The email mirrors an issue's page on the site: the breadcrumb on top, the
+# same link line at the end of each language. Buttondown's free plan allows no
+# custom email CSS, so the look lives in this Markdown, which Buttondown also
+# sends as the email's plain-text part.
 WEB = {"en": "read it on the web", "es": "léelo en la web"}
-KIOSK = "Every issue is kept on the [kiosk]({site}/newsletter/kiosk/) · Todos los números se guardan en el [quiosco]({site}/newsletter/kiosk/)."
+CRUMB = "[cptx]({site}/) / [newsletter]({site}/newsletter/) / issue {n:02d}"
+END = {"en": "[read it on the web]({web}) · [all issues in the kiosk]({site}/newsletter/kiosk/) · [cptx.ee]({site}/)",
+       "es": "[léelo en la web]({web}) · [todos los números en el quiosco]({site}/newsletter/kiosk/) · [cptx.ee]({site}/)"}
+SIGN = "*cptx · a collection of mathoms*"
 
 
 def frontmatter(text):
@@ -87,22 +94,26 @@ def meta_line(n, fm, lang):
     week = date.isocalendar()[1]
     if lang == "es":
         months = "ene feb mar abr may jun jul ago sep oct nov dic".split()
-        return f"issue {n:02d} · semana {week} · {date.day} {months[date.month - 1]} {date.year}"
-    return f"issue {n:02d} · week {week} · {date:%-d %b %Y}"
+        return f"semana {week} · {date.day} {months[date.month - 1]} {date.year}"
+    return f"week {week} · {date:%-d %b %Y}"
+
+
+def half(n, fm, body, lang, web, title=False):
+    """One language: breadcrumb, (title), week and date, the issue, link line."""
+    top = CRUMB.format(site=SITE, n=n) + "  \n" + f"*{meta_line(n, fm, lang)}* · [{WEB[lang]}]({web})"
+    parts = [f"# {fm.get('title', '').strip()}"] if title else []
+    return parts + [top, clean(body), END[lang].format(site=SITE, web=web)]
 
 
 def email_body(n, en, es):
     """English, then Spanish. Buttondown shows the subject above the body and
     adds its own unsubscribe footer."""
     web_en, web_es = f"{SITE}/newsletter/{n}/", f"{SITE}/newsletter/{n}/es/"
-    top = f"*{meta_line(n, en[0], 'en')}* · [{WEB['en']}]({web_en})"
+    parts = half(n, en[0], en[1], "en", web_en)
     if es:
-        top += "  \n*Versión en español más abajo.*"
-    parts = [top, clean(en[1])]
-    if es:
-        parts += ["---", f"# {es[0].get('title', '').strip()}",
-                  f"*{meta_line(n, es[0], 'es')}* · [{WEB['es']}]({web_es})", clean(es[1])]
-    parts += ["---", "*cptx · a collection of mathoms*  \n" + KIOSK.format(site=SITE)]
+        parts[0] += "  \n*Versión en español más abajo.*"
+        parts += ["---"] + half(n, es[0], es[1], "es", web_es, title=True)
+    parts += ["---", SIGN]
     return "\n\n".join(parts) + "\n"
 
 
