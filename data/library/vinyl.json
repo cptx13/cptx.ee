@@ -9,7 +9,7 @@
   "mbid": "d8dde278-482c-3cc8-a530-fea70476f3a5",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Smiths",
   "cover": "vinyl/covers/smiths-queen-is-dead.jpg",
   "cover_photo": false
  },
@@ -23,7 +23,7 @@
   "mbid": "f81500a3-d01a-30e7-8ec9-75f672e9a775",
   "spotify": "https://open.spotify.com/album/1j57Q5ntVi7crpibb0h4sv",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Smiths",
   "cover": "vinyl/covers/smiths-hatful-of-hollow.jpg",
   "cover_photo": false
  },
@@ -51,7 +51,7 @@
   "mbid": "8c318de7-c3f5-37cd-9906-5fc38d238c40",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Kenny_Rogers",
   "cover": "vinyl/covers/kenny-rogers-gambler.jpg",
   "cover_photo": false
  },
@@ -65,7 +65,7 @@
   "mbid": "7401fb97-46e6-32cd-bd59-6c49debaa3ae",
   "spotify": "https://open.spotify.com/album/366R23DbfxqjZo6AUBrQjv",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/ABBA",
   "cover": "vinyl/covers/abba-voulez-vous.jpg",
   "cover_photo": false
  },
@@ -79,7 +79,7 @@
   "mbid": "aabcf0ac-d26c-3619-99a8-8e561885c8c7",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://es.wikipedia.org/wiki/Mecano_(banda)",
   "cover": "vinyl/covers/mecano-entre-el-cielo.jpg",
   "cover_photo": false
  },
@@ -93,7 +93,7 @@
   "mbid": "bcab0d49-2098-3738-807b-82b747ff4587",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://es.wikipedia.org/wiki/Mecano_(banda)",
   "cover": "vinyl/covers/mecano-pais-de-las-hadas.jpg",
   "cover_photo": false
  },
@@ -107,7 +107,7 @@
   "mbid": "a78d6432-8e7c-39cb-98be-45a447094ddf",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Bee_Gees",
   "cover": "vinyl/covers/bee-gees-living-eyes.jpg",
   "cover_photo": false
  },
@@ -121,7 +121,7 @@
   "mbid": "f6df6292-fd40-37c3-bd61-22c53abfe773",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Police",
   "cover": "vinyl/covers/police-synchronicity.jpg",
   "cover_photo": false
  },
@@ -135,7 +135,7 @@
   "mbid": "613aa3fc-2e22-4996-b48e-e7cdcfe507a6",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Mac_Miller",
   "cover": "vinyl/covers/mac-miller-good-am.jpg",
   "cover_photo": false
  },
@@ -149,7 +149,7 @@
   "mbid": "6448381d-9d98-4f84-b99d-733b6acde906",
   "spotify": "https://open.spotify.com/album/2Ek1q2haOnxVqhvVKqMvJe",
   "youtube_music": "https://music.youtube.com/playlist?list=OLAK5uy_lIQVIH0lL1H4fGumjG1ddsD1QEDZ5lz8Y",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Kanye_West",
   "cover": "vinyl/covers/kanye-ye.jpg",
   "cover_photo": false
  },
@@ -163,7 +163,7 @@
   "mbid": "23355caf-a543-4b5f-80fe-449101868fc1",
   "spotify": "https://open.spotify.com/album/2nXJkqkS1tIKIyhBcFMmwz",
   "youtube_music": "https://music.youtube.com/playlist?list=OLAK5uy_m8CTvG7VQSH0c2RQ7dj-kRWzi3Lgew99E",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/The_xx",
   "cover": "vinyl/covers/the-xx-xx.jpg",
   "cover_photo": false
  },
@@ -177,7 +177,7 @@
   "mbid": "09cd958e-754b-414d-b8da-e2376135dcd0",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Alt-J",
   "cover": "vinyl/covers/alt-j-the-dream.jpg",
   "cover_photo": false
  },
@@ -191,7 +191,7 @@
   "mbid": "8a103b36-a632-425f-8980-da934b0c1eb3",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Alt-J",
   "cover": "vinyl/covers/alt-j-relaxer.jpg",
   "cover_photo": false
  },
@@ -205,9 +205,9 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://es.wikipedia.org/wiki/Julio_Iglesias",
+  "cover": "vinyl/covers/julio-iglesias-el-album.jpg",
+  "cover_photo": true
  },
  {
   "key": "macklemore-ben",
@@ -219,7 +219,7 @@
   "mbid": "12df2e23-ecda-4e26-9c8d-0242401a2518",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Macklemore",
   "cover": "vinyl/covers/macklemore-ben.jpg",
   "cover_photo": false
  },
@@ -233,9 +233,9 @@
   "mbid": "fb9ef109-63d7-33b0-851a-c78190817119",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Alan_Parsons_Project",
   "cover": "vinyl/covers/alan-parsons-best-of.jpg",
-  "cover_photo": false
+  "cover_photo": true
  },
  {
   "key": "beatles-first",
@@ -247,9 +247,9 @@
   "mbid": "3d7df470-85d3-4174-b349-57946d5fa6df",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Beatles",
   "cover": "vinyl/covers/beatles-first.jpg",
-  "cover_photo": false
+  "cover_photo": true
  },
  {
   "key": "supertramp-quietest-moments",
@@ -261,7 +261,7 @@
   "mbid": "c4b68591-5d85-393e-9c97-d42a0d89900c",
   "spotify": "https://open.spotify.com/album/18TiCDixtBNarD55Yw2aTU",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Supertramp",
   "cover": "vinyl/covers/supertramp-quietest-moments.jpg",
   "cover_photo": false
  },
@@ -275,7 +275,7 @@
   "mbid": "52518151-100a-3721-be6c-378fcacde5d6",
   "spotify": "https://open.spotify.com/album/4BIuGTISTudTtnRjoCw53n",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://es.wikipedia.org/wiki/Silvio_Rodr%C3%ADguez",
   "cover": "vinyl/covers/silvio-rabo-de-nube.jpg",
   "cover_photo": false
  },
@@ -289,7 +289,7 @@
   "mbid": "a738bdf1-f610-30aa-9ae7-9a4f90d6f2d7",
   "spotify": "https://open.spotify.com/album/6hmmX5UP4rIvOpGSaPerV8",
   "youtube_music": "https://music.youtube.com/playlist?list=OLAK5uy_lJiJ1eSjBfk73-87m_0i9ubOA5RGSiLUs",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Tracy_Chapman",
   "cover": "vinyl/covers/tracy-chapman.jpg",
   "cover_photo": false
  },
@@ -303,7 +303,7 @@
   "mbid": "3f149ce3-71f4-313b-bd76-33eebcda7623",
   "spotify": "https://open.spotify.com/album/0BSde3lfwtz0DB2fSIuU7j",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Neil_Diamond",
   "cover": "vinyl/covers/neil-diamond-serenade.jpg",
   "cover_photo": false
  },
@@ -317,7 +317,7 @@
   "mbid": "61eed5a5-85e6-48bc-abf3-447e8510d39e",
   "spotify": "https://open.spotify.com/album/44a7Wk3Jh2JGVhjcFYWozj",
   "youtube_music": "https://music.youtube.com/playlist?list=OLAK5uy_mY4skY5yDePaN61M2yFNp2s1SCaE6AHx8",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/M%C3%A5neskin",
   "cover": "vinyl/covers/maneskin-il-ballo.jpg",
   "cover_photo": false
  },
@@ -331,7 +331,7 @@
   "mbid": "29cffbed-9ae1-4e75-be82-6058c7e9e9b4",
   "spotify": "https://open.spotify.com/album/2c7gFThUYyo2t6ogAgIYNw",
   "youtube_music": "https://music.youtube.com/playlist?list=OLAK5uy_kzJHv3q2UP6Z0UnrglQ3rls6wEiGkNGRA",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Hozier",
   "cover": "vinyl/covers/hozier-wasteland-baby.jpg",
   "cover_photo": false
  },
@@ -345,7 +345,7 @@
   "mbid": "7f7d47f8-a97b-420b-b2f8-c3dfd6ca505c",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Hozier",
   "cover": "vinyl/covers/hozier-unreal-unearth.jpg",
   "cover_photo": false
  },
@@ -359,7 +359,7 @@
   "mbid": "b291b08d-2e3d-3280-bac3-2b371040bf21",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Cat_Stevens",
   "cover": "vinyl/covers/cat-stevens-foreigner.jpg",
   "cover_photo": false
  },
@@ -373,7 +373,7 @@
   "mbid": "a5a1dfbc-c470-3735-bc7f-327391cbe569",
   "spotify": "https://open.spotify.com/album/5jHYO06BmXUYylNfg0yiDm",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Neil_Diamond",
   "cover": "vinyl/covers/neil-diamond-flowers.jpg",
   "cover_photo": false
  },
@@ -387,9 +387,9 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Moody_Blues",
+  "cover": "vinyl/covers/moody-blues-days-of-future.jpg",
+  "cover_photo": true
  },
  {
   "key": "leonard-cohen-im-your-man",
@@ -401,7 +401,7 @@
   "mbid": "7f073c9c-f64f-3a79-bbd8-5aa7668e5cd8",
   "spotify": "https://open.spotify.com/album/0iahfkN4PwmphXcQezpTRg",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Leonard_Cohen",
   "cover": "vinyl/covers/leonard-cohen-im-your-man.jpg",
   "cover_photo": false
  },
@@ -415,7 +415,7 @@
   "mbid": "9f3c5cf8-6987-4c0e-84d3-81ffb11a8058",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Mood",
   "cover": "vinyl/covers/the-mood-paris.jpg",
   "cover_photo": false
  },
@@ -429,7 +429,7 @@
   "mbid": "a0137ec1-f557-4ab0-ab1f-48a82fee436c",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Will_Varley",
   "cover": "vinyl/covers/will-varley-postcards.jpg",
   "cover_photo": false
  },
@@ -443,7 +443,7 @@
   "mbid": "27492e5b-c6ef-4831-9b26-a72333b24647",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Will_Varley",
   "cover": "vinyl/covers/will-varley-minnie.jpg",
   "cover_photo": false
  },
@@ -457,7 +457,7 @@
   "mbid": "9030ce69-db28-47d4-b3e7-95c9e55c3b4b",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Will_Varley",
   "cover": "vinyl/covers/will-varley-kingsdown.jpg",
   "cover_photo": false
  },
@@ -471,7 +471,7 @@
   "mbid": "f5093c06-23e3-404f-aeaa-40f72885ee3a",
   "spotify": "https://open.spotify.com/album/2WT1pbYjLJciAR26yMebkH",
   "youtube_music": "https://music.youtube.com/playlist?list=OLAK5uy_l1x-JAx0w53suECoCI0YJtW6VB8DBQWRQ",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Pink_Floyd",
   "cover": "vinyl/covers/pink-floyd-dsotm.jpg",
   "cover_photo": false
  },
@@ -485,9 +485,9 @@
   "mbid": "75304551-c719-4eea-a1a1-d560447daa5e",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Jamaaladeen_Tacuma",
+  "cover": "vinyl/covers/tacuma-music-world.jpg",
+  "cover_photo": true
  },
  {
   "key": "abba-best-of",
@@ -499,9 +499,9 @@
   "mbid": "2e50986f-70ed-41b6-ab52-4366b37cf6e9",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/ABBA",
   "cover": "vinyl/covers/abba-best-of.jpg",
-  "cover_photo": false
+  "cover_photo": true
  },
  {
   "key": "marvin-gaye-midnight-love",
@@ -513,7 +513,7 @@
   "mbid": "0ffad470-d1e3-3988-8e3b-1a644495b964",
   "spotify": "https://open.spotify.com/album/3gPlX9Zs3tXZZKNCyoOkSm",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Marvin_Gaye",
   "cover": "vinyl/covers/marvin-gaye-midnight-love.jpg",
   "cover_photo": false
  },
@@ -527,9 +527,9 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Kool_%26_the_Gang",
+  "cover": "vinyl/covers/kool-gang-best-of.jpg",
+  "cover_photo": true
  },
  {
   "key": "eagles-greatest-hits",
@@ -541,7 +541,7 @@
   "mbid": "56ecf5cb-ad82-3d7e-82bf-1904cc16f451",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Eagles_(band)",
   "cover": "vinyl/covers/eagles-greatest-hits.jpg",
   "cover_photo": false
  },
@@ -555,7 +555,7 @@
   "mbid": "a0e25b7f-30d4-3e87-b469-df315573bb16",
   "spotify": "https://open.spotify.com/album/1dZNgJ3Gh3wp6ohzk29JUG",
   "youtube_music": "https://music.youtube.com/playlist?list=OLAK5uy_kvlWAsb5DZOh1_O0LHnZ32ObkdZBkmijM",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Fleetwood_Mac",
   "cover": "vinyl/covers/fleetwood-mac-mirage.jpg",
   "cover_photo": false
  },
@@ -569,7 +569,7 @@
   "mbid": "416bb5e5-c7d1-3977-8fd7-7c9daf6c2be6",
   "spotify": "https://open.spotify.com/album/63k57x0qOkUWEMR0dkMivh",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Fleetwood_Mac",
   "cover": "vinyl/covers/fleetwood-mac-rumours.jpg",
   "cover_photo": false
  },
@@ -583,9 +583,9 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Boney_M.",
+  "cover": "vinyl/covers/boney-m-magic.jpg",
+  "cover_photo": true
  },
  {
   "key": "fattori-mediterranean-africa",
@@ -611,7 +611,7 @@
   "mbid": "9b4d952f-3049-3d4a-a113-e9a7f04caf60",
   "spotify": "https://open.spotify.com/album/0txzXbDfTn3vAdx77iCaXd",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Boney_M.",
   "cover": "vinyl/covers/boney-m-nightflight.jpg",
   "cover_photo": false
  },
@@ -625,7 +625,7 @@
   "mbid": "c3749af5-0d0c-3ed1-b1c0-8b4a8f6c3436",
   "spotify": "https://open.spotify.com/album/3Fv4TJQ9iQ0DCLHv02122Z",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Supertramp",
   "cover": "vinyl/covers/supertramp-crime.jpg",
   "cover_photo": false
  },
@@ -639,7 +639,7 @@
   "mbid": "422528e0-fe62-366b-95eb-34838b34e44f",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Moody_Blues",
   "cover": "vinyl/covers/this-is-moody-blues.jpg",
   "cover_photo": false
  },
@@ -653,7 +653,7 @@
   "mbid": "499c19c8-0dab-4824-884b-6191d145e95b",
   "spotify": "https://open.spotify.com/album/748dZDqSZy6aPXKcI9H80u",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Kendrick_Lamar",
   "cover": "vinyl/covers/kendrick-gkmc.jpg",
   "cover_photo": false
  },
@@ -667,9 +667,9 @@
   "mbid": "deb27f74-5b4b-4645-b865-29efa59bd36f",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Mamas_%26_the_Papas",
+  "cover": "vinyl/covers/mamas-papas-20.jpg",
+  "cover_photo": true
  },
  {
   "key": "simon-garfunkel-greatest",
@@ -681,7 +681,7 @@
   "mbid": "a39bc4d1-82c9-3ff2-97d0-817f5913fb61",
   "spotify": "https://open.spotify.com/album/25irJgxRNTlyg8pUmWfDVG",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Simon_%26_Garfunkel",
   "cover": "vinyl/covers/simon-garfunkel-greatest.jpg",
   "cover_photo": false
  },
@@ -695,9 +695,9 @@
   "mbid": "24944755-2f68-3778-974e-f572a9e30108",
   "spotify": "https://open.spotify.com/album/1nVUhbpkGwlTKxSIF6UJyM",
   "youtube_music": "https://music.youtube.com/playlist?list=OLAK5uy_nfbdHZA0VilB7SVhxGZVbWRZPO7vcvxcI",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/ABBA",
   "cover": "vinyl/covers/abba-super-trouper.jpg",
-  "cover_photo": false
+  "cover_photo": true
  },
  {
   "key": "simon-garfunkel-bridge",
@@ -706,12 +706,12 @@
   "year": 1970,
   "shelf": "songwriters",
   "notes": "Spanish edition \"Puente sobre aguas turbulentas\"",
-  "mbid": "",
-  "spotify": "",
+  "mbid": "c39f7f80-d42f-3669-9653-230f8e922083",
+  "spotify": "https://open.spotify.com/album/0JwHz5SSvpYWuuCNbtYZoV",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Simon_%26_Garfunkel",
+  "cover": "vinyl/covers/simon-garfunkel-bridge.jpg",
+  "cover_photo": true
  },
  {
   "key": "puuluup-suuta-mu-lumi",
@@ -723,7 +723,7 @@
   "mbid": "7b10e1d5-9cad-48fa-aad9-c777a6e86d90",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://et.wikipedia.org/wiki/Puuluup",
   "cover": "vinyl/covers/puuluup-suuta-mu-lumi.jpg",
   "cover_photo": false
  },
@@ -737,9 +737,9 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/David_Tukhmanov",
+  "cover": "vinyl/covers/tukhmanov-po-volne.jpg",
+  "cover_photo": true
  },
  {
   "key": "black-sabbath-paranoid",
@@ -751,9 +751,9 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Black_Sabbath",
+  "cover": "vinyl/covers/black-sabbath-paranoid.jpg",
+  "cover_photo": true
  },
  {
   "key": "beatles-sgt-pepper",
@@ -765,7 +765,7 @@
   "mbid": "9f7a4c28-8fa2-3113-929c-c47a9f7982c3",
   "spotify": "https://open.spotify.com/album/6QaVfG1pHYl1z15ZxkvVDW",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Beatles",
   "cover": "vinyl/covers/beatles-sgt-pepper.jpg",
   "cover_photo": false
  },
@@ -779,7 +779,7 @@
   "mbid": "b286b831-931e-3680-97f1-aa18541f5cc2",
   "spotify": "https://open.spotify.com/album/104hTimjqMxVk3qH8Nf7I4",
   "youtube_music": "https://music.youtube.com/playlist?list=OLAK5uy_k3F1w9iVx9c9sb6a6VegoAhoXhrLSi58g",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Dire_Straits",
   "cover": "vinyl/covers/dire-straits-every-street.jpg",
   "cover_photo": false
  },
@@ -793,7 +793,7 @@
   "mbid": "18a8c10f-e283-4170-8bc8-efef0f46573e",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Pyotr_Ilyich_Tchaikovsky",
   "cover": "vinyl/covers/karajan-swan-lake.jpg",
   "cover_photo": false
  },
@@ -807,7 +807,7 @@
   "mbid": "e2f503d7-5488-3fe1-b3ac-f236d9f1b44c",
   "spotify": "https://open.spotify.com/album/5c1ZTzT4oSkiiFS4wmEuOe",
   "youtube_music": "https://music.youtube.com/playlist?list=OLAK5uy_m-_hJUy5TAO10yRvbxgvSO3ZrBp9_zXg4",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Pink_Floyd",
   "cover": "vinyl/covers/pink-floyd-atom-heart.jpg",
   "cover_photo": false
  },
@@ -821,7 +821,7 @@
   "mbid": "ab0b3245-f550-477a-a313-4a4ac2785f14",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Pyotr_Ilyich_Tchaikovsky",
   "cover": "vinyl/covers/barenboim-romeo-francesca.jpg",
   "cover_photo": false
  },
@@ -835,7 +835,7 @@
   "mbid": "1f7e9f94-333e-4832-95be-51bb26998ef3",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Joseph_Haydn",
   "cover": "vinyl/covers/karajan-haydn-paris.jpg",
   "cover_photo": false
  },
@@ -849,7 +849,7 @@
   "mbid": "31d84f23-10a9-4409-bf20-ce83c2001fd7",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Hector_Berlioz",
   "cover": "vinyl/covers/kempe-berlioz-fantastique.jpg",
   "cover_photo": false
  },
@@ -863,7 +863,7 @@
   "mbid": "85480bb3-40dc-34d8-b106-0a9470f13a73",
   "spotify": "",
   "youtube_music": "https://music.youtube.com/playlist?list=OLAK5uy_kgamQmwkeashkBodUshXzRy4fEdLxytH4",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/USA_for_Africa",
   "cover": "vinyl/covers/usa-for-africa.jpg",
   "cover_photo": false
  },
@@ -877,7 +877,7 @@
   "mbid": "bbc388bc-2a1d-4c1e-bd48-ab4815393665",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://et.wikipedia.org/wiki/Puuluup",
   "cover": "vinyl/covers/puuluup-viimane-suusataja.jpg",
   "cover_photo": false
  },
@@ -891,9 +891,9 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Anton%C3%ADn_Dvo%C5%99%C3%A1k",
+  "cover": "vinyl/covers/dvorak-new-world.jpg",
+  "cover_photo": true
  },
  {
   "key": "pinnock-bach-suites",
@@ -905,9 +905,9 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Johann_Sebastian_Bach",
+  "cover": "vinyl/covers/pinnock-bach-suites.jpg",
+  "cover_photo": true
  },
  {
   "key": "karajan-strauss",
@@ -919,9 +919,9 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Johann_Strauss_II",
+  "cover": "vinyl/covers/karajan-strauss.jpg",
+  "cover_photo": true
  },
  {
   "key": "munchinger-matthaus",
@@ -933,8 +933,8 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
-  "cover": "",
-  "cover_photo": false
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Johann_Sebastian_Bach",
+  "cover": "vinyl/covers/munchinger-matthaus.jpg",
+  "cover_photo": true
  }
 ]

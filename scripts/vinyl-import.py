@@ -14,7 +14,8 @@ looks up new records (--refresh looks everything up again).
 
 Columns in vinyl.csv: key, artist, title, year, shelf, notes, search_artist, wiki_artist,
 mbid, spotify, youtube_music, artist_wikipedia. wiki_artist names the artist to look up
-on Wikipedia when the artist field won't do (a composer, a duo); the last four are pins: a value there wins
+on Wikipedia when the artist field won't do (a composer, a duo); the last four are pins
+(mbid "none" = don't match an album at all): a value there wins
 over whatever the lookup finds. A hand-made cover goes to OUTDIR/vinyl/covers/<key>.jpg
 (also delete OUTDIR/vinyl/thumbs/<key>.jpg when replacing one).
 Matches scoring under 90 are reported and left out; pin their mbid to accept them.
@@ -119,6 +120,8 @@ def artist_wikipedia(name, prefer):
 
 def lookup(row, outdir):
     prefer = {"espanol": ["es"], "eesti": ["et"]}.get(row["shelf"], [])
+    if row.get("mbid") == "none":  # no album match wanted (the search found the wrong one)
+        return {"status": "ok", "mbid": ""}
     info = {"mbid": row.get("mbid", ""), "score": 100 if row.get("mbid") else 0}
     if not info["mbid"]:
         rg = search(row["title"], row.get("search_artist", ""), "single" in row.get("notes", "").lower())
