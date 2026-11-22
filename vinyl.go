@@ -100,7 +100,7 @@ func (r *vinylRecord) path() string { return "/archives/vinyl/" + r.Key + "/" }
 func (r *vinylRecord) item() map[string]any {
 	return map[string]any{
 		"Key":       r.Key,
-		"Title":     niceCase(r.Title),
+		"Title":     r.Title,
 		"Artist":    r.Artist,
 		"Year":      yearString(r.Year),
 		"Href":      r.path(),
@@ -319,7 +319,7 @@ func buildRecordData(lib *library, r *vinylRecord) map[string]any {
 	}
 	return map[string]any{
 		"record":        r.item(),
-		"title":         niceCase(r.Title),
+		"title":         r.Title,
 		"artist":        r.Artist,
 		"year":          yearString(r.Year),
 		"large":         "/archives/vinyl/covers/" + r.Key + "-l.jpg",
