@@ -84,7 +84,7 @@ func loadVinyl(dir, media string) (*vinylCrate, error) {
 		if r.Cover != "" {
 			if _, _, mc, err := ensureSquare(c.Media, r.Key); err == nil {
 				r.HasCover, col = true, mc
-				if st, err := os.Stat(filepath.Join(c.Media, "covers", r.Key+".jpg")); err == nil {
+				if st, err := os.Stat(filepath.Join(c.Media, "squares", r.Key+".jpg")); err == nil {
 					r.ver = fmt.Sprintf("?v=%d", st.ModTime().Unix())
 				}
 			}
