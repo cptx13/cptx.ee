@@ -206,7 +206,7 @@ always wins over the archive's cover; the record page then says "photo of our co
 `~/cptx-data/library/vinyl/covers/<key>.jpg` (thumbnails are made at start-up).
 
 1. Edit `vinyl.csv` on a branch (new key = short slug; shelves: rock, pop, songwriters,
-   espanol, soul-funk-jazz, hip-hop, electronic, eesti, classical).
+   espanol, soul-funk-jazz, hip-hop, electronic, soundtracks, eesti, classical).
 2. On the VM, in a scratch clone of that branch:
    ```sh
    git clone -q -b <branch> https://github.com/cptx13/cptx.ee /tmp/lib && cd /tmp/lib
