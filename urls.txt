@@ -344,6 +344,8 @@
 /newsletter/
 /newsletter/1/
 /newsletter/1/es/
+/newsletter/2/
+/newsletter/2/es/
 /newsletter/kiosk/
 /newsletter/thanks/
 /newsletter/welcome/
