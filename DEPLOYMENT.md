@@ -197,7 +197,7 @@ Google's anonymous quota (the VM's IP is often rate-limited).
 
 ## Vinyl refresh (`/archives/vinyl/`)
 
-`data/library/vinyl.csv` is the list of records (key, artist, title, year, shelf, notes;
+`data/library/vinyl.csv` is the list of records (key, artist, title, year, shelf, lang, notes;
 optional `search_artist`, `wiki_artist` — the name to look up on Wikipedia, e.g. the
 composer — and pins `mbid`, `spotify`, `youtube_music`, `artist_wikipedia`).
 A photo of our own copy in `~/cptx-data/library/vinyl/photos/<key>.jpg` (square, ~800 px)
@@ -205,8 +205,9 @@ always wins over the archive's cover; the record page then says "photo of our co
 `data/library/vinyl.json` is in git; covers live only on the VM in
 `~/cptx-data/library/vinyl/covers/<key>.jpg` (thumbnails are made at start-up).
 
-1. Edit `vinyl.csv` on a branch (new key = short slug; shelves: rock, pop, songwriters,
-   espanol, soul-funk-jazz, hip-hop, electronic, soundtracks, eesti, classical).
+1. Edit `vinyl.csv` on a branch (new key = short slug; `shelf` is the genre: rock, pop, songwriters,
+   soul-funk-jazz, hip-hop, electronic, soundtracks, classical; `lang` is the sung language
+   when it isn't English — es, et, it, ru — and drives the "language" view).
 2. On the VM, in a scratch clone of that branch:
    ```sh
    git clone -q -b <branch> https://github.com/cptx13/cptx.ee /tmp/lib && cd /tmp/lib

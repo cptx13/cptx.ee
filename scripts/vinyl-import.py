@@ -12,7 +12,7 @@ looks up the artist's Wikipedia page (Spanish/Estonian first for those shelves).
 of our own copy in OUTDIR/vinyl/photos/<key>.jpg always wins over the archive's cover. Results are cached in OUTDIR/vinyl-cache.json, so a re-run only
 looks up new records (--refresh looks everything up again).
 
-Columns in vinyl.csv: key, artist, title, year, shelf, notes, search_artist, wiki_artist,
+Columns in vinyl.csv: key, artist, title, year, shelf (genre), lang (sung language, e.g. es), notes, search_artist, wiki_artist,
 mbid, spotify, youtube_music, artist_wikipedia. wiki_artist names the artist to look up
 on Wikipedia when the artist field won't do (a composer, a duo); the last four are pins
 (mbid "none" = don't match an album at all): a value there wins
@@ -119,7 +119,7 @@ def artist_wikipedia(name, prefer):
 
 
 def lookup(row, outdir):
-    prefer = {"espanol": ["es"], "eesti": ["et"]}.get(row["shelf"], [])
+    prefer = [row["lang"]] if row.get("lang") else []
     if row.get("mbid") == "none":  # no album match wanted (the search found the wrong one)
         return {"status": "ok", "mbid": ""}
     info = {"mbid": row.get("mbid", ""), "score": 100 if row.get("mbid") else 0}
@@ -212,7 +212,7 @@ def main():
         if name and name != "Various Artists":
             aw = artists.get(name) or {}
             if aw.get("status") != "ok":
-                prefer = {"espanol": ["es"], "eesti": ["et"]}.get(row["shelf"], [])
+                prefer = [row["lang"]] if row.get("lang") else []
                 try:
                     aw = artist_wikipedia(name, prefer)
                 except Exception as e:
@@ -228,7 +228,7 @@ def main():
         year = int(row["year"]) if row["year"].strip().isdigit() else c.get("first_year", 0)
         rec = {
             "key": key, "artist": row["artist"], "title": row["title"], "year": year,
-            "shelf": row["shelf"], "notes": row["notes"], "mbid": c.get("mbid", ""),
+            "shelf": row["shelf"], "lang": row.get("lang", ""), "notes": row["notes"], "mbid": c.get("mbid", ""),
             "spotify": row.get("spotify") or c.get("spotify", ""),
             "youtube_music": row.get("youtube_music") or c.get("youtube_music", ""),
             "artist_wikipedia": row.get("artist_wikipedia") or aw.get("url", ""),

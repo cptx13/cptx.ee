@@ -29,7 +29,8 @@ type vinylRecord struct {
 	Artist       string `json:"artist"`
 	Title        string `json:"title"`
 	Year         int    `json:"year"`
-	Shelf        string `json:"shelf"`
+	Shelf        string `json:"shelf"` // genre
+	Lang         string `json:"lang"`  // sung language (ISO code), empty = English or none
 	Notes        string `json:"notes"`
 	MBID         string `json:"mbid"`
 	Spotify      string `json:"spotify"`
@@ -56,12 +57,10 @@ var vinylShelves = []struct{ ID, Label string }{
 	{"rock", "rock"},
 	{"pop", "pop"},
 	{"songwriters", "songwriters & folk"},
-	{"espanol", "en español"},
 	{"soul-funk-jazz", "soul, funk & jazz"},
 	{"hip-hop", "hip-hop"},
 	{"electronic", "electronic"},
 	{"soundtracks", "soundtracks & stage"},
-	{"eesti", "eesti"},
 	{"classical", "classical"},
 }
 
@@ -137,7 +136,14 @@ func vinylItems(rs []*vinylRecord) []any {
 // --- views ------------------------------------------------------------------------------
 
 var vinylGroupings = []struct{ ID, Label string }{
-	{"shelf", "genre"}, {"artist", "artist"}, {"decade", "decade"}, {"colour", "colour"},
+	{"shelf", "genre"}, {"lang", "language"}, {"artist", "artist"}, {"decade", "decade"}, {"colour", "colour"},
+}
+
+var vinylLangs = []struct{ ID, Label string }{
+	{"es", "en español"},
+	{"et", "eesti keeles"},
+	{"it", "in italiano"},
+	{"ru", "на русском"},
 }
 
 type vinylParams struct{ By, Group string }
@@ -181,6 +187,13 @@ func vinylGroupOf(by string, r *vinylRecord) (id, label string, order float64) {
 			return "other", "#", 99
 		}
 		return strings.ToLower(string(rs[0])), string(rs[0]), float64(rs[0])
+	case "lang":
+		for i, l := range vinylLangs {
+			if l.ID == r.Lang {
+				return l.ID, l.Label, float64(i)
+			}
+		}
+		return "en", "in English or instrumental", 99
 	case "decade":
 		if r.Year == 0 {
 			return "unknown", "year unknown", 9999
@@ -265,7 +278,7 @@ func buildVinylData(lib *library, q url.Values) map[string]any {
 	}
 	return map[string]any{
 		"count":     n,
-		"stats":     plural(n, "record") + " · " + plural(len(all), map[string]string{"shelf": "genre", "artist": "letter", "decade": "decade", "colour": "colour"}[p.By]),
+		"stats":     plural(n, "record") + " · " + plural(len(all), map[string]string{"shelf": "genre", "lang": "language", "artist": "letter", "decade": "decade", "colour": "colour"}[p.By]),
 		"groupings": groupings,
 		"shelves":   shelves,
 		"hasFocus":  focus != "",
@@ -310,6 +323,10 @@ func buildRecordData(lib *library, r *vinylRecord) map[string]any {
 	}
 	add("released", yearString(r.Year))
 	add("genre", shelfLabel)
+	if r.Lang != "" {
+		_, langLabel, _ := vinylGroupOf("lang", r)
+		add("sung", langLabel)
+	}
 	add("our copy", r.Notes)
 
 	q := url.QueryEscape(vinylSearchQuery(r))
