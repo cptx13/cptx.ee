@@ -17,7 +17,7 @@ over whatever the lookup finds. A hand-made cover goes to OUTDIR/vinyl/covers/<k
 (also delete OUTDIR/vinyl/thumbs/<key>.jpg when replacing one).
 Matches scoring under 90 are reported and left out; pin their mbid to accept them.
 """
-import csv, json, os, sys, time, urllib.parse, urllib.request
+import csv, json, os, sys, time, urllib.error, urllib.parse, urllib.request
 
 UA = "cptx-library/0.2 ( https://cptx.ee )"
 MIN_SCORE = 90
@@ -27,14 +27,21 @@ _last = [0.0]
 
 
 def get(url, mb=False):
-    if mb:  # MusicBrainz: at most one request per second
-        wait = 1.1 - (time.time() - _last[0])
-        if wait > 0:
-            time.sleep(wait)
-        _last[0] = time.time()
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return r.read()
+    for attempt in range(5):
+        if mb:  # MusicBrainz: at most one request per second (a bit slower to be safe)
+            wait = 1.5 - (time.time() - _last[0])
+            if wait > 0:
+                time.sleep(wait)
+            _last[0] = time.time()
+        req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return r.read()
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 502, 503) and attempt < 4:  # throttled: back off and retry
+                time.sleep(3 * (attempt + 1))
+                continue
+            raise
 
 
 def lucene(s):
