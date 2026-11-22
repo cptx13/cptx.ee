@@ -1,5 +1,5 @@
 <template>
-<AppLayout :pageTitle="pageTitle" :description="'Some of the records Merzeede and I own, by cover: sort them by genre, language, artist, decade or colour, and listen on Spotify or YouTube Music.'" :canonicalURL="canonical" :lang="'en'" :ogType="'website'">
+<AppLayout :pageTitle="pageTitle" :description="'Some of the records Merzeede and I own, by cover: sort them by genre, artist, decade or colour, and listen on Spotify or YouTube Music.'" :canonicalURL="canonical" :lang="'en'" :ogType="'website'">
   <div class="list-container addons library vinyl">
     <p class="addons-crumb"><a href="/archives/">archives</a> / vinyl<span v-if="hasFocus"> / {{ focus }}</span></p>
     <h1 class="addons-title">vinyl</h1>

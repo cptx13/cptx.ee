@@ -207,7 +207,7 @@ always wins over the archive's cover; the record page then says "photo of our co
 
 1. Edit `vinyl.csv` on a branch (new key = short slug; `shelf` is the genre: rock, pop, songwriters,
    soul-funk-jazz, hip-hop, electronic, soundtracks, classical; `lang` is the sung language
-   when it isn't English — es, et, it, ru — and drives the "language" view).
+   when it isn't English — es, et, it, ru — shown on the record page and used to pick the Wikipedia language).
 2. On the VM, in a scratch clone of that branch:
    ```sh
    git clone -q -b <branch> https://github.com/cptx13/cptx.ee /tmp/lib && cd /tmp/lib

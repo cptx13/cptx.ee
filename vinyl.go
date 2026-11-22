@@ -136,7 +136,7 @@ func vinylItems(rs []*vinylRecord) []any {
 // --- views ------------------------------------------------------------------------------
 
 var vinylGroupings = []struct{ ID, Label string }{
-	{"shelf", "genre"}, {"lang", "language"}, {"artist", "artist"}, {"decade", "decade"}, {"colour", "colour"},
+	{"shelf", "genre"}, {"artist", "artist"}, {"decade", "decade"}, {"colour", "colour"},
 }
 
 var vinylLangs = []struct{ ID, Label string }{
