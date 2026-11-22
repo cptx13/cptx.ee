@@ -3,7 +3,7 @@
   <div class="list-container addons archives">
     <p class="addons-crumb"><a href="/archives/">archives</a> / written by me</p>
     <h1 class="addons-title">written by me</h1>
-    <p class="addons-intro">The books I wrote: poems and recuerdos.</p>
+    <p class="addons-intro">The books I have published: poems and recuerdos.</p>
     <section class="ar-mine">
       <div class="ar-mine-row">
         <div v-for="b in mine" class="ar-mine-book">
