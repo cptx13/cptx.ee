@@ -7,12 +7,14 @@ Run on the VM (the workspace can't reach MusicBrainz):
 
 For each record it finds the MusicBrainz release group (or uses the `mbid` column),
 downloads the front cover from the Cover Art Archive into OUTDIR/vinyl/covers/<key>.jpg,
-and follows MusicBrainz -> Wikidata for the Wikipedia article, the Spotify album and the
-YouTube Music playlist. Results are cached in OUTDIR/vinyl-cache.json, so a re-run only
+follows MusicBrainz -> Wikidata for the Spotify album and the YouTube Music playlist, and
+looks up the artist's Wikipedia page (Spanish/Estonian first for those shelves). A photo
+of our own copy in OUTDIR/vinyl/photos/<key>.jpg always wins over the archive's cover. Results are cached in OUTDIR/vinyl-cache.json, so a re-run only
 looks up new records (--refresh looks everything up again).
 
-Columns in vinyl.csv: key, artist, title, year, shelf, notes, search_artist, mbid,
-spotify, youtube_music, wikipedia. The last four are optional pins: a value there wins
+Columns in vinyl.csv: key, artist, title, year, shelf, notes, search_artist, wiki_artist,
+mbid, spotify, youtube_music, artist_wikipedia. wiki_artist names the artist to look up
+on Wikipedia when the artist field won't do (a composer, a duo); the last four are pins: a value there wins
 over whatever the lookup finds. A hand-made cover goes to OUTDIR/vinyl/covers/<key>.jpg
 (also delete OUTDIR/vinyl/thumbs/<key>.jpg when replacing one).
 Matches scoring under 90 are reported and left out; pin their mbid to accept them.
@@ -74,12 +76,6 @@ def wikidata_links(qid, prefer):
         {"action": "wbgetentities", "ids": qid, "props": "sitelinks/urls|claims", "format": "json"})
     ent = json.loads(get(url))["entities"][qid]
     out = {}
-    sl = ent.get("sitelinks", {})
-    for lang in prefer + ["en", "es", "et", "de", "fr", "it", "ru"]:
-        s = sl.get(lang + "wiki")
-        if s:
-            out["wikipedia"], out["wikipedia_lang"] = s["url"], lang
-            break
 
     def claim(p):
         for c in ent.get("claims", {}).get(p, []):
@@ -95,6 +91,30 @@ def wikidata_links(qid, prefer):
     if yt:
         out["youtube_music"] = "https://music.youtube.com/playlist?list=" + yt
     return out
+
+
+def sitelink(qid, prefer):
+    url = "https://www.wikidata.org/w/api.php?" + urllib.parse.urlencode(
+        {"action": "wbgetentities", "ids": qid, "props": "sitelinks/urls", "format": "json"})
+    sl = json.loads(get(url))["entities"][qid].get("sitelinks", {})
+    for lang in prefer + ["en", "es", "et", "de", "fr", "it", "ru"]:
+        if sl.get(lang + "wiki"):
+            return sl[lang + "wiki"]["url"]
+    return ""
+
+
+def artist_wikipedia(name, prefer):
+    """Wikipedia page of an artist: MusicBrainz artist search -> Wikidata -> sitelink."""
+    url = "https://musicbrainz.org/ws/2/artist/?" + urllib.parse.urlencode({"query": "artist:" + lucene(name), "fmt": "json", "limit": 1})
+    found = json.loads(get(url, mb=True)).get("artists", [])
+    if not found or int(found[0].get("score", 0)) < MIN_SCORE:
+        return {"status": "no artist match"}
+    a = json.loads(get(f"https://musicbrainz.org/ws/2/artist/{found[0]['id']}?inc=url-rels&fmt=json", mb=True))
+    for rel in a.get("relations", []):
+        if rel.get("type") == "wikidata":
+            qid = rel["url"]["resource"].rstrip("/").rsplit("/", 1)[-1]
+            return {"status": "ok", "artist_mbid": a["id"], "url": sitelink(qid, prefer)}
+    return {"status": "ok", "artist_mbid": a["id"], "url": ""}
 
 
 def lookup(row, outdir):
@@ -119,6 +139,9 @@ def lookup(row, outdir):
             print("  wikidata:", qid, e)
     dest = os.path.join(outdir, "vinyl", "covers", row["key"] + ".jpg")
     old = os.path.join(outdir, "vinyl", "cover-mbid", row["key"])
+    if os.path.exists(os.path.join(outdir, "vinyl", "photos", row["key"] + ".jpg")):
+        info["status"] = "ok"  # a photo of our copy wins over the archive's cover
+        return info
     if os.path.exists(dest) and (not os.path.exists(old) or open(old).read() != info["mbid"]):
         os.remove(dest)  # the match changed: fetch the new cover, drop the old thumbnail
         thumb = os.path.join(outdir, "vinyl", "thumbs", row["key"] + ".jpg")
@@ -138,6 +161,25 @@ def lookup(row, outdir):
     return info
 
 
+def use_photo(outdir, key):
+    """A photo of our copy (vinyl/photos/<key>.jpg) becomes the cover."""
+    photo = os.path.join(outdir, "vinyl", "photos", key + ".jpg")
+    dest = os.path.join(outdir, "vinyl", "covers", key + ".jpg")
+    if not os.path.exists(photo):
+        return
+    data = open(photo, "rb").read()
+    if os.path.exists(dest) and open(dest, "rb").read() == data:
+        return
+    with open(dest, "wb") as f:
+        f.write(data)
+    thumb = os.path.join(outdir, "vinyl", "thumbs", key + ".jpg")
+    if os.path.exists(thumb):
+        os.remove(thumb)
+    os.makedirs(os.path.join(outdir, "vinyl", "cover-mbid"), exist_ok=True)
+    with open(os.path.join(outdir, "vinyl", "cover-mbid", key), "w") as f:
+        f.write("photo")
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     if len(args) != 1:
@@ -148,8 +190,10 @@ def main():
     cache = {} if "--refresh" in sys.argv or not os.path.exists(cache_path) else json.load(open(cache_path))
     rows = list(csv.DictReader(open(CSV, encoding="utf-8")))
     records, problems = [], []
+    artists = cache.setdefault("_artists", {})
     for row in rows:
         key = row["key"]
+        use_photo(outdir, key)
         c = cache.get(key)
         if c is None or c.get("mbid", "") != (row.get("mbid") or c.get("mbid", "")) or c.get("status") != "ok":
             try:
@@ -159,9 +203,24 @@ def main():
             cache[key] = c
             print(f"{key}: {c.get('status')}")
         cover = os.path.exists(os.path.join(outdir, "vinyl", "covers", key + ".jpg"))
+        photo = os.path.exists(os.path.join(outdir, "vinyl", "photos", key + ".jpg"))
+        name = (row.get("wiki_artist") or row["artist"].split(" / ")[0]).strip()
+        aw = {}
+        if name and name != "Various Artists":
+            aw = artists.get(name) or {}
+            if aw.get("status") != "ok":
+                prefer = {"espanol": ["es"], "eesti": ["et"]}.get(row["shelf"], [])
+                try:
+                    aw = artist_wikipedia(name, prefer)
+                except Exception as e:
+                    aw = {"status": f"error: {e}"}
+                artists[name] = aw
+                print(f"  artist {name}: {aw.get('status')} {aw.get('url', '')}")
+            if aw.get("status") != "ok":
+                problems.append(f"{key}: artist {name}: {aw.get('status')}")
         if c.get("status") != "ok":
             problems.append(f"{key}: {c.get('status')}")
-        elif not cover:
+        elif not cover and not photo:
             problems.append(f"{key}: no cover in the Cover Art Archive")
         year = int(row["year"]) if row["year"].strip().isdigit() else c.get("first_year", 0)
         rec = {
@@ -169,8 +228,9 @@ def main():
             "shelf": row["shelf"], "notes": row["notes"], "mbid": c.get("mbid", ""),
             "spotify": row.get("spotify") or c.get("spotify", ""),
             "youtube_music": row.get("youtube_music") or c.get("youtube_music", ""),
-            "wikipedia": row.get("wikipedia") or c.get("wikipedia", ""),
+            "artist_wikipedia": row.get("artist_wikipedia") or aw.get("url", ""),
             "cover": "vinyl/covers/" + key + ".jpg" if cover else "",
+            "cover_photo": photo,
         }
         records.append(rec)
     json.dump(cache, open(cache_path, "w"), ensure_ascii=False, indent=1)
@@ -180,7 +240,7 @@ def main():
     n = len(records)
     def has(k):
         return sum(1 for r in records if r[k])
-    print(f"\n{n} records · covers {has('cover')} · Wikipedia {has('wikipedia')} · Spotify {has('spotify')} · YouTube Music {has('youtube_music')}")
+    print(f"\n{n} records · covers {has('cover')} (photos {has('cover_photo')}) · artist Wikipedia {has('artist_wikipedia')} · Spotify {has('spotify')} · YouTube Music {has('youtube_music')}")
     if problems:
         print("\nto check:\n  " + "\n  ".join(problems))
 

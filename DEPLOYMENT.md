@@ -198,7 +198,10 @@ Google's anonymous quota (the VM's IP is often rate-limited).
 ## Vinyl refresh (`/archives/vinyl/`)
 
 `data/library/vinyl.csv` is the list of records (key, artist, title, year, shelf, notes;
-optional `search_artist`, and pins `mbid`, `spotify`, `youtube_music`, `wikipedia`).
+optional `search_artist`, `wiki_artist` — the name to look up on Wikipedia, e.g. the
+composer — and pins `mbid`, `spotify`, `youtube_music`, `artist_wikipedia`).
+A photo of our own copy in `~/cptx-data/library/vinyl/photos/<key>.jpg` (square, ~800 px)
+always wins over the archive's cover; the record page then says "photo of our copy".
 `data/library/vinyl.json` is in git; covers live only on the VM in
 `~/cptx-data/library/vinyl/covers/<key>.jpg` (thumbnails are made at start-up).
 

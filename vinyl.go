@@ -27,8 +27,9 @@ type vinylRecord struct {
 	MBID         string `json:"mbid"`
 	Spotify      string `json:"spotify"`
 	YouTubeMusic string `json:"youtube_music"`
-	Wikipedia    string `json:"wikipedia"`
+	ArtistWiki   string `json:"artist_wikipedia"`
 	Cover        string `json:"cover"`
+	CoverPhoto   bool   `json:"cover_photo"` // a photo of our own copy, not the archive's cover
 
 	// worked out at load time
 	HasCover        bool
@@ -311,8 +312,8 @@ func buildRecordData(lib *library, r *vinylRecord) map[string]any {
 		listen = append(listen, map[string]any{"Label": "YouTube Music", "Href": "https://music.youtube.com/search?q=" + q, "Search": true})
 	}
 	var about []any
-	if r.Wikipedia != "" {
-		about = append(about, map[string]any{"Label": "Wikipedia", "Href": r.Wikipedia})
+	if r.ArtistWiki != "" {
+		about = append(about, map[string]any{"Label": strings.Split(r.Artist, " / ")[0] + " on Wikipedia", "Href": r.ArtistWiki})
 	}
 	if r.MBID != "" {
 		about = append(about, map[string]any{"Label": "MusicBrainz", "Href": "https://musicbrainz.org/release-group/" + r.MBID})
@@ -327,6 +328,7 @@ func buildRecordData(lib *library, r *vinylRecord) map[string]any {
 		"listen":        listen,
 		"about":         about,
 		"hasAbout":      len(about) > 0,
+		"coverPhoto":    r.HasCover && r.CoverPhoto,
 		"shelfLabel":    shelfLabel,
 		"shelfHref":     vinylParams{By: "shelf", Group: r.Shelf}.url(nil),
 		"neighbours":    vinylItems(neighbours),

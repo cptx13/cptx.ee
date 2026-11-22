@@ -7,6 +7,7 @@
         <span class="vn-disc" :style="record.DiscStyle" aria-hidden="true"></span>
         <img v-if="record.HasCover" class="vn-sleeve" :src="large" :alt="record.Label" width="300" height="300">
         <span v-else class="vn-sleeve vn-gen" :style="record.GenStyle"><span class="vn-gen-artist">{{ artist }}</span><span class="vn-gen-title">{{ title }}</span><span class="vn-gen-year">{{ year }}</span></span>
+        <span v-if="coverPhoto" class="vn-photo-note">photo of our copy</span>
       </div>
       <div class="bk-info">
         <h1 class="bk-title">{{ title }}</h1>

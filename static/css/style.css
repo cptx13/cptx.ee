@@ -1094,6 +1094,8 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .vn-gen-year { font-size: 8px; opacity: .7; min-height: 1em; }
 .vn-big { position: relative; width: min(300px, 64vw); height: min(300px, 64vw); margin-right: min(80px, 14vw); }
 .vn-big .vn-disc { transform: translateX(26%); }
+.vn-photo-note { position: absolute; left: 0; top: calc(100% + .45em); font-size: .72em; color: var(--content-secondary); }
+.vn-big { margin-bottom: 1.6em; }
 .vn-big .vn-gen { padding: 22px 20px; }
 .vn-big .vn-gen-artist, .vn-big .vn-gen-year { font-size: 11px; }
 .vn-big .vn-gen-title { font-size: 22px; -webkit-line-clamp: 6; }
