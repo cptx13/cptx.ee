@@ -7983,8 +7983,8 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
-  "openlibrary": "",
+  "cover": "openlibrary",
+  "openlibrary": "https://openlibrary.org/works/OL37571490W",
   "google": ""
  },
  {
@@ -7998,7 +7998,7 @@
   "publisher": "Seix Barral",
   "year": 1982,
   "first_year": 1975,
-  "pages": 0,
+  "pages": 188,
   "lang": "es",
   "subjects": [],
   "categories": [],
@@ -8006,8 +8006,8 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
-  "openlibrary": "",
+  "cover": "openlibrary",
+  "openlibrary": "https://openlibrary.org/works/OL1401894W",
   "google": ""
  }
 ]
