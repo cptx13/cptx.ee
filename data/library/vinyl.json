@@ -947,7 +947,7 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://en.wikipedia.org/wiki/Hozier",
   "cover": "vinyl/covers/hozier.jpg",
   "cover_photo": true
  },
@@ -961,7 +961,7 @@
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
-  "artist_wikipedia": "",
+  "artist_wikipedia": "https://es.wikipedia.org/wiki/Manzanita_(cantante)",
   "cover": "vinyl/covers/manzanita-talco-y-bronce.jpg",
   "cover_photo": true
  },
@@ -972,11 +972,25 @@
   "year": 2024,
   "shelf": "eesti",
   "notes": "",
+  "mbid": "9d6f6727-4ab8-41f4-9039-0ce5a7384d74",
+  "spotify": "",
+  "youtube_music": "",
+  "artist_wikipedia": "https://et.wikipedia.org/wiki/Puuluup",
+  "cover": "vinyl/covers/puuluup-kannatused.jpg",
+  "cover_photo": true
+ },
+ {
+  "key": "max-d-many-any",
+  "artist": "Max D",
+  "title": "Many Any",
+  "year": 0,
+  "shelf": "electronic",
+  "notes": "",
   "mbid": "",
   "spotify": "",
   "youtube_music": "",
   "artist_wikipedia": "",
-  "cover": "vinyl/covers/puuluup-kannatused.jpg",
+  "cover": "vinyl/covers/max-d-many-any.jpg",
   "cover_photo": true
  }
 ]

@@ -59,6 +59,7 @@ var vinylShelves = []struct{ ID, Label string }{
 	{"espanol", "en español"},
 	{"soul-funk-jazz", "soul, funk & jazz"},
 	{"hip-hop", "hip-hop"},
+	{"electronic", "electronic"},
 	{"eesti", "eesti"},
 	{"classical", "classical"},
 }
