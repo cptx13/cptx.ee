@@ -2323,7 +2323,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "yes",
   "openlibrary": "",
   "google": ""
  },
@@ -2840,7 +2840,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "yes",
   "openlibrary": "",
   "google": ""
  },
@@ -2863,7 +2863,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "yes",
   "openlibrary": "https://openlibrary.org/works/OL37776599W",
   "google": ""
  },

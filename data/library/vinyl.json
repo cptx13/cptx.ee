@@ -627,7 +627,7 @@
   "youtube_music": "",
   "artist_wikipedia": "https://en.wikipedia.org/wiki/Supertramp",
   "cover": "vinyl/covers/supertramp-crime.jpg",
-  "cover_photo": true
+  "cover_photo": false
  },
  {
   "key": "this-is-moody-blues",
@@ -641,7 +641,7 @@
   "youtube_music": "",
   "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Moody_Blues",
   "cover": "vinyl/covers/this-is-moody-blues.jpg",
-  "cover_photo": true
+  "cover_photo": false
  },
  {
   "key": "kendrick-gkmc",
@@ -795,7 +795,7 @@
   "youtube_music": "",
   "artist_wikipedia": "https://en.wikipedia.org/wiki/Pyotr_Ilyich_Tchaikovsky",
   "cover": "vinyl/covers/karajan-swan-lake.jpg",
-  "cover_photo": true
+  "cover_photo": false
  },
  {
   "key": "pink-floyd-atom-heart",
@@ -1005,6 +1005,20 @@
   "youtube_music": "",
   "artist_wikipedia": "",
   "cover": "vinyl/covers/sias-may-1932-of-cotton.jpg",
+  "cover_photo": true
+ },
+ {
+  "key": "serrat-album-blanco",
+  "artist": "Joan Manuel Serrat",
+  "title": "Joan Manuel Serrat (Álbum blanco)",
+  "year": 1977,
+  "shelf": "espanol",
+  "notes": "Novola",
+  "mbid": "",
+  "spotify": "",
+  "youtube_music": "",
+  "artist_wikipedia": "https://es.wikipedia.org/wiki/Joan_Manuel_Serrat",
+  "cover": "vinyl/covers/serrat-album-blanco.jpg",
   "cover_photo": true
  }
 ]
