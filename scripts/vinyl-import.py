@@ -183,6 +183,11 @@ def use_photo(outdir, key):
         f.write("photo")
 
 
+def yt_playlist(url):
+    """Only album playlists: Wikidata sometimes holds a channel ID (UC…) under P4300."""
+    return "" if "list=UC" in url else url
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     if len(args) != 1:
@@ -231,7 +236,7 @@ def main():
             "key": key, "artist": row["artist"], "title": row["title"], "year": year,
             "shelf": row["shelf"], "lang": row.get("lang", ""), "notes": row["notes"], "mbid": c.get("mbid", ""),
             "spotify": row.get("spotify") or c.get("spotify", ""),
-            "youtube_music": row.get("youtube_music") or c.get("youtube_music", ""),
+            "youtube_music": row.get("youtube_music") or yt_playlist(c.get("youtube_music", "")),
             "artist_wikipedia": row.get("artist_wikipedia") or aw.get("url", ""),
             "cover": "vinyl/covers/" + key + ".jpg" if cover else "",
             "cover_photo": photo,
