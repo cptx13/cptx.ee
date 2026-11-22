@@ -36,6 +36,7 @@ type vinylRecord struct {
 	Color, Ink      string
 	Hue, Sat, Light float64
 	sortName        string
+	ver             string // cover file time, appended to cover URLs
 }
 
 type vinylCrate struct {
@@ -76,6 +77,9 @@ func loadVinyl(dir, media string) (*vinylCrate, error) {
 		if r.Cover != "" {
 			if _, _, mc, err := ensureThumb(c.Media, r.Key); err == nil {
 				r.HasCover, col = true, mc
+				if st, err := os.Stat(filepath.Join(c.Media, "covers", r.Key+".jpg")); err == nil {
+					r.ver = fmt.Sprintf("?v=%d", st.ModTime().Unix())
+				}
 			}
 		}
 		if !r.HasCover {
@@ -107,7 +111,7 @@ func (r *vinylRecord) item() map[string]any {
 		"Href":      r.path(),
 		"Label":     strings.TrimSpace(r.Title + " — " + r.Artist),
 		"HasCover":  r.HasCover,
-		"Thumb":     "/archives/vinyl/covers/" + r.Key + ".jpg",
+		"Thumb":     "/archives/vinyl/covers/" + r.Key + ".jpg" + r.ver,
 		"GenStyle":  fmt.Sprintf("background-color:%s;color:%s", r.Color, r.Ink),
 		"DiscStyle": "--vn-label:" + r.Color,
 	}
@@ -323,7 +327,7 @@ func buildRecordData(lib *library, r *vinylRecord) map[string]any {
 		"title":         r.Title,
 		"artist":        r.Artist,
 		"year":          yearString(r.Year),
-		"large":         "/archives/vinyl/covers/" + r.Key + "-l.jpg",
+		"large":         "/archives/vinyl/covers/" + r.Key + "-l.jpg" + r.ver,
 		"facts":         facts,
 		"listen":        listen,
 		"about":         about,
