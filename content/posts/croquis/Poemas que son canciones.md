@@ -19,7 +19,7 @@ que escuchen en Madrid mis gritos sin razones.
 
 Es ya tarde por la noche y aún escribo sin motivo  
 me siento algo extraño, soñando en mi cabeza,  
-una par de finas notas, y dos estrofas rotas,  
+un par de finas notas, y dos estrofas rotas,  
 en total son varios versos y unas cuatro estrofas.  
 
 Me imagino a cada rato, en el Retiro con cervezas  

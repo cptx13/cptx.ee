@@ -19,5 +19,5 @@ los ladrillos de mi lado, mojados.
 
 En un lunes de abril tardío,  
 vuelvo a casa, paseando y perro en mano,  
-mi preocupan mis recuerdos, lo que guardo,  
+me preocupan mis recuerdos, lo que guardo,  
 ¿y si vuelvo a la poesía, por hacer algo?

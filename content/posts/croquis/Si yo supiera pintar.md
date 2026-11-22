@@ -7,8 +7,8 @@ categories: ["rimas"]
 tags: [rimas]
 showTags: true
 ---
-Si yo supera pintar  
-llenaría este cuaderro  
+Si yo supiera pintar  
+llenaría este cuaderno  
 de tímidas líneas  
 ajenas a mi mala letra,  
 a mi mala cabeza.  

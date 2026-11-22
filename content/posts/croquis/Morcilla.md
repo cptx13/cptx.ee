@@ -20,7 +20,7 @@ unas querían morcilla o eso han contado.
 También se ha dado cuenta de mi persona  
 una rubia exaltada que ahora me recuerda  
 dice conocerme a través de dos hermanos  
-sus amigas se han reído y yo avergozado.  
+sus amigas se han reído y yo avergonzado.  
 
 No sé cómo acabará esta noche,  
 y menos si yo aguanto, igual alguna tiene suerte  

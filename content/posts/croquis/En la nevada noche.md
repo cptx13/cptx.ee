@@ -15,7 +15,7 @@ aquellos que ya no recuerdo y que aún guardo en un baúl con una llave que ya n
 Si hoy me latiera el pecho, si acaso no me escondiera o me perdiera en mis lamentos,  
 si todo fuera cierto, yo hoy le pido a la nieve en la que ahora pienso, que ese blanco tan gélido  
 con el que ya no siento frío, con el que ya no me tropiezo, que me arrope esta noche, en la que no me duermo  
-qué me hagan hueco esos sonetos, aquellos en los que aún no quepo, y que el frío acuda a mi cuaderno.  
+que me hagan hueco esos sonetos, aquellos en los que aún no quepo, y que el frío acuda a mi cuaderno.  
 
 Y es ahora, como tantas otras veces, en invierno y con la nieve iluminada,  
 en un jardín nevado, en el que me imaginé triunfante y a la vez esclavo,  

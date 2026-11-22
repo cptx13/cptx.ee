@@ -8,7 +8,7 @@ tags: [rimas]
 showTags: true
 ---
 Si supiera escribir poemas,  
-como otras veces he quejido,  
+como otras veces he querido,  
 aguantaría el pulso de mis sentidos,  
 dedicaría líneas a cada risa, a cada momento.  
 
