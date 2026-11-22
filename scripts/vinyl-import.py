@@ -204,7 +204,8 @@ def main():
             except Exception as e:
                 c = {"status": f"error: {e}"}
             cache[key] = c
-            print(f"{key}: {c.get('status')}")
+            print(f"{key}: {c.get('status')}", flush=True)
+            json.dump(cache, open(cache_path, "w"), ensure_ascii=False, indent=1)  # keep progress if stopped
         cover = os.path.exists(os.path.join(outdir, "vinyl", "covers", key + ".jpg"))
         photo = os.path.exists(os.path.join(outdir, "vinyl", "photos", key + ".jpg"))
         name = (row.get("wiki_artist") or row["artist"].split(" / ")[0]).strip()
@@ -218,7 +219,7 @@ def main():
                 except Exception as e:
                     aw = {"status": f"error: {e}"}
                 artists[name] = aw
-                print(f"  artist {name}: {aw.get('status')} {aw.get('url', '')}")
+                print(f"  artist {name}: {aw.get('status')} {aw.get('url', '')}", flush=True)
             if aw.get("status") != "ok":
                 problems.append(f"{key}: artist {name}: {aw.get('status')}")
         if c.get("status") != "ok":
