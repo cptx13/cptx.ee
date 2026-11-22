@@ -17,6 +17,7 @@
 /archives/library/9780008453343/
 /archives/library/9780008485122/
 /archives/library/9780008501822/
+/archives/library/9780008511685/
 /archives/library/9780008537838/
 /archives/library/9780008537890/
 /archives/library/9780060959470/
@@ -221,6 +222,7 @@
 /archives/library/9788420686073/
 /archives/library/9788420693996/
 /archives/library/9788420734880/
+/archives/library/9788421125106/
 /archives/library/9788422681755/
 /archives/library/9788423919543/
 /archives/library/9788425314216/
