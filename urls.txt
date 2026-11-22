@@ -302,6 +302,7 @@
 /archives/vinyl/alt-j-an-awesome-wave/
 /archives/vinyl/alt-j-relaxer/
 /archives/vinyl/alt-j-the-dream/
+/archives/vinyl/alt-j-this-is-all-yours/
 /archives/vinyl/amy-winehouse-glastonbury/
 /archives/vinyl/arctic-monkeys-am/
 /archives/vinyl/barenboim-romeo-francesca/
@@ -349,6 +350,7 @@
 /archives/vinyl/kendrick-gkmc/
 /archives/vinyl/kenny-rogers-gambler/
 /archives/vinyl/kool-gang-best-of/
+/archives/vinyl/leon-guallart-comfort/
 /archives/vinyl/leonard-cohen-im-your-man/
 /archives/vinyl/lindisfarne-70s-pop-sound/
 /archives/vinyl/mac-miller-good-am/
@@ -375,6 +377,7 @@
 /archives/vinyl/neil-diamond-flowers/
 /archives/vinyl/neil-diamond-jazz-singer/
 /archives/vinyl/neil-diamond-serenade/
+/archives/vinyl/outward-bound/
 /archives/vinyl/paul-simon-graceland/
 /archives/vinyl/pereza-animales/
 /archives/vinyl/phantom-of-the-opera/
