@@ -135,6 +135,7 @@
 /archives/library/9781610395694/
 /archives/library/9781612194196/
 /archives/library/9781627792134/
+/archives/library/9781639739134/
 /archives/library/9781681193571/
 /archives/library/9781780769714/
 /archives/library/9781780993942/
@@ -290,6 +291,8 @@
 /archives/library/9798679252547/
 /archives/library/9798843754884/
 /archives/library/9798855413786/
+/archives/library/manual-a-fuego-lento/
+/archives/library/manual-lilla-de-la-calma/
 /archives/vinyl/
 /archives/vinyl/abba-best-of/
 /archives/vinyl/abba-super-trouper/
