@@ -15,6 +15,7 @@
         <dl class="bk-facts">
           <template v-for="f in facts"><dt>{{ f.Label }}</dt><dd>{{ f.Value }}</dd></template>
         </dl>
+        <p v-if="hasBedside" class="bk-bedside">on my <a href="/pockets/bedsidetable/">bedside table</a> · {{ bedside }}</p>
         <p v-if="own" class="bk-buy"><a :href="buy" rel="noopener">I wrote this one · buy it →</a></p>
         <p v-if="hasSubjects" class="bk-subjects"><span v-for="s in subjects" class="bk-subject">{{ s }}</span></p>
         <p v-if="hasLinks" class="bk-links">more about it: <a v-for="l in links" :href="l.Href" rel="noopener">{{ l.Label }}</a></p>

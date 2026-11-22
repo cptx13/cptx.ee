@@ -59,6 +59,7 @@ type libBook struct {
 	Hue, Sat, Light float64
 	sortName        string
 	Mentions        []addonPost
+	Bedside         []string // months on the bedsidetable pocket (P-10)
 }
 
 type library struct {
@@ -827,6 +828,8 @@ func buildBookData(lib *library, b *libBook) map[string]any {
 		"hasNeighbours": len(neighbours) > 0,
 		"mentions":      postListMaps(b.Mentions),
 		"hasMentions":   len(b.Mentions) > 0,
+		"bedside":       strings.Join(b.Bedside, ", "),
+		"hasBedside":    len(b.Bedside) > 0,
 		"buy":           b.Buy,
 		"own":           b.Own,
 		"pageTitle":     b.Title + " | library | cptx",

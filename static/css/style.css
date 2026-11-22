@@ -1099,6 +1099,13 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
     border-left: 2px solid color-mix(in srgb, var(--pk-accent) 40%, transparent);
 }
 /* the cheatsheet is a wall of links */
+/* P-10: bedsidetable books in the library get a small cover + a link to their page */
+.pk-body li.bs-book { display: flex; align-items: center; gap: .8em; padding-left: 0; }
+.pk-body li.bs-book::before { content: none; }
+.bs-cover { flex: none; line-height: 0; }
+.bs-cover img { width: auto; height: 60px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,.18); }
+.bk-bedside { margin: 0 0 .6em; font-size: .85em; color: var(--content-secondary); }
+.bk-bedside a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .pk-cheatsheet ul { display: grid; grid-template-columns: repeat(auto-fill, minmax(13em, 1fr)); gap: 0 1.2em; }
 .pk-cheatsheet li::before { content: "↗"; font-size: .8em; top: .4em; }
 .pk-body p.feed-link {

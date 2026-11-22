@@ -268,6 +268,7 @@ func main() {
 		log.Printf("library: %v", err)
 		lib = &library{ByKey: map[string]*libBook{}}
 	}
+	linkBedside(postsByPath["/pockets/bedsidetable/"], lib) // P-10
 	// F-06: site-wide search over posts' full text and the library
 	searchIdx := buildSearchIndex(addonIdx, postTexts, lib)
 
