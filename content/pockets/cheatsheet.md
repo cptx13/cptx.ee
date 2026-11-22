@@ -43,6 +43,7 @@ Some links I like to have at hand,
 * [Layoff Tracker](https://layoffhedge.com/)
 * [Killed by Google](https://killedbygoogle.com/)
 * [Organized Crime and Corruption Reporting Project](https://www.occrp.org/en)
+* [East Asian Graphics Archive](https://eastasiangraphicsarchive.com/)
 
 #### Art
 * [Poorly Drawn Lines](https://poorlydrawnlines.com/)
