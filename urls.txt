@@ -313,6 +313,7 @@
 /archives/vinyl/fleetwood-mac-rumours/
 /archives/vinyl/hozier-unreal-unearth/
 /archives/vinyl/hozier-wasteland-baby/
+/archives/vinyl/hozier/
 /archives/vinyl/julio-iglesias-el-album/
 /archives/vinyl/kanye-ye/
 /archives/vinyl/karajan-haydn-paris/
@@ -327,6 +328,7 @@
 /archives/vinyl/macklemore-ben/
 /archives/vinyl/mamas-papas-20/
 /archives/vinyl/maneskin-il-ballo/
+/archives/vinyl/manzanita-talco-y-bronce/
 /archives/vinyl/marvin-gaye-midnight-love/
 /archives/vinyl/mecano-entre-el-cielo/
 /archives/vinyl/mecano-pais-de-las-hadas/
@@ -339,6 +341,7 @@
 /archives/vinyl/pinnock-bach-suites/
 /archives/vinyl/poetas-en-nueva-york/
 /archives/vinyl/police-synchronicity/
+/archives/vinyl/puuluup-kannatused/
 /archives/vinyl/puuluup-suuta-mu-lumi/
 /archives/vinyl/puuluup-viimane-suusataja/
 /archives/vinyl/silvio-rabo-de-nube/

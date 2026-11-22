@@ -795,7 +795,7 @@
   "youtube_music": "",
   "artist_wikipedia": "https://en.wikipedia.org/wiki/Pyotr_Ilyich_Tchaikovsky",
   "cover": "vinyl/covers/karajan-swan-lake.jpg",
-  "cover_photo": false
+  "cover_photo": true
  },
  {
   "key": "pink-floyd-atom-heart",
@@ -823,7 +823,7 @@
   "youtube_music": "",
   "artist_wikipedia": "https://en.wikipedia.org/wiki/Pyotr_Ilyich_Tchaikovsky",
   "cover": "vinyl/covers/barenboim-romeo-francesca.jpg",
-  "cover_photo": false
+  "cover_photo": true
  },
  {
   "key": "karajan-haydn-paris",
@@ -837,7 +837,7 @@
   "youtube_music": "",
   "artist_wikipedia": "https://en.wikipedia.org/wiki/Joseph_Haydn",
   "cover": "vinyl/covers/karajan-haydn-paris.jpg",
-  "cover_photo": false
+  "cover_photo": true
  },
  {
   "key": "kempe-berlioz-fantastique",
@@ -851,7 +851,7 @@
   "youtube_music": "",
   "artist_wikipedia": "https://en.wikipedia.org/wiki/Hector_Berlioz",
   "cover": "vinyl/covers/kempe-berlioz-fantastique.jpg",
-  "cover_photo": false
+  "cover_photo": true
  },
  {
   "key": "usa-for-africa",
@@ -935,6 +935,48 @@
   "youtube_music": "",
   "artist_wikipedia": "https://en.wikipedia.org/wiki/Johann_Sebastian_Bach",
   "cover": "vinyl/covers/munchinger-matthaus.jpg",
+  "cover_photo": true
+ },
+ {
+  "key": "hozier",
+  "artist": "Hozier",
+  "title": "Hozier",
+  "year": 2014,
+  "shelf": "songwriters",
+  "notes": "",
+  "mbid": "",
+  "spotify": "",
+  "youtube_music": "",
+  "artist_wikipedia": "",
+  "cover": "vinyl/covers/hozier.jpg",
+  "cover_photo": true
+ },
+ {
+  "key": "manzanita-talco-y-bronce",
+  "artist": "Manzanita",
+  "title": "Talco y bronce",
+  "year": 0,
+  "shelf": "espanol",
+  "notes": "",
+  "mbid": "",
+  "spotify": "",
+  "youtube_music": "",
+  "artist_wikipedia": "",
+  "cover": "vinyl/covers/manzanita-talco-y-bronce.jpg",
+  "cover_photo": true
+ },
+ {
+  "key": "puuluup-kannatused",
+  "artist": "5MIINUST & Puuluup",
+  "title": "kannatused ehk külakiigel pole stopperit",
+  "year": 2024,
+  "shelf": "eesti",
+  "notes": "",
+  "mbid": "",
+  "spotify": "",
+  "youtube_music": "",
+  "artist_wikipedia": "",
+  "cover": "vinyl/covers/puuluup-kannatused.jpg",
   "cover_photo": true
  }
 ]
