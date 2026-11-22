@@ -1082,6 +1082,7 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
     repeating-radial-gradient(circle, #141414 0 1.6px, #232323 1.6px 2.4px);
   box-shadow: 0 0 0 1px rgba(0,0,0,.35); transition: transform .25s ease;
 }
+.dark .vn-disc { box-shadow: 0 0 0 1px rgba(255,255,255,.16), 0 0 0 4px rgba(255,255,255,.03); }
 .vn-link:hover .vn-disc, .vn-link:focus-visible .vn-disc { transform: translateX(34%) rotate(40deg); }
 .vn-link:hover .vn-sleeve, .vn-link:focus-visible .vn-sleeve { transform: translateX(-4px); }
 .vn-link:hover, .vn-link:focus-visible { z-index: 2; }

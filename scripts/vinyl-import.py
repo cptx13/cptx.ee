@@ -48,10 +48,13 @@ def lucene(s):
     return '"' + s.replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
-def search(title, artist):
+def search(title, artist, single=False):
     q = "releasegroup:" + lucene(title)
     if artist:
         q += " AND artist:" + lucene(artist)
+    # albums only (a title search otherwise finds the hit single first), unless the
+    # record itself is a single
+    q += " AND primarytype:" + ("single" if single else "album")
     url = "https://musicbrainz.org/ws/2/release-group/?" + urllib.parse.urlencode({"query": q, "fmt": "json", "limit": 1})
     groups = json.loads(get(url, mb=True)).get("release-groups", [])
     return groups[0] if groups else None
@@ -98,7 +101,7 @@ def lookup(row, outdir):
     prefer = {"espanol": ["es"], "eesti": ["et"]}.get(row["shelf"], [])
     info = {"mbid": row.get("mbid", ""), "score": 100 if row.get("mbid") else 0}
     if not info["mbid"]:
-        rg = search(row["title"], row.get("search_artist", ""))
+        rg = search(row["title"], row.get("search_artist", ""), "single" in row.get("notes", "").lower())
         if not rg:
             return {"status": "no match"}
         info["score"] = int(rg.get("score", 0))
@@ -115,11 +118,20 @@ def lookup(row, outdir):
         except Exception as e:
             print("  wikidata:", qid, e)
     dest = os.path.join(outdir, "vinyl", "covers", row["key"] + ".jpg")
+    old = os.path.join(outdir, "vinyl", "cover-mbid", row["key"])
+    if os.path.exists(dest) and (not os.path.exists(old) or open(old).read() != info["mbid"]):
+        os.remove(dest)  # the match changed: fetch the new cover, drop the old thumbnail
+        thumb = os.path.join(outdir, "vinyl", "thumbs", row["key"] + ".jpg")
+        if os.path.exists(thumb):
+            os.remove(thumb)
     if not os.path.exists(dest):
         try:
             data = get(f"https://coverartarchive.org/release-group/{info['mbid']}/front-500")
             with open(dest, "wb") as f:
                 f.write(data)
+            os.makedirs(os.path.dirname(old), exist_ok=True)
+            with open(old, "w") as f:
+                f.write(info["mbid"])
         except Exception as e:
             info["cover_error"] = str(e)
     info["status"] = "ok"
