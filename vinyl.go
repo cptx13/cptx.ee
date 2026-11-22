@@ -3,11 +3,16 @@ package main
 // /archives/vinyl/: the records. data/library/vinyl.json is made from vinyl.csv by
 // scripts/vinyl-import.py on the VM (MusicBrainz → Cover Art Archive, Wikidata →
 // Wikipedia, Spotify, YouTube Music). Covers live outside git in
-// <library media>/vinyl/covers/, thumbnails are made here at startup like the books'.
+// <library media>/vinyl/covers/. Every cover is made exactly square here at startup
+// (squares/<key>.jpg 300 px, squares/<key>-l.jpg 600 px): near-square scans are
+// centre-cropped, anything further off is padded with its own edge colour.
 
 import (
 	"encoding/json"
 	"fmt"
+	"image"
+	"image/color"
+	"image/jpeg"
 	"net/http"
 	"net/url"
 	"os"
@@ -15,6 +20,8 @@ import (
 	"sort"
 	"strings"
 	"unicode"
+
+	"golang.org/x/image/draw"
 )
 
 type vinylRecord struct {
@@ -69,13 +76,13 @@ func loadVinyl(dir, media string) (*vinylCrate, error) {
 	if err := json.Unmarshal(raw, &c.Records); err != nil {
 		return c, fmt.Errorf("vinyl.json: %w", err)
 	}
-	os.MkdirAll(filepath.Join(c.Media, "thumbs"), 0o755)
+	os.MkdirAll(filepath.Join(c.Media, "squares"), 0o755)
 	for _, r := range c.Records {
 		c.ByKey[r.Key] = r
 		r.sortName = foldKey(strings.TrimPrefix(r.Artist, "The ") + " " + r.Title)
 		col := [3]uint8{}
 		if r.Cover != "" {
-			if _, _, mc, err := ensureThumb(c.Media, r.Key); err == nil {
+			if _, _, mc, err := ensureSquare(c.Media, r.Key); err == nil {
 				r.HasCover, col = true, mc
 				if st, err := os.Stat(filepath.Join(c.Media, "covers", r.Key+".jpg")); err == nil {
 					r.ver = fmt.Sprintf("?v=%d", st.ModTime().Unix())
@@ -376,9 +383,9 @@ func serveVinyl(w http.ResponseWriter, r *http.Request, lib *library, render fun
 		render(w, "VinylPage", buildVinylData(lib, r.URL.Query()))
 	case strings.HasPrefix(path, "/archives/vinyl/covers/"):
 		name := strings.TrimPrefix(path, "/archives/vinyl/covers/")
-		key, sub := strings.TrimSuffix(name, ".jpg"), "thumbs"
+		key, suffix := strings.TrimSuffix(name, ".jpg"), ""
 		if strings.HasSuffix(key, "-l") {
-			key, sub = strings.TrimSuffix(key, "-l"), "covers"
+			key, suffix = strings.TrimSuffix(key, "-l"), "-l"
 		}
 		rec := c.ByKey[key]
 		if rec == nil || !rec.HasCover || !strings.HasSuffix(name, ".jpg") {
@@ -386,7 +393,7 @@ func serveVinyl(w http.ResponseWriter, r *http.Request, lib *library, render fun
 			return
 		}
 		w.Header().Set("Cache-Control", "public, max-age=604800")
-		http.ServeFile(w, r, filepath.Join(c.Media, sub, key+".jpg"))
+		http.ServeFile(w, r, filepath.Join(c.Media, "squares", key+suffix+".jpg"))
 	default:
 		key := strings.Trim(strings.TrimPrefix(path, "/archives/vinyl/"), "/")
 		rec := c.ByKey[key]
@@ -396,4 +403,98 @@ func serveVinyl(w http.ResponseWriter, r *http.Request, lib *library, render fun
 		}
 		render(w, "RecordPage", buildRecordData(lib, rec))
 	}
+}
+
+// ensureSquare makes squares/<key>.jpg (300 px) and squares/<key>-l.jpg (600 px) from
+// covers/<key>.jpg whenever the cover is newer, and returns the cover's main colour.
+// Sleeves are square: a scan within 15% of square is centre-cropped (scan margins);
+// anything further off is padded with the average colour of its edges, so nothing is cut.
+func ensureSquare(dir, key string) (int, int, [3]uint8, error) {
+	src := filepath.Join(dir, "covers", key+".jpg")
+	small := filepath.Join(dir, "squares", key+".jpg")
+	large := filepath.Join(dir, "squares", key+"-l.jpg")
+	st, err := os.Stat(src)
+	if err != nil {
+		return 0, 0, [3]uint8{}, err
+	}
+	if t, err := os.Stat(small); err == nil && !t.ModTime().Before(st.ModTime()) {
+		if _, err := os.Stat(large); err == nil {
+			if f, err := os.Open(small); err == nil {
+				img, _, err := image.Decode(f)
+				f.Close()
+				if err == nil {
+					return 300, 300, mainColor(img), nil
+				}
+			}
+		}
+	}
+	f, err := os.Open(src)
+	if err != nil {
+		return 0, 0, [3]uint8{}, err
+	}
+	img, _, err := image.Decode(f)
+	f.Close()
+	if err != nil {
+		return 0, 0, [3]uint8{}, err
+	}
+	sq := squareOf(img)
+	var thumb image.Image
+	for _, out := range []struct {
+		path string
+		size int
+	}{{large, 600}, {small, 300}} {
+		n := out.size
+		if b := sq.Bounds().Dx(); b < n {
+			n = b
+		}
+		t := image.NewRGBA(image.Rect(0, 0, n, n))
+		draw.CatmullRom.Scale(t, t.Bounds(), sq, sq.Bounds(), draw.Over, nil)
+		if w, err := os.Create(out.path); err == nil {
+			jpeg.Encode(w, t, &jpeg.Options{Quality: 85})
+			w.Close()
+		}
+		thumb = t
+	}
+	return 300, 300, mainColor(thumb), nil
+}
+
+func squareOf(img image.Image) image.Image {
+	b := img.Bounds()
+	w, h := b.Dx(), b.Dy()
+	if w == h {
+		return img
+	}
+	r := float64(w) / float64(h)
+	if r >= 0.87 && r <= 1.15 {
+		side := min(w, h)
+		x0, y0 := b.Min.X+(w-side)/2, b.Min.Y+(h-side)/2
+		out := image.NewRGBA(image.Rect(0, 0, side, side))
+		draw.Draw(out, out.Bounds(), img, image.Pt(x0, y0), draw.Src)
+		return out
+	}
+	side := max(w, h)
+	out := image.NewRGBA(image.Rect(0, 0, side, side))
+	draw.Draw(out, out.Bounds(), &image.Uniform{edgeColour(img)}, image.Point{}, draw.Src)
+	off := image.Pt((side-w)/2, (side-h)/2)
+	draw.Draw(out, image.Rectangle{off, off.Add(image.Pt(w, h))}, img, b.Min, draw.Src)
+	return out
+}
+
+// edgeColour averages the outermost pixels, the colour a sleeve's border would have.
+func edgeColour(img image.Image) color.Color {
+	b := img.Bounds()
+	var r, g, bl, n uint64
+	add := func(x, y int) {
+		cr, cg, cb, _ := img.At(x, y).RGBA()
+		r, g, bl, n = r+uint64(cr>>8), g+uint64(cg>>8), bl+uint64(cb>>8), n+1
+	}
+	for x := b.Min.X; x < b.Max.X; x += 2 {
+		add(x, b.Min.Y)
+		add(x, b.Max.Y-1)
+	}
+	for y := b.Min.Y; y < b.Max.Y; y += 2 {
+		add(b.Min.X, y)
+		add(b.Max.X-1, y)
+	}
+	return color.RGBA{uint8(r / n), uint8(g / n), uint8(bl / n), 255}
 }

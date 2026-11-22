@@ -627,7 +627,7 @@
   "youtube_music": "",
   "artist_wikipedia": "https://en.wikipedia.org/wiki/Supertramp",
   "cover": "vinyl/covers/supertramp-crime.jpg",
-  "cover_photo": false
+  "cover_photo": true
  },
  {
   "key": "this-is-moody-blues",
@@ -641,7 +641,7 @@
   "youtube_music": "",
   "artist_wikipedia": "https://en.wikipedia.org/wiki/The_Moody_Blues",
   "cover": "vinyl/covers/this-is-moody-blues.jpg",
-  "cover_photo": false
+  "cover_photo": true
  },
  {
   "key": "kendrick-gkmc",
