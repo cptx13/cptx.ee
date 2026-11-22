@@ -195,6 +195,26 @@ on the VM.
 `LIBRARY_DIR` / `LIBRARY_MEDIA_DIR` override the two locations; `GOOGLE_BOOKS_KEY` lifts
 Google's anonymous quota (the VM's IP is often rate-limited).
 
+## Vinyl refresh (`/archives/vinyl/`)
+
+`data/library/vinyl.csv` is the list of records (key, artist, title, year, shelf, notes;
+optional `search_artist`, and pins `mbid`, `spotify`, `youtube_music`, `wikipedia`).
+`data/library/vinyl.json` is in git; covers live only on the VM in
+`~/cptx-data/library/vinyl/covers/<key>.jpg` (thumbnails are made at start-up).
+
+1. Edit `vinyl.csv` on a branch (new key = short slug; shelves: rock, pop, songwriters,
+   espanol, soul-funk-jazz, hip-hop, eesti, classical).
+2. On the VM, in a scratch clone of that branch:
+   ```sh
+   git clone -q -b <branch> https://github.com/cptx13/cptx.ee /tmp/lib && cd /tmp/lib
+   python3 scripts/vinyl-import.py ~/cptx-data/library   # MusicBrainz, Cover Art Archive, Wikidata
+   cp ~/cptx-data/library/vinyl.json data/library/vinyl.json
+   ```
+   It prints what's still missing (no match, low score, no cover). Pin an `mbid` to accept
+   a match; a hand-made cover goes in `vinyl/covers/<key>.jpg` (delete `vinyl/thumbs/<key>.jpg`
+   when replacing one). Records without Spotify/YouTube Music links get a search link.
+3. Commit `vinyl.csv`, `vinyl.json` and `urls.txt` (new record pages); branch → check → main.
+
 ## Go version
 
 The Go toolchain is pinned in `mise.toml` (currently `1.27.4`); `go.mod` only sets

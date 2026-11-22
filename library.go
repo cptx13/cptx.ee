@@ -67,6 +67,7 @@ type library struct {
 	ByKey map[string]*libBook
 	Dir   string // books.json
 	Media string // covers/ + thumbs/
+	Vinyl *vinylCrate
 }
 
 var libShelves = []struct{ ID, Label string }{
@@ -128,6 +129,11 @@ func hashOf(s string) uint32 {
 // A missing books.json is not an error: the library is simply empty.
 func loadLibrary(dir string, posts []addonPost, texts map[string]string) (*library, error) {
 	lib := &library{ByKey: map[string]*libBook{}, Dir: dir, Media: libraryMediaDir(dir)}
+	v, err := loadVinyl(dir, lib.Media)
+	if err != nil {
+		log.Printf("vinyl: %v", err)
+	}
+	lib.Vinyl = v
 	raw, err := os.ReadFile(filepath.Join(dir, "books.json"))
 	if os.IsNotExist(err) {
 		return lib, nil
@@ -879,13 +885,17 @@ func buildArchivesData(lib *library) map[string]any {
 	sort.SliceStable(mine, func(i, j int) bool {
 		return mine[i].(map[string]any)["Rank"].(int) < mine[j].(map[string]any)["Rank"].(int)
 	})
-	return map[string]any{
+	data := map[string]any{
 		"count":     len(lib.Books),
 		"mine":      mine,
 		"mineCount": len(mine),
 		"hasMine":   len(mine) > 0,
 		"strip":     itemsOf(strip),
 	}
+	for k, v := range vinylCard(lib) {
+		data[k] = v
+	}
+	return data
 }
 
 // registerLibrary wires /archives/ into the mux.
@@ -899,6 +909,8 @@ func registerLibrary(mux *http.ServeMux, render func(http.ResponseWriter, string
 			render(w, "WrittenPage", buildArchivesData(lib))
 		case path == "/archives/library/":
 			render(w, "LibraryPage", buildLibraryData(lib, r.URL.Query()))
+		case strings.HasPrefix(path, "/archives/vinyl/"):
+			serveVinyl(w, r, lib, render, notFound)
 		case strings.HasPrefix(path, "/archives/library/covers/"):
 			serveCover(w, r, lib, strings.TrimPrefix(path, "/archives/library/covers/"))
 		case strings.HasPrefix(path, "/archives/library/"):
@@ -946,6 +958,16 @@ func writeLibraryPages(engine *htmlc.Engine, distDir string, lib *library) error
 			comp string
 			data map[string]any
 		}{"BookPage", buildBookData(lib, b)}
+	}
+	pages["archives/vinyl"] = struct {
+		comp string
+		data map[string]any
+	}{"VinylPage", buildVinylData(lib, url.Values{})}
+	for _, r := range lib.crate().Records {
+		pages["archives/vinyl/"+r.Key] = struct {
+			comp string
+			data map[string]any
+		}{"RecordPage", buildRecordData(lib, r)}
 	}
 	for dir, pg := range pages {
 		html, err := engine.RenderPageString(pg.comp, pg.data)

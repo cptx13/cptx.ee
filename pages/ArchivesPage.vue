@@ -25,7 +25,20 @@
         <span class="ar-strip" aria-hidden="true"><span v-for="b in strip" class="lib-spine" :style="b.MiniStyle"></span></span>
       </span>
     </a>
-    <div class="addon-card ar-card ar-soon ic-card">
+    <a v-if="hasVinyl" class="addon-card ar-card ic-card" href="/archives/vinyl/">
+      <LineIcon :name="'vinyl'"></LineIcon>
+      <span class="ic-text">
+        <span class="addon-card-title">vinyl →</span>
+        <span class="addon-card-desc">Some of the records Merzeede and I own: {{ vinylCount }} so far. Sort them by genre, artist, decade or colour, and listen on Spotify or YouTube Music.</span>
+        <span class="ar-covers" aria-hidden="true">
+          <span v-for="r in vinylStrip" class="ar-cover">
+            <img v-if="r.HasCover" :src="r.Thumb" alt="" width="64" height="64" loading="lazy">
+            <span v-else class="ar-cover-gen vn-mini" :style="r.GenStyle"></span>
+          </span>
+        </span>
+      </span>
+    </a>
+    <div v-else class="addon-card ar-card ar-soon ic-card">
       <LineIcon :name="'vinyl'"></LineIcon>
       <span class="ic-text">
         <span class="addon-card-title">vinyl</span>
