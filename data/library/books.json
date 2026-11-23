@@ -8098,8 +8098,8 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
-  "openlibrary": "",
+  "cover": "amazon",
+  "openlibrary": "https://openlibrary.org/works/OL39131001W",
   "google": ""
  },
  {
@@ -8121,7 +8121,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "amazon",
   "openlibrary": "",
   "google": ""
  }
