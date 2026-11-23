@@ -94,6 +94,8 @@
 /archives/library/9781035026081/
 /archives/library/9781250076229/
 /archives/library/9781350352896/
+/archives/library/9781350515857/
+/archives/library/9781350573161/
 /archives/library/9781399601320/
 /archives/library/9781399607766/
 /archives/library/9781399617208/
