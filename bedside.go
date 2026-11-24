@@ -84,8 +84,8 @@ func linkBedside(p *Post, lib *library) {
 		cover := ""
 		if b.HasCover && b.ThumbH > 0 {
 			h := 60
-			cover = fmt.Sprintf(`<a class="bs-cover" href="%s" tabindex="-1" aria-hidden="true"><img src="/archives/library/covers/%s.jpg" alt="" width="%d" height="%d" loading="lazy"></a>`,
-				b.path(), b.Key, b.ThumbW*h/b.ThumbH, h)
+			cover = fmt.Sprintf(`<a class="bs-cover" href="%s" tabindex="-1" aria-hidden="true"><img src="/archives/library/covers/%s.jpg%s" alt="" width="%d" height="%d" loading="lazy"></a>`,
+				b.path(), b.Key, b.ver, b.ThumbW*h/b.ThumbH, h)
 		}
 		if cover == "" { // no cover: keep the plain list line, just linked
 			return fmt.Sprintf(`<li><a href="%s"><em>%s</em></a>%s</li>`, b.path(), g[2], g[3])

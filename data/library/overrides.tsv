@@ -1,5 +1,6 @@
 # key	field	value — manual fixes that win over Libib and the fetched metadata.
-# fields: title, subtitle, author, lang, year (edition), first_year (first published), pages, shelf, cover (none = use the generated cover)
+# fields: title, subtitle, series, author, lang, year (edition), first_year (first published), pages, shelf,
+# cover (none = use the generated cover; amazon/openlibrary/google = fetch from that source first, e.g. amazon = the edition's own cover)
 9781853260285	author	Jane Austen
 9788415689508	author	G. K. Chesterton
 9781035003792	author	Cormac McCarthy
@@ -46,4 +47,43 @@
 9789401489348	lang	en
 9788476517659	title	Todo lo que debe saber (y nadie le dirá) para tener una casa de campo
 9798541463491	title	Poemas de un joven no leído: Edición completa
-9780008511685	first_year	2017
+9780008511715	first_year	2017
+9781037200083	title	A Court of Splintered Harmony
+9781037200083	series	A Court of Thorns and Roses, 6
+9781037200083	author	Sarah J. Maas
+9781350515857	author	Slavoj Žižek
+9781350515857	series	Žižek's Essays, 1
+9781350573161	series	Žižek's Essays, 3
+# 2026-11-24: covers checked against Amazon's edition cover (by ISBN); Open Library had another edition
+9780141197364	cover	amazon
+9780593820285	cover	amazon
+9780593820261	cover	amazon
+9780593955994	cover	amazon
+9780593898000	cover	amazon
+9781408839126	cover	amazon
+9781399601320	cover	amazon
+9780593956014	cover	amazon
+9780571135394	cover	amazon
+9780008425050	cover	amazon
+9780571376483	cover	amazon
+9781784876579	cover	amazon
+9781838862978	cover	amazon
+9788408056324	cover	amazon
+9788449314964	cover	amazon
+9781035003792	cover	amazon
+9781853261756	cover	amazon
+9781473630833	cover	amazon
+9780241422267	cover	amazon
+9780008501822	cover	amazon
+9780008537890	cover	amazon
+9780008453343	cover	amazon
+9780008485122	cover	amazon
+9780007432905	cover	amazon
+9781529110685	cover	amazon
+9780486831855	cover	amazon
+9780192737359	cover	amazon
+9780192743480	cover	amazon
+9780571258093	cover	amazon
+9780575079755	cover	amazon
+9781529019292	cover	amazon
+9780593820308	cover	amazon

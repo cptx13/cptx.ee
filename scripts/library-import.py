@@ -23,6 +23,14 @@ google_off = False  # set after a 429: Google's anonymous quota is spent, skip i
 OL_LANG = {"eng": "en", "spa": "es", "est": "et", "ben": "bn", "ger": "de", "cat": "ca", "fre": "fr", "ita": "it", "por": "pt", "dut": "nl"}
 
 
+def isbn13to10(x):
+    if len(x) != 13 or not x.startswith("978") or not x.isdigit():
+        return ""
+    b = x[3:12]
+    c = (11 - sum((10 - i) * int(d) for i, d in enumerate(b)) % 11) % 11
+    return b + ("X" if c == 10 else str(c))
+
+
 def isbn10to13(x):
     if len(x) != 10:
         return ""
@@ -158,10 +166,12 @@ def fetch_raw(key, isbn, rawdir, refetch):
     return raw
 
 
-def fetch_cover(key, isbn, raw, coverdir, refetch, isbn10="", asin=""):
+def fetch_cover(key, isbn, raw, coverdir, refetch, isbn10="", asin="", prefer=""):
     path = os.path.join(coverdir, key + ".jpg")
     if os.path.exists(path) and not refetch:
         return "cached"
+    # Libib's ISBN-10 is sometimes another edition's; the one derived from the ISBN-13 wins
+    isbn10 = isbn13to10(isbn) or isbn10
     tries = []
     if isbn:
         tries.append(("openlibrary", "https://covers.openlibrary.org/b/isbn/%s-L.jpg?default=false" % isbn))
@@ -181,6 +191,8 @@ def fetch_cover(key, isbn, raw, coverdir, refetch, isbn10="", asin=""):
         tries.append(("casadellibro", "https://imagessl.casadellibro.com/a/l/t0/%s/%s.jpg" % (isbn[-2:], isbn)))
     if isbn:  # Google's public cover image by ISBN (no API quota)
         tries.append(("google", "https://books.google.com/books/content?vid=ISBN%s&printsec=frontcover&img=1&zoom=1" % isbn))
+    if prefer:  # overrides.tsv "cover <source>": that source first (e.g. amazon = the edition's own cover)
+        tries.sort(key=lambda t: t[0] != prefer)
     for src, url in tries:
         b = get_bytes(url)
         time.sleep(0.3)
@@ -267,7 +279,8 @@ def main():
             if raw.get("google"):
                 b["google"] = (raw["google"].get("volumeInfo") or {}).get("infoLink", "")
             asin = amazon_asin(own[key]) if key in own else ""
-            b["cover"] = fetch_cover(key, isbn, raw, coverdir, refetch, r["isbn10"], asin)
+            prefer = over.get(key, {}).get("cover", "")
+            b["cover"] = fetch_cover(key, isbn, raw, coverdir, refetch, r["isbn10"], asin, "" if prefer == "none" else prefer)
             if b["cover"] == "cached":
                 b["cover"] = "yes"
             print("%3d/%d %-14s %-8s %s" % (i, len(rows), key, b["cover"] or "-", b["title"][:50]), flush=True)

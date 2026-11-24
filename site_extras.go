@@ -299,6 +299,9 @@ var retiredURLs = map[string]string{
 	"/croquis/202611171/": "/rimas/202611171/",   // Park lights
 	// 2026-11-20 (AD-11): weekendreads became the kept view of /addons/reads/
 	"/pockets/weekendreads/": "/addons/reads/",
+	// 2026-11-24: books added by hand under another edition's ISBN, now scanned in Libib
+	"/archives/library/9780008511685/": "/archives/library/9780008511715/", // Butter
+	"/archives/library/9781639739134/": "/archives/library/9781037200083/", // A Court of Splintered Harmony
 }
 
 func registerRetired(mux *http.ServeMux, distDir string) error {

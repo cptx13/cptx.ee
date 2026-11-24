@@ -18,6 +18,7 @@
 /archives/library/9780008485122/
 /archives/library/9780008501822/
 /archives/library/9780008511685/
+/archives/library/9780008511715/
 /archives/library/9780008537838/
 /archives/library/9780008537890/
 /archives/library/9780060959470/
@@ -92,6 +93,7 @@
 /archives/library/9780996061315/
 /archives/library/9781035003792/
 /archives/library/9781035026081/
+/archives/library/9781037200083/
 /archives/library/9781250076229/
 /archives/library/9781350352896/
 /archives/library/9781350515857/
@@ -104,6 +106,7 @@
 /archives/library/9781399629959/
 /archives/library/9781401248192/
 /archives/library/9781405940368/
+/archives/library/9781405972949/
 /archives/library/9781405972963/
 /archives/library/9781405972994/
 /archives/library/9781406362848/

@@ -55,6 +55,7 @@ type libBook struct {
 	// worked out at load time
 	HasCover        bool
 	ThumbW, ThumbH  int
+	ver             string // "?v=<cover mtime>", so a replaced cover isn't stuck in caches
 	Color, Ink      string
 	Hue, Sat, Light float64
 	sortName        string
@@ -151,6 +152,9 @@ func loadLibrary(dir string, posts []addonPost, texts map[string]string) (*libra
 		if b.Cover != "" {
 			if w, h, c, err := ensureThumb(lib.Media, b.Key); err == nil {
 				b.HasCover, b.ThumbW, b.ThumbH = true, w, h
+				if st, err := os.Stat(filepath.Join(lib.Media, "covers", b.Key+".jpg")); err == nil {
+					b.ver = fmt.Sprintf("?v=%d", st.ModTime().Unix())
+				}
 				b.setColor(c)
 			}
 		}
@@ -224,13 +228,19 @@ func rgbToHSL(r, g, b float64) (h, s, l float64) {
 	return h * 60, s, l
 }
 
-// ensureThumb makes thumbs/<key>.jpg (300px tall) once and returns its size and the
-// cover's main colour.
+// ensureThumb makes thumbs/<key>.jpg (300px tall) once, and again whenever the cover is
+// newer than its thumbnail, and returns its size and the cover's main colour.
 func ensureThumb(dir, key string) (int, int, [3]uint8, error) {
 	src := filepath.Join(dir, "covers", key+".jpg")
 	dst := filepath.Join(dir, "thumbs", key+".jpg")
 	var thumb image.Image
-	if f, err := os.Open(dst); err == nil {
+	fresh := true
+	if s, err := os.Stat(src); err == nil {
+		if t, err := os.Stat(dst); err == nil && t.ModTime().Before(s.ModTime()) {
+			fresh = false
+		}
+	}
+	if f, err := os.Open(dst); fresh && err == nil {
 		thumb, _, err = image.Decode(f)
 		f.Close()
 		if err != nil {
@@ -628,7 +638,7 @@ func (b *libBook) item() map[string]any {
 		"Href":       b.path(),
 		"Label":      strings.TrimSpace(b.Title + " — " + b.Author),
 		"HasCover":   b.HasCover,
-		"Thumb":      "/archives/library/covers/" + b.Key + ".jpg",
+		"Thumb":      "/archives/library/covers/" + b.Key + ".jpg" + b.ver,
 		"CoverW":     coverW,
 		"GenStyle":   fmt.Sprintf("background-color:%s;color:%s", b.Color, b.Ink),
 		"SpineStyle": fmt.Sprintf("width:%dpx;height:%dpx;background-color:%s;color:%s", w, h, b.Color, b.Ink),
@@ -820,7 +830,7 @@ func buildBookData(lib *library, b *libBook) map[string]any {
 		"author":        b.Author,
 		"series":        b.Series,
 		"year":          yearString(b.displayYear()),
-		"large":         "/archives/library/covers/" + b.Key + "-l.jpg",
+		"large":         "/archives/library/covers/" + b.Key + "-l.jpg" + b.ver,
 		"coverW":        cw,
 		"coverH":        ch,
 		"facts":         facts,
