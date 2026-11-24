@@ -16,7 +16,7 @@ Some links I like to have at hand,
 * [No One's Happy](https://nooneshappy.com/)
 * [Invokation Games](https://www.invokation.games/blog)
 * [Andrulis](https://andrulis.de/)
-* [Mrus](https://マリウス.com/)
+* [マリウス (Mrus)](https://マリウス.com/)
 * [Karri Saarineen](https://karrisaarinen.com/)
 * [Seth For Privacy](https://sethforprivacy.com/)
 * [Bartosz Ciechanowski](https://ciechanow.ski/)

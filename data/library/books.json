@@ -2337,12 +2337,12 @@
   "author": "Roberto Fontanarrosa",
   "publisher": "Planeta",
   "year": 0,
-  "first_year": 0,
+  "first_year": 1990,
   "pages": 0,
   "lang": "es",
   "subjects": [],
   "categories": [],
-  "shelf": "comics",
+  "shelf": "fiction",
   "own": false,
   "own_rank": 0,
   "buy": "",
@@ -2592,7 +2592,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "yes",
+  "cover": "amazon",
   "openlibrary": "https://openlibrary.org/works/OL1095427W",
   "google": ""
  },
@@ -2628,7 +2628,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "yes",
+  "cover": "amazon",
   "openlibrary": "https://openlibrary.org/works/OL66513W",
   "google": ""
  },
@@ -3608,7 +3608,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "yes",
+  "cover": "amazon",
   "openlibrary": "https://openlibrary.org/works/OL276558W",
   "google": ""
  },
@@ -4542,7 +4542,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "yes",
+  "cover": "amazon",
   "openlibrary": "https://openlibrary.org/works/OL257943W",
   "google": ""
  },
@@ -5217,7 +5217,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "yes",
+  "cover": "amazon",
   "openlibrary": "https://openlibrary.org/works/OL4321141W",
   "google": ""
  },
@@ -5313,7 +5313,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "yes",
+  "cover": "amazon",
   "openlibrary": "https://openlibrary.org/works/OL19850785W",
   "google": ""
  },
@@ -5481,7 +5481,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "yes",
+  "cover": "amazon",
   "openlibrary": "https://openlibrary.org/works/OL8262101W",
   "google": ""
  },
@@ -5517,7 +5517,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "yes",
+  "cover": "amazon",
   "openlibrary": "https://openlibrary.org/works/OL31111W",
   "google": ""
  },
@@ -6176,7 +6176,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "yes",
+  "cover": "amazon",
   "openlibrary": "https://openlibrary.org/works/OL453936W",
   "google": ""
  },

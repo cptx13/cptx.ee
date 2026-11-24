@@ -98,7 +98,7 @@ var feedSources = []struct {
 	FeedURL string
 }{
 	{"No One's Happy", "https://nooneshappy.com/rss.xml"},
-	{"Mrus", "https://xn--gckvb8fzb.com/index.xml"},
+	{"マリウス (Mrus)", "https://xn--gckvb8fzb.com/index.xml"},
 	{"Seth For Privacy", "https://sethforprivacy.com/index.xml"},
 	{"Bartosz Ciechanowski", "https://ciechanow.ski/atom.xml"},
 	{"Matthew Ball", "https://www.matthewball.co/matthewball?format=rss"},
