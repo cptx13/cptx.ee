@@ -303,7 +303,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "web",
   "openlibrary": "",
   "google": ""
  },
@@ -642,7 +642,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "web",
   "openlibrary": "https://openlibrary.org/works/OL10252249W",
   "google": ""
  },
@@ -1511,7 +1511,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "web",
   "openlibrary": "",
   "google": ""
  },
@@ -1910,7 +1910,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "web",
   "openlibrary": "",
   "google": ""
  },
@@ -2369,7 +2369,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "web",
   "openlibrary": "https://openlibrary.org/works/OL31447429W",
   "google": ""
  },
@@ -4900,7 +4900,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "web",
   "openlibrary": "",
   "google": ""
  },
@@ -7891,7 +7891,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "web",
   "openlibrary": "",
   "google": ""
  },
@@ -7960,7 +7960,7 @@
   "own": false,
   "own_rank": 0,
   "buy": "",
-  "cover": "",
+  "cover": "web",
   "openlibrary": "https://openlibrary.org/works/OL31979452W",
   "google": ""
  },

@@ -170,6 +170,8 @@ def fetch_cover(key, isbn, raw, coverdir, refetch, isbn10="", asin="", prefer=""
     path = os.path.join(coverdir, key + ".jpg")
     if os.path.exists(path) and not refetch:
         return "cached"
+    if prefer == "web":  # overrides.tsv "cover web": a hand-placed cover file, never refetched
+        return "cached" if os.path.exists(path) else ""
     # Libib's ISBN-10 is sometimes another edition's; the one derived from the ISBN-13 wins
     isbn10 = isbn13to10(isbn) or isbn10
     tries = []

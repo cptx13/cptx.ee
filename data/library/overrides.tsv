@@ -1,6 +1,7 @@
 # key	field	value — manual fixes that win over Libib and the fetched metadata.
 # fields: title, subtitle, series, author, lang, year (edition), first_year (first published), pages, shelf,
-# cover (none = use the generated cover; amazon/openlibrary/google = fetch from that source first, e.g. amazon = the edition's own cover)
+# cover (none = use the generated cover; amazon/openlibrary/google = fetch from that source first, e.g. amazon = the edition's own cover;
+# web = a cover found by hand and placed in covers/, kept even with --refetch)
 9781853260285	author	Jane Austen
 9788415689508	author	G. K. Chesterton
 9781035003792	author	Cormac McCarthy
@@ -100,3 +101,12 @@
 9780679754855	cover	amazon
 9780060959470	cover	amazon
 9780552137034	cover	amazon
+# 2026-11-24 L-05: covers found by hand (AbeBooks, Apollo, Raamatukoi, Tabletimes)
+9788489715370	cover	web
+9788420734880	cover	web
+9788427025592	cover	web
+9789848765005	cover	web
+9789985335147	cover	web
+8gd3azrohq	cover	web
+9789985335987	cover	web
+9788412536218	cover	web
