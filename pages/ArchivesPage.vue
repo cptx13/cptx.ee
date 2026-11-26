@@ -1,8 +1,8 @@
 <template>
-<AppLayout :pageTitle="'archives | cptx'" :description="'Things we keep: the books I wrote, some of the books Merzeede and I own, our records and films, and later other collections.'" :canonicalURL="'https://cptx.ee/archives/'" :lang="'en'" :ogType="'website'">
+<AppLayout :pageTitle="'archives | cptx'" :description="'Things we keep: the books I wrote, and the books, records and films Merzeede and I own. CDs are next.'" :canonicalURL="'https://cptx.ee/archives/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons archives">
     <h1 class="addons-title">archives</h1>
-    <p class="addons-intro">Things we keep. The books I wrote, some of the books Merzeede and I own, our records and films, and later other collections.</p>
+    <p class="addons-intro">Things we keep: the books I wrote, and the books, records and films Merzeede and I own. CDs are next.</p>
 
     <a v-if="hasMine" class="addon-card ar-card ic-card" href="/archives/written-by-me/">
       <LineIcon :name="'pen'"></LineIcon>
@@ -59,10 +59,10 @@
       </span>
     </a>
     <div class="addon-card ar-card ar-soon ic-card">
-      <LineIcon :name="'box'"></LineIcon>
+      <LineIcon :name="'cd'"></LineIcon>
       <span class="ic-text">
-        <span class="addon-card-title">other collections</span>
-        <span class="addon-card-desc">Later.</span>
+        <span class="addon-card-title">CDs</span>
+        <span class="addon-card-desc">Next.</span>
       </span>
     </div>
   </div>

@@ -62,6 +62,6 @@ My works are organized and distributed using the following system:
   - **[written by me](/archives/written-by-me/)**: published books—manuscripts that have been formatted, reviewed, and are considered complete.
   - **[library](/archives/library/)**: some of the books Merzeede and I own, shown as covers or spines and shelved by genre, colour, author, decade, language or size. Not all of them have been scanned yet.
   - **[vinyl](/archives/vinyl/)**: some of our records, by cover, sorted by genre, artist, decade or colour, with links to listen to each one.
-  - **[films](/archives/films/)**: some of our films on DVD and Blu-ray, by poster, sorted by genre, title, director, decade or colour, with links to read about each one and find where to watch it. Other collections will follow.
+  - **[films](/archives/films/)**: some of our films on DVD and Blu-ray, by poster, sorted by genre, title, director, decade or colour, with links to read about each one and find where to watch it. CDs are next.
 
 - **[newsletter](/newsletter/)** is a weekly issue by email, in English and Spanish: what changed here, what I wrote, what I wrote on the same days in earlier years, and what I have been reading, listening to and watching. Every issue is kept on the [kiosk](/newsletter/kiosk/).
