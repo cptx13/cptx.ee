@@ -1023,7 +1023,7 @@ func libraryCovers(lib *library) []*libBook {
 	var with []*libBook
 	for _, b := range lib.Books {
 		// colourful covers only: saturated, neither near-white nor near-black
-		if b.HasCover && b.Shelf != "mine" && b.Sat >= 0.45 && b.Light >= 0.3 && b.Light <= 0.7 {
+		if b.HasCover && b.Shelf != "mine" && b.Sat >= 0.45 && b.Light >= 0.3 && b.Light <= 0.7 && !archivesCardSkip(b) {
 			with = append(with, b)
 		}
 	}
@@ -1042,4 +1042,10 @@ func libraryCovers(lib *library) []*libBook {
 		}
 	}
 	return out
+}
+
+// archivesCardSkip keeps some books off the archives card's cover row (Carlos: no Dragon Ball).
+func archivesCardSkip(b *libBook) bool {
+	t := strings.ReplaceAll(foldKey(b.Title), " ", "")
+	return strings.Contains(t, "dragonball")
 }

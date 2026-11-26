@@ -1264,12 +1264,13 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .ar-soon.ic-card:hover .line-icon { color: var(--content-secondary); }
 /* archives cards: nine covers across the full width (books and films 2:3, records square);
    "written by me" has five covers in half the width, so every cover is the same size */
-.ar-covers { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); align-items: end; gap: .45em; margin-top: .9em; }
+.ar-covers { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: .45em; margin-top: .9em; }
 .ar-covers.ar-mine { grid-template-columns: repeat(5, minmax(0, 1fr)); width: calc(50% - .225em); }
-.ar-cover { display: block; min-width: 0; }
+/* every slot is 2:3, so all cards are the same height; square records and our own books sit at its foot */
+.ar-cover { display: flex; align-items: flex-end; justify-content: center; aspect-ratio: 2 / 3; min-width: 0; }
 .ar-cover img, .ar-cover-gen { display: block; width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
-.ar-mine .ar-cover img { object-fit: contain; object-position: center bottom; box-shadow: none; }
 .ar-square .ar-cover img, .ar-square .ar-cover-gen { aspect-ratio: 1 / 1; }
+.ar-mine .ar-cover img { width: auto; max-width: 100%; max-height: 100%; aspect-ratio: auto; object-fit: contain; }
 .ar-count { margin-left: .4em; font-weight: normal; font-size: .85em; color: var(--content-secondary); }
 @media screen and (max-width: 640px) {
     .ic-card { gap: .75em; }
