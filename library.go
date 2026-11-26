@@ -1044,8 +1044,15 @@ func libraryCovers(lib *library) []*libBook {
 	return out
 }
 
-// archivesCardSkip keeps some books off the archives card's cover row (Carlos: no Dragon Ball).
+// archivesCardSkip keeps some books off the archives card's cover row (Carlos's picks).
+var archivesCardSkipTitles = []string{"dragonball", "movimientosdemusculacion", "queridosmallorquines"}
+
 func archivesCardSkip(b *libBook) bool {
 	t := strings.ReplaceAll(foldKey(b.Title), " ", "")
-	return strings.Contains(t, "dragonball")
+	for _, x := range archivesCardSkipTitles {
+		if strings.Contains(t, x) {
+			return true
+		}
+	}
+	return false
 }
