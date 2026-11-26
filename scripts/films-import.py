@@ -78,7 +78,7 @@ def year_of(s):
 
 
 def lookup(key, row):
-    kind = "series" if row["shelf"] == "series" else "movie"
+    kind = "series" if row["shelf"] == "series" and "series" in row["notes"].lower() else "movie"
     if row["imdb"]:
         return omdb(key, i=row["imdb"]), "pinned"
     title, year = row["search_title"] or row["title"], int(row["year"] or 0)
@@ -120,7 +120,7 @@ def main():
         c = films.get(k)
         if row["imdb"] == "none":
             c = {}
-        elif c is None or refresh or (row["imdb"] and c.get("imdb") != row["imdb"]):
+        elif c is None or not c.get("imdb") or refresh or (row["imdb"] and c.get("imdb") != row["imdb"]):
             d, how = lookup(key, row)
             if d:
                 c = {"imdb": d["imdbID"], "found_title": d.get("Title", ""), "found_year": d.get("Year", ""),
