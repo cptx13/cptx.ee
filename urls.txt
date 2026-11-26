@@ -66,6 +66,7 @@
 /archives/films/kill-bill-1/
 /archives/films/kill-bill-2/
 /archives/films/kingdom-of-heaven/
+/archives/films/lady-in-the-water/
 /archives/films/last-castle/
 /archives/films/last-crusade/
 /archives/films/legend-of-bagger-vance/
@@ -89,12 +90,15 @@
 /archives/films/pans-labyrinth/
 /archives/films/perfume/
 /archives/films/phantom-of-the-opera/
+/archives/films/pink-panther-2006/
+/archives/films/pirates-black-pearl/
 /archives/films/prince-of-egypt/
 /archives/films/pursuit-of-happyness/
 /archives/films/raiders-of-the-lost-ark/
 /archives/films/remember-me/
 /archives/films/return-of-the-king/
 /archives/films/robin-hood-1973/
+/archives/films/sky-high/
 /archives/films/slumdog-millionaire/
 /archives/films/spider-verse/
 /archives/films/spiderwick/
@@ -111,7 +115,9 @@
 /archives/films/the-departed/
 /archives/films/the-phantom/
 /archives/films/the-pianist/
+/archives/films/the-prestige/
 /archives/films/the-village/
+/archives/films/tom-and-jerry-magic-ring/
 /archives/films/troy/
 /archives/films/twilight/
 /archives/films/two-towers/
