@@ -371,9 +371,17 @@ func buildFilmData(lib *library, f *film) map[string]any {
 	}
 	add("released", yearString(f.Year))
 	add("directed by", f.Director)
-	add("runtime", f.Runtime)
+	if f.Shelf == "series" && strings.Contains(strings.ToLower(f.Notes), "series") {
+		add("episodes", f.Runtime)
+	} else {
+		add("runtime", f.Runtime)
+	}
 	add("country", f.Country)
-	add("language", f.Language)
+	if f.Language == "None" {
+		add("language", "no dialogue")
+	} else {
+		add("language", f.Language)
+	}
 	add("genre", shelfLabel)
 	copyNote := f.formatLabel()
 	if f.Notes != "" {
