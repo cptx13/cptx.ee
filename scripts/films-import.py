@@ -95,6 +95,12 @@ def lookup(key, row):
     return None, "no match"
 
 
+def runtime(v):
+    # OMDb sometimes gives a series' runtime as "1 min" or "17S min": keep only sane values
+    m = re.fullmatch(r"(\d+) min", clean(v))
+    return v.strip() if m and int(m.group(1)) >= 5 else ""
+
+
 def clean(v):
     return "" if not v or v == "N/A" else v.strip()
 
@@ -124,7 +130,7 @@ def main():
             d, how = lookup(key, row)
             if d:
                 c = {"imdb": d["imdbID"], "found_title": d.get("Title", ""), "found_year": d.get("Year", ""),
-                     "director": clean(d.get("Director")), "runtime": clean(d.get("Runtime")),
+                     "director": clean(d.get("Director")), "runtime": runtime(d.get("Runtime")),
                      "country": clean(d.get("Country")), "language": clean(d.get("Language")),
                      "poster_url": clean(d.get("Poster")), "how": how}
             else:
