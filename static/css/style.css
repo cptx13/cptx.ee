@@ -1270,7 +1270,8 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .ar-cover { display: flex; align-items: flex-end; justify-content: center; aspect-ratio: 2 / 3; min-width: 0; }
 .ar-cover img, .ar-cover-gen { display: block; width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
 .ar-square .ar-cover img, .ar-square .ar-cover-gen { aspect-ratio: 1 / 1; }
-.ar-mine .ar-cover img { width: auto; max-width: 100%; max-height: 100%; aspect-ratio: auto; object-fit: contain; }
+.ar-mine .ar-cover { position: relative; }
+.ar-mine .ar-cover img { position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; width: auto; height: auto; max-width: 100%; max-height: 100%; aspect-ratio: auto; }
 .ar-count { margin-left: .4em; font-weight: normal; font-size: .85em; color: var(--content-secondary); }
 @media screen and (max-width: 640px) {
     .ic-card { gap: .75em; }
