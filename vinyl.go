@@ -382,10 +382,10 @@ func vinylCard(lib *library) map[string]any {
 	if len(pick) == 0 {
 		pick = c.Records
 	}
-	if len(pick) > 9 {
-		step := float64(len(pick)) / 9
+	if len(pick) > 6 { // six square covers fill the same row as nine 2:3 ones
+		step := float64(len(pick)) / 6
 		var s []*vinylRecord
-		for i := 0.0; int(i) < len(pick) && len(s) < 9; i += step {
+		for i := 0.0; int(i) < len(pick) && len(s) < 6; i += step {
 			s = append(s, pick[int(i)])
 		}
 		pick = s
