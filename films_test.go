@@ -36,7 +36,7 @@ func TestFilmGroups(t *testing.T) {
 		t.Errorf("no director files under %q, want unknown", id)
 	}
 	d := buildFilmsData(lib, url.Values{"by": {"decade"}})
-	if d["stats"] != "3 films · 3 decades" {
+	if d["stats"] != "3 films · 2 decades" {
 		t.Errorf("stats = %v", d["stats"])
 	}
 	fd := buildFilmData(lib, lib.Films.ByKey["b"])

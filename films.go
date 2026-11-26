@@ -512,8 +512,8 @@ func ensureFrame(dir, key string) ([3]uint8, error) {
 		path string
 		w    int
 	}{{large, 2 * filmW}, {small, filmW}} {
-		w := min(out.w, fr.Bounds().Dx())
-		h := w * filmH / filmW
+		w := min(out.w, fr.Bounds().Dx()) &^ 1
+		h := w * 3 / 2
 		t := image.NewRGBA(image.Rect(0, 0, w, h))
 		draw.CatmullRom.Scale(t, t.Bounds(), fr, fr.Bounds(), draw.Over, nil)
 		if wf, err := os.Create(out.path); err == nil {
@@ -525,29 +525,25 @@ func ensureFrame(dir, key string) ([3]uint8, error) {
 	return mainColor(thumb), nil
 }
 
-// frameOf returns img as an exact 2:3 portrait: within ~12% of 2:3 it is centre-cropped,
-// otherwise padded with the colour of its edges so nothing is cut.
+// frameOf returns img as an exact 2:3 portrait: within ~12% of 2:3 it is centre-cropped to
+// the largest 2:3 box inside it, otherwise padded with the colour of its edges to the
+// smallest 2:3 box around it, so nothing is cut.
 func frameOf(img image.Image) image.Image {
 	b := img.Bounds()
 	w, h := b.Dx(), b.Dy()
-	if w*filmH == h*filmW {
+	if w*3 == h*2 {
 		return img
 	}
-	r := float64(w) / float64(h) / (float64(filmW) / float64(filmH))
-	if r >= 0.88 && r <= 1.12 {
-		cw, ch := w, w*filmH/filmW
-		if ch > h {
-			cw, ch = h*filmW/filmH, h
-		}
+	r := float64(w) / float64(h) / (2.0 / 3.0)
+	if k := min(w/2, h/3); r >= 0.88 && r <= 1.12 && k > 0 {
+		cw, ch := 2*k, 3*k
 		x0, y0 := b.Min.X+(w-cw)/2, b.Min.Y+(h-ch)/2
 		out := image.NewRGBA(image.Rect(0, 0, cw, ch))
 		draw.Draw(out, out.Bounds(), img, image.Pt(x0, y0), draw.Src)
 		return out
 	}
-	ow, oh := w, w*filmH/filmW
-	if oh < h {
-		ow, oh = h*filmW/filmH, h
-	}
+	k := max((w+1)/2, (h+2)/3)
+	ow, oh := 2*k, 3*k
 	out := image.NewRGBA(image.Rect(0, 0, ow, oh))
 	draw.Draw(out, out.Bounds(), &image.Uniform{edgeColour(img)}, image.Point{}, draw.Src)
 	off := image.Pt((ow-w)/2, (oh-h)/2)
