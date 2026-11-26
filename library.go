@@ -1028,13 +1028,18 @@ func libraryCovers(lib *library) []*libBook {
 		}
 	}
 	sort.SliceStable(with, func(i, j int) bool { return with[i].Hue < with[j].Hue })
-	if len(with) <= 9 {
-		return with
-	}
+	// nine evenly spaced picks, each moved on to the next cover if its author is already shown
 	var out []*libBook
+	seen := map[string]bool{}
 	step := float64(len(with)) / 9
 	for i := 0.0; int(i) < len(with) && len(out) < 9; i += step {
-		out = append(out, with[int(i)])
+		for k := int(i); k < len(with); k++ {
+			if a := foldKey(with[k].Author); !seen[a] {
+				seen[a] = true
+				out = append(out, with[k])
+				break
+			}
+		}
 	}
 	return out
 }
