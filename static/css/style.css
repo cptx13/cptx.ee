@@ -1265,13 +1265,14 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 /* archives cards: nine covers across the full width (books and films 2:3, records square);
    "written by me" has five covers in half the width, so every cover is the same size */
 .ar-covers { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: .45em; margin-top: .9em; }
-.ar-covers.ar-mine { grid-template-columns: repeat(5, minmax(0, 1fr)); width: calc(50% - .225em); }
+/* five slots exactly as wide as the nine-slot rows (5w + 4 gaps, with 9w + 8 gaps = 100%): about half the width */
+.ar-covers.ar-half { grid-template-columns: repeat(5, minmax(0, 1fr)); width: calc(500% / 9 - .2em); }
 /* every slot is 2:3, so all cards are the same height; square records and our own books sit at its foot */
 .ar-cover { display: flex; align-items: flex-end; justify-content: center; aspect-ratio: 2 / 3; min-width: 0; }
 .ar-cover img, .ar-cover-gen { display: block; width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
 .ar-square .ar-cover img, .ar-square .ar-cover-gen { aspect-ratio: 1 / 1; }
-.ar-mine .ar-cover { position: relative; }
-.ar-mine .ar-cover img { position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; width: auto; height: auto; max-width: 100%; max-height: 100%; aspect-ratio: auto; }
+.ar-half .ar-cover { position: relative; }
+.ar-half .ar-cover img { position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; width: auto; height: auto; max-width: 100%; max-height: 100%; aspect-ratio: auto; }
 .ar-count { margin-left: .4em; font-weight: normal; font-size: .85em; color: var(--content-secondary); }
 @media screen and (max-width: 640px) {
     .ic-card { gap: .75em; }

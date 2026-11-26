@@ -8,7 +8,7 @@
       <LineIcon :name="'pen'"></LineIcon>
       <span class="ic-text">
         <span class="addon-card-title">written by me → <span class="ar-count">{{ mineCount }} books</span></span>
-        <span class="ar-covers ar-mine" aria-hidden="true">
+        <span class="ar-covers ar-half" aria-hidden="true">
           <span v-for="b in mine" class="ar-cover">
             <img v-if="b.HasCover" :src="b.Thumb" alt="" height="64" loading="lazy">
             <span v-else class="ar-cover-gen" :style="b.GenStyle"></span>
