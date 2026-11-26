@@ -130,6 +130,7 @@ def main():
             else:
                 c = {}
             films[k] = c
+            json.dump(cache, open(cache_path, "w"), ensure_ascii=False, indent=1)
             time.sleep(0.2)
         if not c.get("imdb") and row["imdb"] != "none":
             missing.append(f"{k}: no match for {row['search_title'] or row['title']} ({row['year']})")
@@ -146,10 +147,13 @@ def main():
                     g.write(f.read())
         elif c.get("poster_url") and k not in keep and (refetch or not os.path.exists(dest)):
             url = re.sub(r"_SX\d+(\.jpg)$", r"_SX600\1", c["poster_url"])
-            try:
-                img = get(url, binary=True)
-            except Exception:
-                img = get(c["poster_url"], binary=True)
+            img = None
+            for u in (url, c["poster_url"]):
+                try:
+                    img = get(u, binary=True)
+                    break
+                except Exception as e:
+                    print(f"  {k}: poster {e}")
             if img and img[:3] == b"\xff\xd8\xff":
                 with open(dest, "wb") as g:
                     g.write(img)
