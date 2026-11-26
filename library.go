@@ -1017,16 +1017,17 @@ func writeLibraryPages(engine *htmlc.Engine, distDir string, lib *library) error
 	return nil
 }
 
-// libraryCovers picks 9 books with a cover, spread across the colour order, for the
+// libraryCovers picks 9 colourful covers, spread around the colour wheel, for the
 // archives card (the same row of covers as vinyl and films).
 func libraryCovers(lib *library) []*libBook {
 	var with []*libBook
 	for _, b := range lib.Books {
-		if b.HasCover && b.Shelf != "mine" {
+		// colourful covers only: saturated, neither near-white nor near-black
+		if b.HasCover && b.Shelf != "mine" && b.Sat >= 0.45 && b.Light >= 0.3 && b.Light <= 0.7 {
 			with = append(with, b)
 		}
 	}
-	sortBooks(with, "colour")
+	sort.SliceStable(with, func(i, j int) bool { return with[i].Hue < with[j].Hue })
 	if len(with) <= 9 {
 		return with
 	}

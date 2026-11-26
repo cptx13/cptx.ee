@@ -7,8 +7,8 @@
     <a v-if="hasMine" class="addon-card ar-card ic-card" href="/archives/written-by-me/">
       <LineIcon :name="'pen'"></LineIcon>
       <span class="ic-text">
-        <span class="addon-card-title">written by me →</span>
-        <span class="ar-covers" aria-hidden="true">
+        <span class="addon-card-title">written by me → <span class="ar-count">{{ mineCount }} books</span></span>
+        <span class="ar-covers ar-mine" aria-hidden="true">
           <span v-for="b in mine" class="ar-cover">
             <img v-if="b.HasCover" :src="b.Thumb" alt="" height="64" loading="lazy">
             <span v-else class="ar-cover-gen" :style="b.GenStyle"></span>
@@ -19,7 +19,7 @@
     <a class="addon-card ar-card ic-card" href="/archives/library/">
       <LineIcon :name="'books'"></LineIcon>
       <span class="ic-text">
-        <span class="addon-card-title">library →</span>
+        <span class="addon-card-title">library → <span class="ar-count">{{ count }} books</span></span>
         <span class="ar-covers" aria-hidden="true">
           <span v-for="b in covers" class="ar-cover"><img :src="b.Thumb" alt="" height="64" loading="lazy"></span>
         </span>
@@ -28,8 +28,8 @@
     <a v-if="hasVinyl" class="addon-card ar-card ic-card" href="/archives/vinyl/">
       <LineIcon :name="'vinyl'"></LineIcon>
       <span class="ic-text">
-        <span class="addon-card-title">vinyl →</span>
-        <span class="ar-covers" aria-hidden="true">
+        <span class="addon-card-title">vinyl → <span class="ar-count">{{ vinylCount }} records</span></span>
+        <span class="ar-covers ar-square" aria-hidden="true">
           <span v-for="r in vinylStrip" class="ar-cover">
             <img v-if="r.HasCover" :src="r.Thumb" alt="" width="64" height="64" loading="lazy">
             <span v-else class="ar-cover-gen vn-mini" :style="r.GenStyle"></span>
@@ -46,7 +46,7 @@
     <a v-if="hasFilms" class="addon-card ar-card ic-card" href="/archives/films/">
       <LineIcon :name="'film'"></LineIcon>
       <span class="ic-text">
-        <span class="addon-card-title">films →</span>
+        <span class="addon-card-title">films → <span class="ar-count">{{ filmsCount }} films</span></span>
         <span class="ar-covers" aria-hidden="true">
           <span v-for="f in filmsStrip" class="ar-cover">
             <img v-if="f.HasCover" class="fm-thumb" :src="f.Thumb" alt="" width="43" height="64" loading="lazy">

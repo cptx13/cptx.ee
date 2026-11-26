@@ -1104,8 +1104,6 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .vn-pill { font-size: .85em; text-decoration: none; border: 1px solid var(--code-border); border-radius: 999px; padding: .2em .85em; color: inherit; }
 .vn-pill:hover, .vn-pill:focus-visible { border-color: var(--content-primary); }
 .vn-search { color: var(--content-secondary); font-size: .9em; }
-.ar-cover-gen.vn-mini { width: 64px; height: 64px; }
-.ar-covers img[width="64"] { width: 64px; height: 64px; object-fit: cover; }
 @media (max-width: 600px) {
   .vn-crate { grid-template-columns: repeat(auto-fill, 104px); gap: 16px 12px; }
   .vn-link { width: 104px; height: 104px; }
@@ -1135,8 +1133,6 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .fm-big .fm-gen-dir, .fm-big .fm-gen-year { font-size: 11px; }
 .fm-big .fm-gen-title { font-size: 22px; -webkit-line-clamp: 8; }
 .fm-photo-note { position: absolute; left: 0; top: calc(100% + .45em); font-size: .72em; color: var(--content-secondary); }
-.ar-cover-gen.fm-mini { width: 43px; height: 64px; }
-.ar-covers img.fm-thumb { width: 43px; height: 64px; object-fit: cover; }
 @media (max-width: 600px) {
   .fm-shelf { grid-template-columns: repeat(auto-fill, 92px); gap: 16px 12px; }
   .fm-link { width: 92px; height: 138px; }
@@ -1266,9 +1262,15 @@ html:not(.dark) .wd-bar-fill { background: #f48c06; }
 .line-icon { flex: none; width: 1.75em; height: 1.75em; margin-top: .05em; color: var(--content-secondary); transition: color .15s; }
 .ic-card:hover .line-icon { color: var(--pk-accent); }
 .ar-soon.ic-card:hover .line-icon { color: var(--content-secondary); }
-.ar-covers { display: flex; align-items: flex-end; gap: .45em; margin-top: .9em; height: 64px; overflow: hidden; }
-.ar-cover img { height: 64px; width: auto; border-radius: 2px; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
-.ar-cover-gen { display: block; width: 42px; height: 64px; border-radius: 2px; }
+/* archives cards: nine covers across the full width (books and films 2:3, records square);
+   "written by me" has five covers in half the width, so every cover is the same size */
+.ar-covers { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); align-items: end; gap: .45em; margin-top: .9em; }
+.ar-covers.ar-mine { grid-template-columns: repeat(5, minmax(0, 1fr)); width: calc(50% - .225em); }
+.ar-cover { display: block; min-width: 0; }
+.ar-cover img, .ar-cover-gen { display: block; width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
+.ar-mine .ar-cover img { object-fit: contain; box-shadow: none; }
+.ar-square .ar-cover img, .ar-square .ar-cover-gen { aspect-ratio: 1 / 1; }
+.ar-count { margin-left: .4em; font-weight: normal; font-size: .85em; color: var(--content-secondary); }
 @media screen and (max-width: 640px) {
     .ic-card { gap: .75em; }
     .line-icon { width: 1.5em; height: 1.5em; }
