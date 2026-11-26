@@ -1609,8 +1609,8 @@
   "title": "Supernatural",
   "year": 2005,
   "shelf": "series",
-  "format": "dvd",
-  "notes": "the complete series box",
+  "format": "blu-ray",
+  "notes": "The Complete Series, the collector's box; all 15 seasons",
   "imdb": "tt0460681",
   "director": "",
   "runtime": "44 min",
@@ -1631,7 +1631,7 @@
   "runtime": "62 min",
   "country": "USA",
   "language": "English",
-  "poster": "",
+  "poster": "films/posters/tom-and-jerry-magic-ring.jpg",
   "poster_photo": false
  },
  {
