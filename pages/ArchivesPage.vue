@@ -22,7 +22,9 @@
       <span class="ic-text">
         <span class="addon-card-title">library →</span>
         <span class="addon-card-desc">Some of the books Merzeede and I own: {{ count }} so far, as not all of them have been scanned. As covers or spines; shelve them by genre, colour, author, decade, language or size.</span>
-        <span class="ar-strip" aria-hidden="true"><span v-for="b in strip" class="lib-spine" :style="b.MiniStyle"></span></span>
+        <span class="ar-covers" aria-hidden="true">
+          <span v-for="b in covers" class="ar-cover"><img :src="b.Thumb" alt="" height="64" loading="lazy"></span>
+        </span>
       </span>
     </a>
     <a v-if="hasVinyl" class="addon-card ar-card ic-card" href="/archives/vinyl/">

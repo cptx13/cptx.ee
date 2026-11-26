@@ -907,6 +907,7 @@ func buildArchivesData(lib *library) map[string]any {
 		"mineCount": len(mine),
 		"hasMine":   len(mine) > 0,
 		"strip":     itemsOf(strip),
+		"covers":    itemsOf(libraryCovers(lib)),
 	}
 	for k, v := range vinylCard(lib) {
 		data[k] = v
@@ -1014,4 +1015,25 @@ func writeLibraryPages(engine *htmlc.Engine, distDir string, lib *library) error
 		}
 	}
 	return nil
+}
+
+// libraryCovers picks 9 books with a cover, spread across the colour order, for the
+// archives card (the same row of covers as vinyl and films).
+func libraryCovers(lib *library) []*libBook {
+	var with []*libBook
+	for _, b := range lib.Books {
+		if b.HasCover && b.Shelf != "mine" {
+			with = append(with, b)
+		}
+	}
+	sortBooks(with, "colour")
+	if len(with) <= 9 {
+		return with
+	}
+	var out []*libBook
+	step := float64(len(with)) / 9
+	for i := 0.0; int(i) < len(with) && len(out) < 9; i += step {
+		out = append(out, with[int(i)])
+	}
+	return out
 }
