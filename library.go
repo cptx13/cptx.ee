@@ -69,6 +69,7 @@ type library struct {
 	Dir   string // books.json
 	Media string // covers/ + thumbs/
 	Vinyl *vinylCrate
+	Films *filmShelf
 }
 
 var libShelves = []struct{ ID, Label string }{
@@ -135,6 +136,11 @@ func loadLibrary(dir string, posts []addonPost, texts map[string]string) (*libra
 		log.Printf("vinyl: %v", err)
 	}
 	lib.Vinyl = v
+	fs, err := loadFilms(dir, lib.Media)
+	if err != nil {
+		log.Printf("films: %v", err)
+	}
+	lib.Films = fs
 	raw, err := os.ReadFile(filepath.Join(dir, "books.json"))
 	if os.IsNotExist(err) {
 		return lib, nil
@@ -905,6 +911,9 @@ func buildArchivesData(lib *library) map[string]any {
 	for k, v := range vinylCard(lib) {
 		data[k] = v
 	}
+	for k, v := range filmsCard(lib) {
+		data[k] = v
+	}
 	return data
 }
 
@@ -921,6 +930,8 @@ func registerLibrary(mux *http.ServeMux, render func(http.ResponseWriter, string
 			render(w, "LibraryPage", buildLibraryData(lib, r.URL.Query()))
 		case strings.HasPrefix(path, "/archives/vinyl/"):
 			serveVinyl(w, r, lib, render, notFound)
+		case strings.HasPrefix(path, "/archives/films/"):
+			serveFilms(w, r, lib, render, notFound)
 		case strings.HasPrefix(path, "/archives/library/covers/"):
 			serveCover(w, r, lib, strings.TrimPrefix(path, "/archives/library/covers/"))
 		case strings.HasPrefix(path, "/archives/library/"):
@@ -978,6 +989,16 @@ func writeLibraryPages(engine *htmlc.Engine, distDir string, lib *library) error
 			comp string
 			data map[string]any
 		}{"RecordPage", buildRecordData(lib, r)}
+	}
+	pages["archives/films"] = struct {
+		comp string
+		data map[string]any
+	}{"FilmsPage", buildFilmsData(lib, url.Values{})}
+	for _, f := range lib.filmShelf().Films {
+		pages["archives/films/"+f.Key] = struct {
+			comp string
+			data map[string]any
+		}{"FilmPage", buildFilmData(lib, f)}
 	}
 	for dir, pg := range pages {
 		html, err := engine.RenderPageString(pg.comp, pg.data)

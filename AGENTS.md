@@ -29,6 +29,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for the full deployment setup (systemd user u
 | `addons.go`, `places.go`, `words.go` | `/addons/` pages |
 | `library.go` | `/archives/` and the library |
 | `vinyl.go` | `/archives/vinyl/`: records, covers, listen + info links (data from `scripts/vinyl-import.py`) |
+| `films.go` | `/archives/films/`: films as 2:3 posters, watch + info links (data from `scripts/films-import.py`, OMDb; key in `~/cptx-data/omdb.key` on the VM, never in git) |
 | `stats.go`, `geo.go`, `static/js/hello.js` | Readers' counters (people via the `/_hello` beacon on first scroll/tap/click/key, no timers; a visit to a post is a read; countries; raw HTML loads shown as "machines"; daily totals in `~/cptx-data/stats/`) and `/addons/readers/` |
 | `newsletter.go` + `content/newsletter/` | Newsletter = every email; the weekly ones are issues (`NNN.md` → `/newsletter/<n>/`, Spanish `NNN.es.md` → `/newsletter/<n>/es/`; "issue 01", read-counted, generated cover art) kept on the kiosk `/newsletter/kiosk/`; how it works is the `#newsletter` section of the privacy policy; `scripts/newsletter-draft.py` drafts the weekly issue (en + es); `scripts/newsletter-send.py` (CI job `newsletter`, after deploy-verify) sends each new issue through Buttondown as one bilingual email (repo variable `NEWSLETTER_MODE=send`; `draft` keeps it waiting); `buttondownUser` (`cptx`) in `newsletter.go` opens the sign-up form. Details: DEPLOYMENT.md → Newsletter |
 | `search.go` | `/search/?q=`: full text of posts + library, accent-insensitive, server-side |

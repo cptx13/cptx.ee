@@ -219,6 +219,33 @@ always wins over the archive's cover; the record page then says "photo of our co
    when replacing one). Records without Spotify/YouTube Music links get a search link.
 3. Commit `vinyl.csv`, `vinyl.json` and `urls.txt` (new record pages); branch → check → main.
 
+## Films refresh (`/archives/films/`)
+
+`data/library/films.csv` is the list of films (key, title, year, shelf, format, notes;
+optional `search_title` — the title to look up when ours differs from IMDb's — and the pin
+`imdb`, an IMDb id like `tt0080684`, or `none` to match nothing). `shelf` is the genre:
+drama, crime, fantasy-sf, adventure, horror, comedy, romance, animation, series; `format`
+is dvd, blu-ray or 4k (`·` between several); `notes` are about our copy.
+Details and posters come from OMDb (https://www.omdbapi.com), which needs a free key:
+Carlos saves it on the VM as one line in `~/cptx-data/omdb.key` (never in git or chat;
+the free key allows 1,000 requests a day, one per film).
+A photo of our own copy in `~/cptx-data/library/films/photos/<key>.jpg` always wins over
+the poster; the film page then says "photo of our copy".
+`data/library/films.json` is in git; posters live only on the VM in
+`~/cptx-data/library/films/posters/<key>.jpg` (2:3 frames are made at start-up).
+
+1. Edit `films.csv` on a branch (new key = short slug).
+2. On the VM, in a scratch clone of that branch:
+   ```sh
+   git clone -q -b <branch> https://github.com/cptx13/cptx.ee /tmp/lib && cd /tmp/lib
+   python3 scripts/films-import.py ~/cptx-data/library   # OMDb (cached in films-cache.json)
+   cp ~/cptx-data/library/films.json data/library/films.json
+   ```
+   It prints what's missing or worth checking (no match, a different title, no poster).
+   Pin an `imdb` id to fix a match; `--refresh` looks everything up again, `--refetch`
+   downloads every poster again (keys in `keep_poster` in `films-cache.json` are kept).
+3. Commit `films.csv`, `films.json` and `urls.txt` (new film pages); branch → check → main.
+
 ## Go version
 
 The Go toolchain is pinned in `mise.toml` (currently `1.27.4`); `go.mod` only sets

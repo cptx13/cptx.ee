@@ -1,7 +1,7 @@
 ---
 title: "How this site works"
 author: cptx
-date: 2026-11-22
+date: 2026-11-26
 draft: false
 lang: en
 summary: "Where the writing comes from, what runs the site, and what is (and isn't) loaded in your browser."
@@ -25,6 +25,7 @@ Only files from cptx.ee: the page, one stylesheet, one font in two or four style
 
 - **The library** uses book details and covers from [Open Library](https://openlibrary.org) and Google Books. They were fetched once by the server; your browser doesn't contact them.
 - **The vinyl crate** uses record details from [MusicBrainz](https://musicbrainz.org) and [Wikidata](https://www.wikidata.org), and covers from the [Cover Art Archive](https://coverartarchive.org) or photos of our own copies, all fetched once by the server. The Spotify, YouTube Music and Wikipedia links are plain links: nothing loads from those sites until you click one.
+- **The films** use film details (director, runtime, country) and posters from the [Open Movie Database](https://www.omdbapi.com) (OMDb), or photos of our own copies, fetched once by the server. The IMDb, Letterboxd, YouTube and JustWatch links are plain links: nothing loads from those sites until you click one.
 - **The latest posts on [reads](/addons/reads/?view=latest)** are collected by the server from the cheatsheet blogs' public RSS feeds a few times a day; your browser never contacts those blogs until you click a link.
 - **City lights** finds place names in the posts themselves.
 - **Readers' countries** come from [DB-IP](https://db-ip.com)'s free country list (CC BY 4.0), a file the server downloads once a month and checks locally.

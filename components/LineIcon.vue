@@ -25,5 +25,6 @@
   <g v-if="name == 'phone'"><rect x="6.5" y="2.5" width="11" height="19" rx="2"/><path d="M10.5 5h3"/><circle cx="12" cy="18.3" r=".8"/></g>
   <g v-if="name == 'gamepad'"><rect x="6" y="2.5" width="12" height="19" rx="2"/><rect x="8" y="4.5" width="8" height="6" rx=".6"/><path d="M8.5 15h3"/><path d="M10 13.5v3"/><circle cx="15" cy="14" r=".8"/><circle cx="14" cy="16.5" r=".8"/></g>
   <g v-if="name == 'laptop'"><rect x="5" y="5" width="14" height="10" rx="1"/><path d="M3 18.5h18l-1.5-3.5h-15z"/></g>
+  <g v-if="name == 'box'"><path d="M3.5 8 12 4l8.5 4v8.5L12 20.5l-8.5-4z"/><path d="M3.5 8 12 12l8.5-4"/><path d="M12 12v8.5"/></g>
 </svg>
 </template>

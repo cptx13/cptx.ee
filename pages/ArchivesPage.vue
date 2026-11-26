@@ -1,8 +1,8 @@
 <template>
-<AppLayout :pageTitle="'archives | cptx'" :description="'Things we keep: the books I wrote, some of the books Merzeede and I own, and later records, films and other collections.'" :canonicalURL="'https://cptx.ee/archives/'" :lang="'en'" :ogType="'website'">
+<AppLayout :pageTitle="'archives | cptx'" :description="'Things we keep: the books I wrote, some of the books Merzeede and I own, our records and films, and later other collections.'" :canonicalURL="'https://cptx.ee/archives/'" :lang="'en'" :ogType="'website'">
   <div class="list-container addons archives">
     <h1 class="addons-title">archives</h1>
-    <p class="addons-intro">Things we keep. The books I wrote, some of the books Merzeede and I own, and later the records, films and other collections.</p>
+    <p class="addons-intro">Things we keep. The books I wrote, some of the books Merzeede and I own, our records and films, and later other collections.</p>
 
     <a v-if="hasMine" class="addon-card ar-card ic-card" href="/archives/written-by-me/">
       <LineIcon :name="'pen'"></LineIcon>
@@ -45,10 +45,23 @@
         <span class="addon-card-desc">Soon: records, with their covers and pressings.</span>
       </span>
     </div>
-    <div class="addon-card ar-card ar-soon ic-card">
+    <a v-if="hasFilms" class="addon-card ar-card ic-card" href="/archives/films/">
       <LineIcon :name="'film'"></LineIcon>
       <span class="ic-text">
-        <span class="addon-card-title">films &amp; other collections</span>
+        <span class="addon-card-title">films →</span>
+        <span class="addon-card-desc">Some of the films Merzeede and I own: {{ filmsCount }} so far. Sort them by genre, title, director, decade or colour, and find where to watch them.</span>
+        <span class="ar-covers" aria-hidden="true">
+          <span v-for="f in filmsStrip" class="ar-cover">
+            <img v-if="f.HasCover" class="fm-thumb" :src="f.Thumb" alt="" width="43" height="64" loading="lazy">
+            <span v-else class="ar-cover-gen fm-mini" :style="f.GenStyle"></span>
+          </span>
+        </span>
+      </span>
+    </a>
+    <div class="addon-card ar-card ar-soon ic-card">
+      <LineIcon :name="'box'"></LineIcon>
+      <span class="ic-text">
+        <span class="addon-card-title">other collections</span>
         <span class="addon-card-desc">Later.</span>
       </span>
     </div>
